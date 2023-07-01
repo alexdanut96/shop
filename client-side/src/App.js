@@ -1,16 +1,13 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Pay from "./Pay";
-import Success from "./Success";
+// import "../node_modules/react-bootstrap/dist/react-bootstrap.min.js";
+// import "./assets/css/style.css";
+import Home from "./Pages/Home";
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/pay" element={<Pay />} />
-        <Route path="/success" element={<Success />} />
-      </Routes>
-    </Router>
+    <>
+      <Home />
+    </>
   );
-}
+};
 
 export default App;
