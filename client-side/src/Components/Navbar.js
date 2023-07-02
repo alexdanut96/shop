@@ -8,8 +8,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 const Container = styled.div`
   display: flex;
   align-items: center;
-  padding: 20px;
-  height: 60px;
+  padding: 0 20px;
+  height: 80px;
+  position: fixed;
+  top: 0;
+  z-index: 300;
+  background: white;
+  width: 100%;
 `;
 
 const Right = styled.div`

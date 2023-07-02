@@ -12,12 +12,13 @@ const Footer = () => {
   `;
   const Top = styled.div`
     display: flex;
-    justify-content: space-between;
     margin-bottom: 70px;
+    flex-wrap: wrap;
   `;
   const Bottom = styled.div`
     padding-top: 32px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
   `;
 
