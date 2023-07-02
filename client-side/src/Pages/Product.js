@@ -8,9 +8,22 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const Product = () => {
   const [selectSize, setSelectSize] = React.useState("");
+  const [amount, setAmount] = React.useState(1);
+
+  const increaseAmount = () => {
+    setAmount(amount + 1);
+  };
+
+  const decreaseAmount = () => {
+    if (amount > 1) {
+      setAmount(amount - 1);
+    }
+  };
 
   const handleChange = (event) => {
     setSelectSize(event.target.value);
@@ -54,6 +67,7 @@ const Product = () => {
   const Button = styled.div`
     margin-top: 36px;
     margin-bottom: 32px;
+    margin-left: 30px;
     background-color: #024e82;
     color: #ffffff;
     padding: 14px 36px;
@@ -66,17 +80,31 @@ const Product = () => {
     }
   `;
 
+  const Amount = styled.div`
+    display: flex;
+    align-items: center;
+
+    span {
+      display: flex;
+      justify-content: center;
+      font-size: 32px;
+      color: #024e82;
+      width: 50px;
+    }
+
+    .amountIcon {
+      transition: all 0.5s ease;
+      font-size: 32px;
+      cursor: pointer;
+    }
+  `;
+
   const Option = styled.div``;
 
   const Category = styled.div``;
 
   const Tags = styled.div``;
 
-  const Description = styled.div``;
-
-  //   const Container = styled.div``;
-
-  //   const Container = styled.div``;
   return (
     <>
       <Navbar />
@@ -111,7 +139,13 @@ const Product = () => {
                 </Select>
               </FormControl>
             </Box>
-            <Button>ADD TO CART</Button>
+            <Amount>
+              <RemoveIcon onClick={decreaseAmount} className="amountIcon" />
+              <span>{amount}</span>
+              <AddIcon onClick={increaseAmount} className="amountIcon" />
+              <Button>ADD TO CART</Button>
+            </Amount>
+
             <Category>Category: Women, Polo, Casual</Category>
             <Tags>Tags: Modern, Design, cotton</Tags>
           </ProductInfo>
