@@ -4,6 +4,7 @@ import { Badge } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -73,7 +74,7 @@ const Input = styled.input`
   font-size: 16px;
 `;
 
-const Link = styled.li`
+const LinkRef = styled.li`
   padding: 5px 15px;
   font-weight: 600;
   cursor: pointer;
@@ -87,9 +88,11 @@ const Navbar = () => {
       </Right>
       <Center>
         <Navlinks>
-          <Link className="active">HOME</Link>
-          <Link>ABOUT</Link>
-          <Link>CONTACT US</Link>
+          <Link style={{ textDecoration: "none" }} to="/">
+            <LinkRef className="active">HOME</LinkRef>
+          </Link>
+          <LinkRef>ABOUT</LinkRef>
+          <LinkRef>CONTACT US</LinkRef>
         </Navlinks>
         <SearchBox>
           <SearchIcon style={{ margin: "0 5px", color: "gray" }} />

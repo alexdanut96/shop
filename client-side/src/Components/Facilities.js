@@ -4,30 +4,30 @@ import ContactSupportOutlinedIcon from "@mui/icons-material/ContactSupportOutlin
 import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
 import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
 
-const Facilities = () => {
-  const Container = styled.div`
-    padding: 50px;
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-  `;
-  const Facility = styled.div`
-    display: flex;
-    gap: 10px;
-    flex: 1;
-  `;
-  const Icon = styled.div`
-    color: #024e82;
-  `;
-  const Info = styled.div``;
-  const Title = styled.div`
-    font-weight: 900;
-    margin-bottom: 8px;
-  `;
-  const Description = styled.div`
-    color: #555555;
-  `;
+const Container = styled.div`
+  padding: 50px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+`;
+const Facility = styled.div`
+  display: flex;
+  gap: 10px;
+  flex: 1;
+`;
+const Icon = styled.div`
+  color: #024e82;
+`;
+const Info = styled.div``;
+const Title = styled.div`
+  font-weight: 900;
+  margin-bottom: 8px;
+`;
+const Description = styled.div`
+  color: #555555;
+`;
 
+const Facilities = () => {
   return (
     <Container>
       <Facility>

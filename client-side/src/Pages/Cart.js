@@ -12,6 +12,183 @@ import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+const Container = styled.div`
+  display: flex;
+  gap: 36px;
+  padding: 0 50px 50px 50px;
+`;
+
+const Hr = styled.hr`
+  background-color: #e8e8e8;
+  border: none;
+  height: 1px;
+`;
+
+const Right = styled.div`
+  flex: 6;
+`;
+
+const Left = styled.div`
+  flex: 4;
+`;
+
+const Properties = styled.div`
+  display: flex;
+  justify-content: end;
+  font-weight: 500;
+  margin-bottom: 16px;
+  padding-right: 24px;
+`;
+
+const Property = styled.div`
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  margin-right: 10px;
+`;
+
+const Item = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+`;
+
+const Image = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+`;
+
+const Title = styled.div`
+  font-weight: 600;
+`;
+
+const Colors = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  width: 100px;
+`;
+
+const Color = styled.div`
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: blue;
+  cursor: pointer;
+`;
+
+const Size = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const Quantity = styled.div`
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const QuantityBox = styled.div`
+  height: 36px;
+  border: solid 1px rgba(0, 0, 0, 0.23);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  span {
+    color: #024e82;
+  }
+
+  .amountIcon {
+    cursor: pointer;
+  }
+`;
+
+const Price = styled.div`
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  font-weight: 600;
+`;
+
+const Icon = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const ItemLeft = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ItemRight = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const CheckoutBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px 16px;
+  border-radius: 10px;
+  height: fit-content;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+`;
+
+const SubtotalContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const SavingsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ShippingContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const TotalContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const CheckoutBtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const CheckoutBtn = styled.div`
+  width: 250px;
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+  justify-content: center;
+  background: #024e82;
+  color: white;
+  cursor: pointer;
+  transition: all 0.5s ease;
+
+  &:hover {
+    background-color: #013e68;
+  }
+`;
+
+const Subtitle = styled.h3``;
+
+const Amount = styled.div`
+  font-weight: 500;
+`;
+
+const ItemsAmount = styled.h1`
+  padding: 50px;
+`;
+
 const Cart = () => {
   const [selectSize, setSelectSize] = React.useState("S");
   const [amount, setAmount] = React.useState(1);
@@ -30,124 +207,15 @@ const Cart = () => {
     setSelectSize(event.target.value);
   };
 
-  const Container = styled.div`
-    display: flex;
-    padding: 50px;
-  `;
-
-  const Hr = styled.hr`
-    background-color: #e8e8e8;
-    border: none;
-    height: 1px;
-  `;
-
-  const Right = styled.div`
-    flex: 6;
-  `;
-
-  const Left = styled.div`
-    flex: 4;
-  `;
-
-  const Properties = styled.div`
-    display: flex;
-    justify-content: end;
-    font-weight: 500;
-    margin-bottom: 16px;
-    padding-right: 24px;
-  `;
-
-  const Property = styled.div`
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    margin-right: 10px;
-  `;
-
-  const Item = styled.div`
-    display: flex;
-    justify-content: space-between;
-    padding: 16px 0;
-  `;
-
-  const Image = styled.img`
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-  `;
-
-  const Title = styled.div`
-    font-weight: 600;
-  `;
-
-  const Colors = styled.div`
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    width: 100px;
-  `;
-
-  const Color = styled.div`
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background-color: blue;
-    cursor: pointer;
-  `;
-
-  const Size = styled.div`
-    display: flex;
-    justify-content: center;
-  `;
-
-  const Quantity = styled.div`
-    width: 100px;
-    display: flex;
-    justify-content: space-between;
-  `;
-
-  const QuantityBox = styled.div`
-    height: 36px;
-    border: solid 1px rgba(0, 0, 0, 0.23);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-
-    span {
-      color: #024e82;
-    }
-
-    .amountIcon {
-      cursor: pointer;
-    }
-  `;
-
-  const Price = styled.div`
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    font-weight: 600;
-  `;
-
-  const Icon = styled.div`
-    display: flex;
-    justify-content: center;
-  `;
-
-  const ItemLeft = styled.div`
-    display: flex;
-    gap: 10px;
-  `;
-
-  const ItemRight = styled.div`
-    display: flex;
-    gap: 10px;
-  `;
-
   return (
     <>
       <Navbar />
+      <ItemsAmount>
+        Cart{" "}
+        <span style={{ fontWeight: "normal", color: "#7c7a79" }}>
+          (3 items)
+        </span>
+      </ItemsAmount>
       <Container>
         <Right>
           <Properties>
@@ -285,7 +353,31 @@ const Cart = () => {
             </ItemRight>
           </Item>
         </Right>
-        <Left></Left>
+        <Left>
+          <CheckoutBox>
+            <SubtotalContainer>
+              <Subtitle>Subtotal (3 items)</Subtitle>
+              <Amount>$540</Amount>
+            </SubtotalContainer>
+            <SavingsContainer>
+              <Subtitle>Savings</Subtitle>
+              <Amount>-$30%</Amount>
+            </SavingsContainer>
+            <Hr />
+            <ShippingContainer>
+              <Subtitle>Shipping</Subtitle>
+              <Amount>$0</Amount>
+            </ShippingContainer>
+            <Hr />
+            <TotalContainer>
+              <Subtitle>Total</Subtitle>
+              <Amount>$510</Amount>
+            </TotalContainer>
+            <CheckoutBtnContainer>
+              <CheckoutBtn>Continue to Checkout</CheckoutBtn>
+            </CheckoutBtnContainer>
+          </CheckoutBox>
+        </Left>
       </Container>
       <Footer />
     </>
