@@ -28,7 +28,7 @@ const Products = ({ cat, filters, sort }) => {
         method: "GET",
         headers: {
           token:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTUzZjUxNzA4ZDk5NjA1OTVlZWQ0ZSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY5MzY2NTQ1NywiZXhwIjoxNjkzOTI0NjU3fQ.sq5JgWccEPd2oRt0GSgesEGk6H3TqxCcdGibr_mtl8s",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTUzZjUxNzA4ZDk5NjA1OTVlZWQ0ZSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY5NDk1MTI5MywiZXhwIjoxNjk1MjEwNDkzfQ.qdX3EGFaWLqHQxtmpm4uC7FIjPEZkHLLAvND9zDZ748",
         },
       })
         .then((response) => {
@@ -46,13 +46,50 @@ const Products = ({ cat, filters, sort }) => {
 
     getProducts();
   }, [cat]);
+
+  useEffect(() => {
+    cat &&
+      setFilteredProducts(
+        products.filter((item) =>
+          Object.entries(filters).every(([key, value]) =>
+            item[key].includes(value)
+          )
+        )
+      );
+  }, [products, cat, filters]);
+
+  useEffect(() => {
+    if (sort === "newest") {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.createdAt - b.createdAt)
+      );
+      console.log(filteredProducts);
+    } else if (sort === "priceAsc") {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.price - b.price)
+      );
+    } else if (sort === "priceDesc") {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => b.price - a.price)
+      );
+    }
+  }, [sort]);
+
   return (
     <Container>
-      {products ? (
-        products.map((item) => <Product item={item} key={item._id} />)
+      {products && products.length ? (
+        cat ? (
+          filteredProducts.map((item) => <Product item={item} key={item._id} />)
+        ) : window.location.pathname !== "/products" ? (
+          products
+            .slice(0, 8)
+            .map((item) => <Product item={item} key={item._id} />)
+        ) : (
+          products.map((item) => <Product item={item} key={item._id} />)
+        )
       ) : (
         <Loader>
-          <span class="loader"></span>
+          <span className="loader"></span>
         </Loader>
       )}
     </Container>

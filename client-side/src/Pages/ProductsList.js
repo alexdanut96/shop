@@ -69,10 +69,6 @@ const ProductsList = () => {
     setSort(value);
   };
 
-  // console.log(filters);
-  // console.log(sort);
-  // console.log(cat);
-
   return (
     <>
       <Navbar />
@@ -84,20 +80,23 @@ const ProductsList = () => {
               <Box sx={{ width: 150 }}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
-                    Select gender
+                    Select size
                   </InputLabel>
                   <Select
                     defaultValue=""
                     MenuProps={{ disableScrollLock: true }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    name="gender"
+                    name="size"
                     onChange={handleFilters}
                     // value={selectGender}
-                    label="selectGender"
+                    label="selectSize"
                   >
-                    <MenuItem value={"Man"}>Man</MenuItem>
-                    <MenuItem value={"Woman"}>Woman</MenuItem>
+                    <MenuItem value={"XS"}>XS</MenuItem>
+                    <MenuItem value={"S"}>S</MenuItem>
+                    <MenuItem value={"M"}>M</MenuItem>
+                    <MenuItem value={"L"}>L</MenuItem>
+                    <MenuItem value={"XL"}>XL</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
