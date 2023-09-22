@@ -11,15 +11,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 
-const Container = styled.div`
-  display: flex;
-  overflow: hidden;
-  flex-wrap: wrap;
-  /* gap: 48px; */
-  padding: 50px;
-  justify-content: center;
-`;
-
 const FilterBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -58,10 +49,11 @@ const ProductsList = () => {
   const handleFilters = (e) => {
     const value = e.target.value;
     const name = e.target.name;
-    setFilters({
-      ...filters,
-      [name]: value,
-    });
+    let changedFilter = { ...filters, [name]: value };
+    if (!value) {
+      delete changedFilter[name];
+    }
+    setFilters(changedFilter);
   };
 
   const handleSort = (e) => {
@@ -92,6 +84,9 @@ const ProductsList = () => {
                     // value={selectGender}
                     label="selectSize"
                   >
+                    <MenuItem value="">
+                      <em>Select size</em>
+                    </MenuItem>
                     <MenuItem value={"XS"}>XS</MenuItem>
                     <MenuItem value={"S"}>S</MenuItem>
                     <MenuItem value={"M"}>M</MenuItem>
@@ -117,6 +112,9 @@ const ProductsList = () => {
                     label="selectColor"
                     onChange={handleFilters}
                   >
+                    <MenuItem value="">
+                      <em>Select color</em>
+                    </MenuItem>
                     <MenuItem value={"red"}>Red</MenuItem>
                     <MenuItem value={"blue"}>Blue</MenuItem>
                   </Select>

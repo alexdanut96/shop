@@ -1,57 +1,21 @@
 // import "../node_modules/react-bootstrap/dist/react-bootstrap.min.js";
 // import "./assets/css/style.css";
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-  Route,
-  Link,
-  Outlet,
-} from "react-router-dom";
-import Cart from "./Pages/Cart";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
-import Product from "./Pages/Product";
-import ProductsList from "./Pages/ProductsList";
-import { Demo, loadingData } from "./Pages/Demo";
+import ProductsRoutes from "./Routes/ProductsRoutes";
+import ProductRoutes from "./Routes/ProductRoutes";
+import CartRoutes from "./Routes/CartRoutes";
 
 const App = () => {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/" element={<Root />}>
-        <Route index element={<Home />}></Route>,
-        <Route path="/product/:id" element={<Product />}></Route>,
-        <Route path="/products/:category" element={<ProductsList />}></Route>
-        {/* <Route path="/products" element={<ProductsList />}></Route> */}
-        <Route path="/cart" element={<Cart />}></Route>
-        <Route path="/demo" element={<Demo />} loader={loadingData}></Route>
-      </Route>
-    )
-  );
-
   return (
-    <>
-      <RouterProvider router={router} />
-      {/* <Home /> */}
-      {/* <Product /> */}
-      {/* <Cart /> */}
-    </>
-  );
-};
-const Root = () => {
-  return (
-    <>
-      <div>
-        <Link to="/">Home</Link>
-        <Link to="/product/:id">Product</Link>
-        <Link to="/cart">Cart</Link>
-        <Link to="/demo">Demo</Link>
-        <Link to="/products/:category">ProductsList</Link>
-        {/* <Link to="/products">Products</Link> */}
-      </div>
-      <div>
-        <Outlet />
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/cart/*" element={<CartRoutes />} />
+        <Route path="/products/*" element={<ProductsRoutes />} />
+        <Route path="/product/*" element={<ProductRoutes />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
