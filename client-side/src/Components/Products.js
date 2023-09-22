@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import Product from "./Product";
+import Swal from "sweetalert2";
 
 const Container = styled.div`
   display: flex;
@@ -28,7 +29,7 @@ const Products = ({ cat, filters, sort }) => {
         method: "GET",
         headers: {
           token:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTUzZjUxNzA4ZDk5NjA1OTVlZWQ0ZSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY5NDk1MTI5MywiZXhwIjoxNjk1MjEwNDkzfQ.qdX3EGFaWLqHQxtmpm4uC7FIjPEZkHLLAvND9zDZ748",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTUzZjUxNzA4ZDk5NjA1OTVlZWQ0ZSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY5NTQwNjY2MiwiZXhwIjoxNjk1NjY1ODYyfQ.avm3ilbPHIp6nDwUFUGEO_PB7V5TcFdsQzLo5udbq2I",
         },
       })
         .then((response) => {
@@ -39,9 +40,16 @@ const Products = ({ cat, filters, sort }) => {
         })
         .then((data) => {
           setProducts(data);
-          console.log(data);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          console.error(err.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Something went wrong! ${err.message}`,
+            footer: '<a href="/">Why do I have this issue?</a>',
+          });
+        });
     };
 
     getProducts();
@@ -51,9 +59,9 @@ const Products = ({ cat, filters, sort }) => {
     cat &&
       setFilteredProducts(
         products.filter((item) =>
-          Object.entries(filters).every(([key, value]) =>
-            item[key].includes(value)
-          )
+          Object.entries(filters).every(([key, value]) => {
+            return item[key].includes(value);
+          })
         )
       );
   }, [products, cat, filters]);
@@ -63,7 +71,6 @@ const Products = ({ cat, filters, sort }) => {
       setFilteredProducts((prev) =>
         [...prev].sort((a, b) => a.createdAt - b.createdAt)
       );
-      console.log(filteredProducts);
     } else if (sort === "priceAsc") {
       setFilteredProducts((prev) =>
         [...prev].sort((a, b) => a.price - b.price)
@@ -74,18 +81,16 @@ const Products = ({ cat, filters, sort }) => {
       );
     }
   }, [sort]);
-
+  console.log(filteredProducts);
   return (
     <Container>
       {products && products.length ? (
         cat ? (
           filteredProducts.map((item) => <Product item={item} key={item._id} />)
-        ) : window.location.pathname !== "/products" ? (
+        ) : (
           products
             .slice(0, 8)
             .map((item) => <Product item={item} key={item._id} />)
-        ) : (
-          products.map((item) => <Product item={item} key={item._id} />)
         )
       ) : (
         <Loader>
