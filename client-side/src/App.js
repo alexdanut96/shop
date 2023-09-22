@@ -21,6 +21,7 @@ const App = () => {
         <Route index element={<Home />}></Route>,
         <Route path="/product/:id" element={<Product />}></Route>,
         <Route path="/products/:category" element={<ProductsList />}></Route>
+        {/* <Route path="/products" element={<ProductsList />}></Route> */}
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/demo" element={<Demo />} loader={loadingData}></Route>
       </Route>
@@ -45,6 +46,7 @@ const Root = () => {
         <Link to="/cart">Cart</Link>
         <Link to="/demo">Demo</Link>
         <Link to="/products/:category">ProductsList</Link>
+        {/* <Link to="/products">Products</Link> */}
       </div>
       <div>
         <Outlet />
