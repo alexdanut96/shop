@@ -1,0 +1,15 @@
+.categories-container {
+  margin-top: 42px;
+  h1 {
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .category {
+    padding: 50px;
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+  }
+}

@@ -1,21 +1,6 @@
-import styled from "styled-components";
 import { useEffect, useState } from "react";
 import Product from "./Product";
 import Swal from "sweetalert2";
-
-const Container = styled.div`
-  display: flex;
-  overflow: hidden;
-  flex-wrap: wrap;
-  /* gap: 48px; */
-  padding: 50px;
-  justify-content: center;
-`;
-
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-`;
 
 const Products = ({ cat, filters, sort }) => {
   const [products, setProducts] = useState([]);
@@ -81,9 +66,8 @@ const Products = ({ cat, filters, sort }) => {
       );
     }
   }, [sort]);
-  console.log(filteredProducts);
   return (
-    <Container>
+    <div className="products-container">
       {products && products.length ? (
         cat ? (
           filteredProducts.map((item) => <Product item={item} key={item._id} />)
@@ -93,11 +77,11 @@ const Products = ({ cat, filters, sort }) => {
             .map((item) => <Product item={item} key={item._id} />)
         )
       ) : (
-        <Loader>
+        <div className="loader">
           <span className="loader"></span>
-        </Loader>
+        </div>
       )}
-    </Container>
+    </div>
   );
 };
 

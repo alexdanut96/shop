@@ -1,25 +1,3 @@
-html {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-*,
-*:before,
-*:after {
-  -webkit-box-sizing: inherit;
-  -moz-box-sizing: inherit;
-  box-sizing: inherit;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  padding-top: 80px;
-}
-
-/* Loader */
 .loader {
   width: 200px;
   height: 200px;
@@ -53,4 +31,3 @@ body {
     opacity: 0;
   }
 }
-/* Loader */

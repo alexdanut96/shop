@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
-import styled from "styled-components";
 import { useState } from "react";
 import { useLocation } from "react-router";
 import Products from "../Components/Products";
@@ -10,35 +9,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
-
-const FilterBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 50px;
-`;
-
-const FilterProducts = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const SortProducts = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const Title = styled.div`
-  margin-right: 16px;
-  font-weight: 500;
-  font-size: 20px;
-`;
-
-const Filters = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-
-const Filter = styled.div``;
 
 const ProductsList = () => {
   const location = useLocation();
@@ -64,11 +34,11 @@ const ProductsList = () => {
   return (
     <>
       <Navbar />
-      <FilterBox>
-        <FilterProducts>
-          <Title>Filter Products:</Title>
-          <Filters>
-            <Filter>
+      <div className="filters-container">
+        <div className="products-filter">
+          <div className="title">Filter Products:</div>
+          <div className="filters">
+            <div className="filter">
               <Box sx={{ width: 150 }}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
@@ -95,8 +65,8 @@ const ProductsList = () => {
                   </Select>
                 </FormControl>
               </Box>
-            </Filter>
-            <Filter>
+            </div>
+            <div className="filter">
               <Box sx={{ width: 150 }}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
@@ -120,13 +90,13 @@ const ProductsList = () => {
                   </Select>
                 </FormControl>
               </Box>
-            </Filter>
-          </Filters>
-        </FilterProducts>
-        <SortProducts>
-          <Title>Sort Products:</Title>
-          <Filters>
-            <Filter>
+            </div>
+          </div>
+        </div>
+        <div className="products-sort">
+          <div className="title">Sort Products:</div>
+          <div className="filters">
+            <div className="filter">
               <Box sx={{ width: 150 }}>
                 <FormControl fullWidth>
                   <InputLabel></InputLabel>
@@ -145,10 +115,10 @@ const ProductsList = () => {
                   </Select>
                 </FormControl>
               </Box>
-            </Filter>
-          </Filters>
-        </SortProducts>
-      </FilterBox>
+            </div>
+          </div>
+        </div>
+      </div>
       <Products cat={cat} filters={filters} sort={sort} />
       <Footer />
     </>
