@@ -13,7 +13,7 @@ const Navbar = () => {
       </div>
       <div className="center">
         <ul>
-          <Link style={{ textDecoration: "none" }} to="/">
+          <Link to="/">
             <li className="active">HOME</li>
           </Link>
           <li>ABOUT</li>

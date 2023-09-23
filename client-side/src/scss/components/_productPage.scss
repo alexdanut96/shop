@@ -22,6 +22,11 @@
       .about-product {
         margin-bottom: 36px;
       }
+
+      .filters {
+        display: flex;
+        gap: 16px;
+      }
       .amount {
         display: flex;
         align-items: center;
@@ -55,6 +60,11 @@
             background-color: #013e68;
           }
         }
+      }
+
+      .category {
+        display: flex;
+        gap: 10px;
       }
     }
   }

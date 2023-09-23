@@ -1,6 +1,7 @@
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { Link } from "react-router-dom";
 
 const Product = ({ item }) => {
   return (
@@ -11,9 +12,11 @@ const Product = ({ item }) => {
         <div className="price">${item.price}</div>
       </div>
       <div className="action-buttons">
-        <div className="icon">
-          <VisibilityIcon />
-        </div>
+        <Link to={`/product/${item._id}`}>
+          <div className="icon">
+            <VisibilityIcon />
+          </div>
+        </Link>
         <div className="icon">
           <FavoriteBorderIcon />
         </div>
