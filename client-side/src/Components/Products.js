@@ -10,6 +10,7 @@ const Products = ({ cat, filters, sort }) => {
   useEffect(() => {
     const baseUrl = allProductsApi;
     const categoryUrl = `${categoryProductsApi}${cat}`;
+
     const getProducts = () => {
       fetch(cat ? categoryUrl : baseUrl, {
         method: "GET",
@@ -18,7 +19,19 @@ const Products = ({ cat, filters, sort }) => {
         },
       })
         .then((response) => {
-          if (response.status === 200) return response.json();
+          switch (response.status) {
+            case 200:
+              return response.json();
+
+            case 401:
+            case 403:
+              return response.json().then((error) => {
+                throw new Error(error.message);
+              });
+
+            default:
+              throw new Error(`Please contact the development departament!`);
+          }
         })
         .then((products) => {
           return products;
@@ -26,13 +39,13 @@ const Products = ({ cat, filters, sort }) => {
         .then((data) => {
           setProducts(data);
         })
-        .catch((err) => {
-          console.error(err.message);
+        .catch((error) => {
+          console.error(error.message);
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: `Something went wrong! ${err.message}`,
-            footer: '<a href="/">Why do I have this issue?</a>',
+            text: `Something went wrong! ${error.message}`,
+            footer: '<a href="/">Go back to home page</a>',
           });
         });
     };
