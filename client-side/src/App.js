@@ -3,11 +3,13 @@ import Home from "./Pages/Home";
 import ProductsRoutes from "./Routes/ProductsRoutes";
 import ProductRoutes from "./Routes/ProductRoutes";
 import CartRoutes from "./Routes/CartRoutes";
+import ScrollToTop from "./Components/ScrollToTop";
 import "./scss/index.scss";
 
 const App = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cart/*" element={<CartRoutes />} />
