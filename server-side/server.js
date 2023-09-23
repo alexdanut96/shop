@@ -23,13 +23,13 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use("/register", registerRoute);
-app.use("/auth", authRoute);
-app.use("/users", userRoute);
-app.use("/products", productRoute);
-app.use("/carts", cartRoute);
-app.use("/orders", orderRoute);
-app.use("/checkout", stripeRoute);
+app.use("/api/register", registerRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
+app.use("/api/products", productRoute);
+app.use("/api/carts", cartRoute);
+app.use("/api/orders", orderRoute);
+app.use("/api/checkout", stripeRoute);
 
 app.listen(PORT, () => {
   console.log(`The server is up and running on port ${PORT}`);

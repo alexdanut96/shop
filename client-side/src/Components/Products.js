@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import Product from "./Product";
 import Swal from "sweetalert2";
+import { allProductsApi, categoryProductsApi, token } from "../ApiRequests";
 
 const Products = ({ cat, filters, sort }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const baseUrl = "http://localhost:5000/products";
-    const categoryUrl = `http://localhost:5000/products?category=${cat}`;
+    const baseUrl = allProductsApi;
+    const categoryUrl = `${categoryProductsApi}${cat}`;
     const getProducts = () => {
       fetch(cat ? categoryUrl : baseUrl, {
         method: "GET",
         headers: {
-          token:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTUzZjUxNzA4ZDk5NjA1OTVlZWQ0ZSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY5NTQwNjY2MiwiZXhwIjoxNjk1NjY1ODYyfQ.avm3ilbPHIp6nDwUFUGEO_PB7V5TcFdsQzLo5udbq2I",
+          token: token,
         },
       })
         .then((response) => {
