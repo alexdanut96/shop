@@ -1,0 +1,24 @@
+.filters-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 50px;
+  .products-filter {
+    display: flex;
+    align-items: center;
+  }
+
+  .products-sort {
+    display: flex;
+    align-items: center;
+  }
+
+  .title {
+    margin-right: 16px;
+    font-weight: 500;
+    font-size: 20px;
+  }
+  .filters {
+    display: flex;
+    gap: 16px;
+  }
+}

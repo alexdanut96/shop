@@ -1,4 +1,3 @@
-import Announcement from "../Components/Announcement";
 import Facilities from "../Components/Facilities";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";

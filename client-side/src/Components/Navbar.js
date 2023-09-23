@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
 import { Badge } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -6,107 +5,33 @@ import PersonIcon from "@mui/icons-material/Person";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  height: 80px;
-  position: fixed;
-  top: 0;
-  z-index: 300;
-  background: white;
-  width: 100%;
-`;
-
-const Right = styled.div`
-  flex: 1;
-`;
-
-const Center = styled.div`
-  display: flex;
-  flex: 3;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Left = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: end;
-  gap: 20px;
-
-  .icon {
-    font-size: 2rem;
-    color: black;
-    cursor: pointer;
-  }
-`;
-
-const Logo = styled.h1`
-  cursor: pointer;
-  width: fit-content;
-`;
-
-const Navlinks = styled.ul`
-  list-style: none;
-  display: flex;
-  padding: 0;
-  gap: 8px;
-
-  .active {
-    color: #024e82;
-    border: solid 1px #dcdcdc;
-  }
-`;
-
-const SearchBox = styled.div`
-  border: solid 1px #dcdcdc;
-  height: 30px;
-  width: max(100px, 30vw);
-  display: flex;
-  align-items: center;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 16px;
-`;
-
-const LinkRef = styled.li`
-  padding: 5px 15px;
-  font-weight: 600;
-  cursor: pointer;
-`;
-
 const Navbar = () => {
   return (
-    <Container>
-      <Right>
-        <Logo>Dress-up.</Logo>
-      </Right>
-      <Center>
-        <Navlinks>
+    <nav className="navbar">
+      <div className="right">
+        <h1>Dress-up.</h1>
+      </div>
+      <div className="center">
+        <ul>
           <Link style={{ textDecoration: "none" }} to="/">
-            <LinkRef className="active">HOME</LinkRef>
+            <li className="active">HOME</li>
           </Link>
-          <LinkRef>ABOUT</LinkRef>
-          <LinkRef>CONTACT US</LinkRef>
-        </Navlinks>
-        <SearchBox>
+          <li>ABOUT</li>
+          <li>CONTACT US</li>
+        </ul>
+        <div className="search-box">
           <SearchIcon style={{ margin: "0 5px", color: "gray" }} />
-          <Input />
-        </SearchBox>
-      </Center>
-      <Left>
+          <input />
+        </div>
+      </div>
+      <div className="left">
         <PersonIcon className="icon" />
         <Badge badgeContent={4} color="primary">
           <ShoppingCartIcon className="icon" color="action" />
         </Badge>
         <MenuIcon className="icon" />
-      </Left>
-    </Container>
+      </div>
+    </nav>
   );
 };
 

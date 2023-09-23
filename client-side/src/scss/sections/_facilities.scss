@@ -1,0 +1,23 @@
+.facilities-container {
+  padding: 50px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  .facility {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    .icon {
+      color: #024e82;
+    }
+    .info {
+      .title {
+        font-weight: 900;
+        margin-bottom: 8px;
+      }
+      .description {
+        color: #555555;
+      }
+    }
+  }
+}

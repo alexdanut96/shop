@@ -1,0 +1,36 @@
+.presentation-container {
+  .image-box {
+    background-image: url("../../images/img_1.png");
+    background-size: cover;
+    height: 650px;
+    position: relative;
+    .image-info {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      justify-content: center;
+      padding-right: 100px;
+      h1 {
+        color: white;
+        font-size: 48px;
+      }
+      button {
+        border-left: 3.5px white solid;
+        border-top: 3.5px white solid;
+        border-right: 3.5px white solid;
+        border-bottom: 3.5px white solid;
+        padding: 18px 36px;
+        background: transparent;
+        color: white;
+        font-weight: 900;
+        font-size: 21px;
+        cursor: pointer;
+      }
+    }
+  }
+}

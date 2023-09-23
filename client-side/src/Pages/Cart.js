@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import CloseIcon from "@mui/icons-material/Close";
@@ -11,183 +10,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-
-const Container = styled.div`
-  display: flex;
-  gap: 36px;
-  padding: 0 50px 50px 50px;
-`;
-
-const Hr = styled.hr`
-  background-color: #e8e8e8;
-  border: none;
-  height: 1px;
-`;
-
-const Right = styled.div`
-  flex: 6;
-`;
-
-const Left = styled.div`
-  flex: 4;
-`;
-
-const Properties = styled.div`
-  display: flex;
-  justify-content: end;
-  font-weight: 500;
-  margin-bottom: 16px;
-  padding-right: 24px;
-`;
-
-const Property = styled.div`
-  width: 100px;
-  display: flex;
-  justify-content: center;
-  margin-right: 10px;
-`;
-
-const Item = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 0;
-`;
-
-const Image = styled.img`
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-`;
-
-const Title = styled.div`
-  font-weight: 600;
-`;
-
-const Colors = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  width: 100px;
-`;
-
-const Color = styled.div`
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  background-color: blue;
-  cursor: pointer;
-`;
-
-const Size = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const Quantity = styled.div`
-  width: 100px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const QuantityBox = styled.div`
-  height: 36px;
-  border: solid 1px rgba(0, 0, 0, 0.23);
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-
-  span {
-    color: #024e82;
-  }
-
-  .amountIcon {
-    cursor: pointer;
-  }
-`;
-
-const Price = styled.div`
-  width: 100px;
-  display: flex;
-  justify-content: center;
-  font-weight: 600;
-`;
-
-const Icon = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const ItemLeft = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const ItemRight = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const CheckoutBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 32px 16px;
-  border-radius: 10px;
-  height: fit-content;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
-`;
-
-const SubtotalContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const SavingsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const ShippingContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const TotalContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const CheckoutBtnContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const CheckoutBtn = styled.div`
-  width: 250px;
-  display: flex;
-  align-items: center;
-  padding: 16px 0;
-  justify-content: center;
-  background: #024e82;
-  color: white;
-  cursor: pointer;
-  transition: all 0.5s ease;
-
-  &:hover {
-    background-color: #013e68;
-  }
-`;
-
-const Subtitle = styled.h3``;
-
-const Amount = styled.div`
-  font-weight: 500;
-`;
-
-const ItemsAmount = styled.h1`
-  padding: 50px;
-`;
 
 const Cart = () => {
   const [selectSize, setSelectSize] = React.useState("S");
@@ -210,175 +32,186 @@ const Cart = () => {
   return (
     <>
       <Navbar />
-      <ItemsAmount>
-        Cart{" "}
-        <span style={{ fontWeight: "normal", color: "#7c7a79" }}>
-          (3 items)
-        </span>
-      </ItemsAmount>
-      <Container>
-        <Right>
-          <Properties>
-            <Property>Color</Property>
-            <Property>Size</Property>
-            <Property>Quantity</Property>
-            <Property>Price</Property>
-          </Properties>
-          <Hr />
-          <Item>
-            <ItemLeft>
-              <Image src={img1} />
-              <Title>Plain White Shirt</Title>
-            </ItemLeft>
-            <ItemRight>
-              <Colors>
-                <Color></Color>
-                <Color></Color>
-                <Color></Color>
-              </Colors>
-              <Size>
-                <FormControl sx={{ m: 0, minWidth: 100 }}>
-                  <Select
-                    style={{ height: "36px" }}
-                    MenuProps={{ disableScrollLock: true }}
-                    value={selectSize}
-                    onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value={"S"}>S</MenuItem>
-                    <MenuItem value={"M"}>M</MenuItem>
-                    <MenuItem value={"L"}>L</MenuItem>
-                    <MenuItem value={"XL"}>XL</MenuItem>
-                  </Select>
-                </FormControl>
-              </Size>
+      <div className="cart-container">
+        <h1>
+          Cart{" "}
+          <span style={{ fontWeight: "normal", color: "#7c7a79" }}>
+            (3 items)
+          </span>
+        </h1>
+        <div className="order-container">
+          <div className="left">
+            <div className="properties">
+              <div className="property">Color</div>
+              <div className="property">Size</div>
+              <div className="property">Quantity</div>
+              <div className="property">Price</div>
+            </div>
+            <hr />
+            <div className="item">
+              <div className="item-left">
+                <img src={img1} />
+                <div className="title">Plain White Shirt</div>
+              </div>
+              <div className="item-right">
+                <div className="colors">
+                  <div className="color"></div>
+                  <div className="color"></div>
+                  <div className="color"></div>
+                </div>
+                <div className="size">
+                  <FormControl sx={{ m: 0, minWidth: 100 }}>
+                    <Select
+                      style={{ height: "36px" }}
+                      MenuProps={{ disableScrollLock: true }}
+                      value={selectSize}
+                      onChange={handleChange}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value={"S"}>S</MenuItem>
+                      <MenuItem value={"M"}>M</MenuItem>
+                      <MenuItem value={"L"}>L</MenuItem>
+                      <MenuItem value={"XL"}>XL</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
 
-              <Quantity>
-                <QuantityBox>
-                  <RemoveIcon onClick={decreaseAmount} className="amountIcon" />
-                  <span>{amount}</span>
-                  <AddIcon onClick={increaseAmount} className="amountIcon" />
-                </QuantityBox>
-              </Quantity>
+                <div className="quantity">
+                  <div className="quantity-box">
+                    <RemoveIcon
+                      onClick={decreaseAmount}
+                      className="amountIcon"
+                    />
+                    <span>{amount}</span>
+                    <AddIcon onClick={increaseAmount} className="amountIcon" />
+                  </div>
+                </div>
 
-              <Price>$29.00</Price>
-              <Icon>
-                <CloseIcon style={{ cursor: "pointer" }} />
-              </Icon>
-            </ItemRight>
-          </Item>
-          <Hr />
-          <Item>
-            <ItemLeft>
-              <Image src={img2} />
-              <Title>Denim Jacket</Title>
-            </ItemLeft>
-            <ItemRight>
-              <Colors>
-                <Color></Color>
-                <Color></Color>
-                <Color></Color>
-              </Colors>
-              <Size>
-                <FormControl sx={{ m: 0, minWidth: 100 }}>
-                  <Select
-                    style={{ height: "36px" }}
-                    MenuProps={{ disableScrollLock: true }}
-                    value={selectSize}
-                    onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value={"S"}>S</MenuItem>
-                    <MenuItem value={"M"}>M</MenuItem>
-                    <MenuItem value={"L"}>L</MenuItem>
-                    <MenuItem value={"XL"}>XL</MenuItem>
-                  </Select>
-                </FormControl>
-              </Size>
-              <Quantity>
-                <QuantityBox>
-                  <RemoveIcon onClick={decreaseAmount} className="amountIcon" />
-                  <span>{amount}</span>
-                  <AddIcon onClick={increaseAmount} className="amountIcon" />
-                </QuantityBox>
-              </Quantity>
-              <Price>$69.00</Price>
-              <Icon>
-                <CloseIcon />
-              </Icon>
-            </ItemRight>
-          </Item>
-          <Hr />
-          <Item>
-            <ItemLeft>
-              <Image src={img3} />
-              <Title>Black Polo Shirt</Title>
-            </ItemLeft>
-            <ItemRight>
-              <Colors>
-                <Color></Color>
-                <Color></Color>
-                <Color></Color>
-              </Colors>
-              <Size>
-                <FormControl sx={{ m: 0, minWidth: 100 }}>
-                  <Select
-                    style={{ height: "36px" }}
-                    MenuProps={{ disableScrollLock: true }}
-                    value={selectSize}
-                    onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value={"S"}>S</MenuItem>
-                    <MenuItem value={"M"}>M</MenuItem>
-                    <MenuItem value={"L"}>L</MenuItem>
-                    <MenuItem value={"XL"}>XL</MenuItem>
-                  </Select>
-                </FormControl>
-              </Size>
-              <Quantity>
-                <QuantityBox>
-                  <RemoveIcon onClick={decreaseAmount} className="amountIcon" />
-                  <span>{amount}</span>
-                  <AddIcon onClick={increaseAmount} className="amountIcon" />
-                </QuantityBox>
-              </Quantity>
-              <Price>$49.00</Price>
-              <Icon>
-                <CloseIcon />
-              </Icon>
-            </ItemRight>
-          </Item>
-        </Right>
-        <Left>
-          <CheckoutBox>
-            <SubtotalContainer>
-              <Subtitle>Subtotal (3 items)</Subtitle>
-              <Amount>$540</Amount>
-            </SubtotalContainer>
-            <SavingsContainer>
-              <Subtitle>Savings</Subtitle>
-              <Amount>-$30%</Amount>
-            </SavingsContainer>
-            <Hr />
-            <ShippingContainer>
-              <Subtitle>Shipping</Subtitle>
-              <Amount>$0</Amount>
-            </ShippingContainer>
-            <Hr />
-            <TotalContainer>
-              <Subtitle>Total</Subtitle>
-              <Amount>$510</Amount>
-            </TotalContainer>
-            <CheckoutBtnContainer>
-              <CheckoutBtn>Continue to Checkout</CheckoutBtn>
-            </CheckoutBtnContainer>
-          </CheckoutBox>
-        </Left>
-      </Container>
+                <div className="price">$29.00</div>
+                <div className="icon">
+                  <CloseIcon style={{ cursor: "pointer" }} />
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div className="item">
+              <div className="item-left">
+                <img src={img2} />
+                <div className="title">Denim Jacket</div>
+              </div>
+              <div className="item-right">
+                <div className="colors">
+                  <div className="color"></div>
+                  <div className="color"></div>
+                  <div className="color"></div>
+                </div>
+                <div className="size">
+                  <FormControl sx={{ m: 0, minWidth: 100 }}>
+                    <Select
+                      style={{ height: "36px" }}
+                      MenuProps={{ disableScrollLock: true }}
+                      value={selectSize}
+                      onChange={handleChange}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value={"S"}>S</MenuItem>
+                      <MenuItem value={"M"}>M</MenuItem>
+                      <MenuItem value={"L"}>L</MenuItem>
+                      <MenuItem value={"XL"}>XL</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className="quantity">
+                  <div className="quantity-box">
+                    <RemoveIcon
+                      onClick={decreaseAmount}
+                      className="amountIcon"
+                    />
+                    <span>{amount}</span>
+                    <AddIcon onClick={increaseAmount} className="amountIcon" />
+                  </div>
+                </div>
+                <div className="price">$69.00</div>
+                <div className="icon">
+                  <CloseIcon />
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div className="item">
+              <div className="item-left">
+                <img src={img3} />
+                <div className="title">Black Polo Shirt</div>
+              </div>
+              <div className="item-right">
+                <div className="colors">
+                  <div className="color"></div>
+                  <div className="color"></div>
+                  <div className="color"></div>
+                </div>
+                <div className="size">
+                  <FormControl sx={{ m: 0, minWidth: 100 }}>
+                    <Select
+                      style={{ height: "36px" }}
+                      MenuProps={{ disableScrollLock: true }}
+                      value={selectSize}
+                      onChange={handleChange}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value={"S"}>S</MenuItem>
+                      <MenuItem value={"M"}>M</MenuItem>
+                      <MenuItem value={"L"}>L</MenuItem>
+                      <MenuItem value={"XL"}>XL</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className="quantity">
+                  <div className="quantity-box">
+                    <RemoveIcon
+                      onClick={decreaseAmount}
+                      className="amountIcon"
+                    />
+                    <span>{amount}</span>
+                    <AddIcon onClick={increaseAmount} className="amountIcon" />
+                  </div>
+                </div>
+                <div className="price">$49.00</div>
+                <div className="icon">
+                  <CloseIcon />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="right">
+            <div className="checkout-box">
+              <div className="subtotal-container">
+                <h3>Subtotal (3 items)</h3>
+                <div className="amount">$540</div>
+              </div>
+              <div className="savings-container">
+                <h3>Savings</h3>
+                <div className="amount">-$30%</div>
+              </div>
+              <hr />
+              <div className="shipping-container">
+                <h3>Shipping</h3>
+                <div className="amount">$0</div>
+              </div>
+              <hr />
+              <div className="total-container">
+                <h3>Total</h3>
+                <div className="amount">$510</div>
+              </div>
+              <div className="checkout-button-container">
+                <div className="checkout-button">Continue to Checkout</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <Footer />
     </>
   );

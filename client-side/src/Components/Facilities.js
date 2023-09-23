@@ -1,80 +1,56 @@
-import styled from "styled-components";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import ContactSupportOutlinedIcon from "@mui/icons-material/ContactSupportOutlined";
 import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
 import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
 
-const Container = styled.div`
-  padding: 50px;
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-`;
-const Facility = styled.div`
-  display: flex;
-  gap: 10px;
-  flex: 1;
-`;
-const Icon = styled.div`
-  color: #024e82;
-`;
-const Info = styled.div``;
-const Title = styled.div`
-  font-weight: 900;
-  margin-bottom: 8px;
-`;
-const Description = styled.div`
-  color: #555555;
-`;
-
 const Facilities = () => {
   return (
-    <Container>
-      <Facility>
-        <Icon>
+    <div className="facilities-container">
+      <div className="facility">
+        <div className="icon">
           <LocalShippingOutlinedIcon />
-        </Icon>
-        <Info>
-          <Title>FREE SHIPPING</Title>
-          <Description>
+        </div>
+        <div className="info">
+          <div className="title">FREE SHIPPING</div>
+          <div className="description">
             Enjoy free shipping on all orders above $100
-          </Description>
-        </Info>
-      </Facility>
-      <Facility>
-        <Icon>
+          </div>
+        </div>
+      </div>
+      <div className="facility">
+        <div className="icon">
           <ContactSupportOutlinedIcon />
-        </Icon>
-        <Info>
-          <Title>SUPPORT 24/7</Title>
-          <Description>
+        </div>
+        <div className="info">
+          <div className="title">SUPPORT 24/7</div>
+          <div className="description">
             Our support team is there to help you for queries
-          </Description>
-        </Info>
-      </Facility>
-      <Facility>
-        <Icon>
+          </div>
+        </div>
+      </div>
+      <div className="facility">
+        <div className="icon">
           <ReplayOutlinedIcon />
-        </Icon>
-        <Info>
-          <Title>30 DAYS RETURN</Title>
-          <Description>
+        </div>
+        <div className="info">
+          <div className="title">30 DAYS RETURN</div>
+          <div className="description">
             Simply return it within 30 days for an exchange.
-          </Description>
-        </Info>
-      </Facility>
-      <Facility>
-        <Icon>
+          </div>
+        </div>
+      </div>
+      <div className="facility">
+        <div className="icon">
           <ShieldOutlinedIcon />
-        </Icon>
-        <Info>
-          <Title>100% PAYMENT SECURE</Title>
-          <Description>
+        </div>
+        <div className="info">
+          <div className="title">100% PAYMENT SECURE</div>
+          <div className="description">
             Our payments are secured with 256 bit encryption
-          </Description>
-        </Info>
-      </Facility>
-    </Container>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

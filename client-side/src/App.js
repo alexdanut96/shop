@@ -1,10 +1,9 @@
-// import "../node_modules/react-bootstrap/dist/react-bootstrap.min.js";
-// import "./assets/css/style.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import ProductsRoutes from "./Routes/ProductsRoutes";
 import ProductRoutes from "./Routes/ProductRoutes";
 import CartRoutes from "./Routes/CartRoutes";
+import "./scss/index.scss";
 
 const App = () => {
   return (
