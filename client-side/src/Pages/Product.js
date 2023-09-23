@@ -11,6 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useLocation } from "react-router-dom";
 import { productApi, token } from "../ApiRequests";
+import Swal from "sweetalert2";
 
 const Product = () => {
   const location = useLocation();
@@ -38,13 +39,34 @@ const Product = () => {
         },
       })
         .then((response) => {
-          if (response.status === 200) return response.json();
+          switch (response.status) {
+            case 200:
+              return response.json();
+
+            case 401:
+            case 403:
+              return response.json().then((error) => {
+                throw new Error(error.message);
+              });
+
+            default:
+              throw new Error(`Please contact the development departament!`);
+          }
         })
         .then((product) => {
           return product;
         })
         .then((data) => {
           setProduct(data);
+        })
+        .catch((error) => {
+          console.error(error.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Something went wrong! ${error.message}`,
+            footer: '<a href="/">Go back to home page</a>',
+          });
         });
     };
 
