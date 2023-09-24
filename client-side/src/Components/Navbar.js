@@ -4,8 +4,11 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const quantity = useSelector((state) => state.cart.quantity);
+
   return (
     <nav className="navbar">
       <div className="right">
@@ -26,9 +29,11 @@ const Navbar = () => {
       </div>
       <div className="left">
         <PersonIcon className="icon" />
-        <Badge badgeContent={4} color="primary">
-          <ShoppingCartIcon className="icon" color="action" />
-        </Badge>
+        <Link to="/cart">
+          <Badge badgeContent={quantity} color="primary">
+            <ShoppingCartIcon className="icon" color="action" />
+          </Badge>
+        </Link>
         <MenuIcon className="icon" />
       </div>
     </nav>

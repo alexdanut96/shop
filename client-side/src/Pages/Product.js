@@ -12,15 +12,22 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useLocation } from "react-router-dom";
 import { productApi, token } from "../ApiRequests";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { cartActions } from "../Redux/CartSlice";
 
 const Product = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const id = location.pathname.split("/product/")[1];
 
   const [amount, setAmount] = useState(1);
   const [product, setProduct] = useState();
-  const [size, setSize] = useState();
-  const [color, setColor] = useState();
+  const [size, setSize] = useState("");
+  const [color, setColor] = useState("");
+
+  const addToCart = () => {
+    dispatch(cartActions.addProduct({ ...product, amount, color, size }));
+  };
 
   const handleAmount = (type) => {
     if (type === "increase") {
@@ -105,7 +112,6 @@ const Product = () => {
                       id="demo-simple-select"
                       name="size"
                       onChange={selectSize}
-                      // value={selectGender}
                       label="selectSize"
                     >
                       <MenuItem value="">
@@ -142,7 +148,9 @@ const Product = () => {
                   onClick={() => handleAmount("increase")}
                   className="amountIcon"
                 />
-                <div className="button">ADD TO CART</div>
+                <div onClick={addToCart} className="button">
+                  ADD TO CART
+                </div>
               </div>
 
               <div className="category">
