@@ -19,15 +19,23 @@ const Product = () => {
 
   const [amount, setAmount] = useState(1);
   const [product, setProduct] = useState();
+  const [size, setSize] = useState();
+  const [color, setColor] = useState();
 
-  const increaseAmount = () => {
-    setAmount(amount + 1);
+  const handleAmount = (type) => {
+    if (type === "increase") {
+      setAmount((prevState) => prevState + 1);
+    } else {
+      amount > 1 && setAmount((prevState) => prevState - 1);
+    }
   };
 
-  const decreaseAmount = () => {
-    if (amount > 1) {
-      setAmount(amount - 1);
-    }
+  const selectSize = (e) => {
+    setSize(e.target.value);
+  };
+  const selectColor = (e) => {
+    const selectedColor = e.target.dataset.colorType;
+    setColor(selectedColor);
   };
 
   useEffect(() => {
@@ -96,7 +104,7 @@ const Product = () => {
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       name="size"
-                      // onChange={handleFilters}
+                      onChange={selectSize}
                       // value={selectGender}
                       label="selectSize"
                     >
@@ -111,37 +119,29 @@ const Product = () => {
                     </Select>
                   </FormControl>
                 </Box>
-                <Box sx={{ width: 150 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Select color
-                    </InputLabel>
-                    <Select
-                      defaultValue=""
-                      MenuProps={{ disableScrollLock: true }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      name="color"
-                      // value={selectColor}
-                      label="selectColor"
-                      // onChange={handleFilters}
-                    >
-                      <MenuItem value="">
-                        <em>Select color</em>
-                      </MenuItem>
-                      {product.color.map((color, index) => (
-                        <MenuItem key={index} value={color}>
-                          {color}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
+                <div className="colors">
+                  Colors:
+                  {product.color.map((color) => (
+                    <div
+                      key={color}
+                      className="color"
+                      data-color-type={color}
+                      style={{ backgroundColor: color }}
+                      onClick={selectColor}
+                    ></div>
+                  ))}
+                </div>
               </div>
               <div className="amount">
-                <RemoveIcon onClick={decreaseAmount} className="amountIcon" />
+                <RemoveIcon
+                  onClick={() => handleAmount("decrease")}
+                  className="amountIcon"
+                />
                 <span>{amount}</span>
-                <AddIcon onClick={increaseAmount} className="amountIcon" />
+                <AddIcon
+                  onClick={() => handleAmount("increase")}
+                  className="amountIcon"
+                />
                 <div className="button">ADD TO CART</div>
               </div>
 
