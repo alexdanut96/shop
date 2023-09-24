@@ -23,3 +23,20 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+.colors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 100px;
+
+  .color {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background-color: blue;
+    cursor: pointer;
+    border: solid 1px rgb(213, 212, 212);
+  }
+}

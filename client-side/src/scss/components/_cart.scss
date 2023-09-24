@@ -100,20 +100,6 @@
           display: flex;
           gap: 10px;
 
-          .colors {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            width: 100px;
-
-            .color {
-              height: 16px;
-              width: 16px;
-              border-radius: 50%;
-              background-color: blue;
-              cursor: pointer;
-            }
-          }
           .size {
             display: flex;
             justify-content: center;
