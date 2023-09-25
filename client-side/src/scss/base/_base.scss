@@ -35,8 +35,11 @@ a {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background-color: blue;
+    // background-color: blue;
     cursor: pointer;
-    border: solid 1px rgb(213, 212, 212);
+
+    .active{
+      border: solid 1px rgb(213, 212, 212);
+    }
   }
 }

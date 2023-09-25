@@ -10,8 +10,13 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useSelector, useDispatch } from "react-redux";
+import { cartActions } from "../Redux/CartSlice";
 
 const Cart = () => {
+  const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
   const [selectSize, setSelectSize] = React.useState("S");
   const [amount, setAmount] = React.useState(1);
 
@@ -27,6 +32,30 @@ const Cart = () => {
 
   const handleChange = (event) => {
     setSelectSize(event.target.value);
+  };
+
+  const changeProductDetails = (e) => {
+    const elementType = e.target.dataset.elementType;
+    const productId = e.target.dataset.productId;
+    if (elementType === "color") {
+      const selectedColor = e.target.dataset.colorType;
+      dispatch(
+        cartActions.modifyOrder({
+          property: elementType,
+          productId,
+          selectedColor,
+        })
+      );
+    } else if (elementType === "amount") {
+      const amountAction = e.target.dataset.amountAction;
+      dispatch(
+        cartActions.modifyOrder({
+          property: elementType,
+          productId,
+          amountAction,
+        })
+      );
+    }
   };
 
   return (
@@ -47,143 +76,94 @@ const Cart = () => {
               <div className="property">Quantity</div>
               <div className="property">Price</div>
             </div>
-            <hr />
-            <div className="item">
-              <div className="item-left">
-                <img src={img1} />
-                <div className="title">Plain White Shirt</div>
-              </div>
-              <div className="item-right">
-                <div className="colors">
-                  <div className="color"></div>
-                  <div className="color"></div>
-                  <div className="color"></div>
-                </div>
-                <div className="size">
-                  <FormControl sx={{ m: 0, minWidth: 100 }}>
-                    <Select
-                      style={{ height: "36px" }}
-                      MenuProps={{ disableScrollLock: true }}
-                      value={selectSize}
-                      onChange={handleChange}
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                    >
-                      <MenuItem value={"S"}>S</MenuItem>
-                      <MenuItem value={"M"}>M</MenuItem>
-                      <MenuItem value={"L"}>L</MenuItem>
-                      <MenuItem value={"XL"}>XL</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
 
-                <div className="quantity">
-                  <div className="quantity-box">
-                    <RemoveIcon
-                      onClick={decreaseAmount}
-                      className="amountIcon"
-                    />
-                    <span>{amount}</span>
-                    <AddIcon onClick={increaseAmount} className="amountIcon" />
+            <hr />
+            {cart.products.map((item) => (
+              <div key={item._id} className="item-container">
+                <div className="item">
+                  <div className="item-left">
+                    <img src={item.image} />
+                    <div className="title">{item.title}</div>
                   </div>
-                </div>
+                  <div className="item-right">
+                    <div className="colors">
+                      {item.color.map((color) => (
+                        <div
+                          key={color}
+                          className="color"
+                          data-color-type={color}
+                          data-product-id={item._id}
+                          data-element-type="color"
+                          style={{ backgroundColor: color }}
+                          onClick={changeProductDetails}
+                        ></div>
+                      ))}
+                    </div>
+                    <div className="size">
+                      <FormControl sx={{ m: 0, minWidth: 100 }}>
+                        <Select
+                          style={{ height: "36px" }}
+                          MenuProps={{ disableScrollLock: true }}
+                          // value={item.selectedSize}
+                          defaultValue={item.selectedSize}
+                          onChange={handleChange}
+                          displayEmpty
+                          inputProps={{ "aria-label": "Without label" }}
+                        >
+                          <MenuItem value="">
+                            <em>Select size</em>
+                          </MenuItem>
+                          {item.size.map((size) => {
+                            if (item.selectedSize === size) {
+                              return (
+                                <MenuItem defaultValue key={size} value={size}>
+                                  {size}
+                                </MenuItem>
+                              );
+                            } else {
+                              return (
+                                <MenuItem key={size} value={size}>
+                                  {size}
+                                </MenuItem>
+                              );
+                            }
+                          })}
+                        </Select>
+                      </FormControl>
+                    </div>
+                    <div className="quantity">
+                      <div className="quantity-box">
+                        <div
+                          data-product-id={item._id}
+                          data-element-type="amount"
+                          data-amount-action="decrease"
+                          onClick={changeProductDetails}
+                          className="amountIcon"
+                        >
+                          -
+                        </div>
 
-                <div className="price">$29.00</div>
-                <div className="icon">
-                  <CloseIcon style={{ cursor: "pointer" }} />
-                </div>
-              </div>
-            </div>
-            <hr />
-            <div className="item">
-              <div className="item-left">
-                <img src={img2} />
-                <div className="title">Denim Jacket</div>
-              </div>
-              <div className="item-right">
-                <div className="colors">
-                  <div className="color"></div>
-                  <div className="color"></div>
-                  <div className="color"></div>
-                </div>
-                <div className="size">
-                  <FormControl sx={{ m: 0, minWidth: 100 }}>
-                    <Select
-                      style={{ height: "36px" }}
-                      MenuProps={{ disableScrollLock: true }}
-                      value={selectSize}
-                      onChange={handleChange}
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                    >
-                      <MenuItem value={"S"}>S</MenuItem>
-                      <MenuItem value={"M"}>M</MenuItem>
-                      <MenuItem value={"L"}>L</MenuItem>
-                      <MenuItem value={"XL"}>XL</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-                <div className="quantity">
-                  <div className="quantity-box">
-                    <RemoveIcon
-                      onClick={decreaseAmount}
-                      className="amountIcon"
-                    />
-                    <span>{amount}</span>
-                    <AddIcon onClick={increaseAmount} className="amountIcon" />
+                        <span>{item.amount}</span>
+                        <div
+                          data-product-id={item._id}
+                          data-element-type="amount"
+                          data-amount-action="increase"
+                          onClick={changeProductDetails}
+                          className="amountIcon"
+                        >
+                          +
+                        </div>
+                      </div>
+                    </div>
+                    <div className="price">${item.price * item.amount}</div>
+                    <div className="icon">
+                      <CloseIcon />
+                    </div>
                   </div>
                 </div>
-                <div className="price">$69.00</div>
-                <div className="icon">
-                  <CloseIcon />
-                </div>
+                <hr />
               </div>
-            </div>
-            <hr />
-            <div className="item">
-              <div className="item-left">
-                <img src={img3} />
-                <div className="title">Black Polo Shirt</div>
-              </div>
-              <div className="item-right">
-                <div className="colors">
-                  <div className="color"></div>
-                  <div className="color"></div>
-                  <div className="color"></div>
-                </div>
-                <div className="size">
-                  <FormControl sx={{ m: 0, minWidth: 100 }}>
-                    <Select
-                      style={{ height: "36px" }}
-                      MenuProps={{ disableScrollLock: true }}
-                      value={selectSize}
-                      onChange={handleChange}
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                    >
-                      <MenuItem value={"S"}>S</MenuItem>
-                      <MenuItem value={"M"}>M</MenuItem>
-                      <MenuItem value={"L"}>L</MenuItem>
-                      <MenuItem value={"XL"}>XL</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-                <div className="quantity">
-                  <div className="quantity-box">
-                    <RemoveIcon
-                      onClick={decreaseAmount}
-                      className="amountIcon"
-                    />
-                    <span>{amount}</span>
-                    <AddIcon onClick={increaseAmount} className="amountIcon" />
-                  </div>
-                </div>
-                <div className="price">$49.00</div>
-                <div className="icon">
-                  <CloseIcon />
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
           <div className="right">
             <div className="checkout-box">
