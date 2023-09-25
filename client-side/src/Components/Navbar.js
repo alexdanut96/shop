@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="right">
-        <h1>Dress-upp.</h1>
+        <h1>Dress-up.</h1>
       </div>
       <div className="center">
         <ul>

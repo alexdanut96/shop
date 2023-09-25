@@ -12,21 +12,31 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useLocation } from "react-router-dom";
 import { productApi, token } from "../ApiRequests";
 import Swal from "sweetalert2";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../Redux/CartSlice";
 
 const Product = () => {
+  const listNumber = useSelector((state) => state.cart.products.length + 1);
+
   const dispatch = useDispatch();
   const location = useLocation();
   const id = location.pathname.split("/product/")[1];
 
   const [amount, setAmount] = useState(1);
   const [product, setProduct] = useState();
-  const [size, setSize] = useState("");
-  const [color, setColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
 
   const addToCart = () => {
-    dispatch(cartActions.addProduct({ ...product, amount, color, size }));
+    dispatch(
+      cartActions.addProduct({
+        ...product,
+        amount,
+        selectedSize,
+        selectedColor,
+        listNumber,
+      })
+    );
   };
 
   const handleAmount = (type) => {
@@ -38,11 +48,11 @@ const Product = () => {
   };
 
   const selectSize = (e) => {
-    setSize(e.target.value);
+    setSelectedSize(e.target.value);
   };
   const selectColor = (e) => {
-    const selectedColor = e.target.dataset.colorType;
-    setColor(selectedColor);
+    const chosenColor = e.target.dataset.colorType;
+    setSelectedColor(chosenColor);
   };
 
   useEffect(() => {
@@ -117,8 +127,8 @@ const Product = () => {
                       <MenuItem value="">
                         <em>Select size</em>
                       </MenuItem>
-                      {product.size.map((size, index) => (
-                        <MenuItem key={index} value={size}>
+                      {product.size.map((size) => (
+                        <MenuItem key={size} value={size}>
                           {size}
                         </MenuItem>
                       ))}
@@ -132,6 +142,7 @@ const Product = () => {
                       key={color}
                       className="color"
                       data-color-type={color}
+                      // data-product-id={product._id}
                       style={{ backgroundColor: color }}
                       onClick={selectColor}
                     ></div>
@@ -155,8 +166,8 @@ const Product = () => {
 
               <div className="category">
                 Categories:
-                {product.categories.map((category, index) => (
-                  <div key={index}>{category}</div>
+                {product.categories.map((category) => (
+                  <div key={category}>{category}</div>
                 ))}
               </div>
               <div className="tags">Tags: Modern, Design, cotton</div>
