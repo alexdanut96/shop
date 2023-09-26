@@ -25,11 +25,12 @@ a {
 }
 
 .colors {
+  position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 5px;
-  width: 100px;
+  // width: 100px;
+
 
   .color {
     height: 16px;
@@ -37,9 +38,36 @@ a {
     border-radius: 50%;
     // background-color: blue;
     cursor: pointer;
+    border: gray 1px solid;
 
-    .active{
-      border: solid 1px rgb(213, 212, 212);
-    }
   }
-}
+  .active{
+    border: solid 2px #024e82;
+    height: 20px;
+    width: 20px;
+  }
+
+  .color-tag{
+    position: absolute;
+  }
+
+ }
+
+ .colors.product{
+  .color-tag{
+    bottom: 15px;
+    left:0;
+  }
+ }
+ .colors.cart{
+  .color-tag{
+    top: 25px;
+    right:0;
+  }
+ }
+
+ // alerts
+ .alerts{
+  margin:10px 0;
+ }
+  
