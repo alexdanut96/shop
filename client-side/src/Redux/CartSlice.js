@@ -10,6 +10,17 @@ const cartSlice = createSlice({
   },
   reducers: {
     addProduct(state, action) {
+      const currentState = JSON.parse(JSON.stringify(state.products));
+      const sameData = currentState.find((item) => {
+        console.log(action.payload);
+        console.log(item);
+        console.log(item.toString() === action.payload.toString());
+        return JSON.stringify(item) === JSON.stringify(action.payload);
+      });
+      // console.log(currentState);
+      // console.log(action.payload);
+      // console.log(sameData);
+
       state.quantity += 1;
       state.products.push(action.payload);
       state.total += action.payload.price * action.payload.amount;

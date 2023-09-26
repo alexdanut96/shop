@@ -14,6 +14,7 @@ import { productApi, token } from "../ApiRequests";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../Redux/CartSlice";
+import Alerts from "../Utilities/Alerts";
 
 const Product = () => {
   const listNumber = useSelector((state) => state.cart.products.length + 1);
@@ -24,10 +25,32 @@ const Product = () => {
 
   const [amount, setAmount] = useState(1);
   const [product, setProduct] = useState();
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState();
+  const [selectedColor, setSelectedColor] = useState();
+  const [showWarningAlert, setShowWarningAlert] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState("");
+
+  const displaySuccessAlert = () => {
+    setShowSuccessAlert("Item added to cart");
+    setTimeout(() => {
+      setShowSuccessAlert("");
+    }, 2000);
+  };
 
   const addToCart = () => {
+    if (!selectedColor || !selectedSize) {
+      if (!selectedColor && !selectedSize) {
+        setShowWarningAlert("Choose size and color");
+      } else if (!selectedColor) {
+        setShowWarningAlert("Choose color");
+      } else {
+        setShowWarningAlert("Choose size");
+      }
+      return;
+    } else if (selectedColor && selectedSize) {
+      setShowWarningAlert("");
+      displaySuccessAlert();
+    }
     dispatch(
       cartActions.addProduct({
         ...product,
@@ -135,20 +158,27 @@ const Product = () => {
                     </Select>
                   </FormControl>
                 </Box>
-                <div className="colors">
-                  Colors:
+                <div className="colors product">
+                  <span>Colors:</span>
                   {product.color.map((color) => (
                     <div
                       key={color}
-                      className="color"
+                      className={`color ${selectedColor === color && "active"}`}
                       data-color-type={color}
                       // data-product-id={product._id}
                       style={{ backgroundColor: color }}
                       onClick={selectColor}
                     ></div>
                   ))}
+                  <div className="color-tag">{selectedColor}</div>
                 </div>
               </div>
+              {showWarningAlert && (
+                <Alerts type="warning" message={showWarningAlert} />
+              )}
+              {showSuccessAlert && (
+                <Alerts type="success" message={showSuccessAlert} />
+              )}
               <div className="amount">
                 <RemoveIcon
                   onClick={() => handleAmount("decrease")}

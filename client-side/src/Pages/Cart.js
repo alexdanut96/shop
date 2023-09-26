@@ -2,14 +2,9 @@ import React from "react";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import CloseIcon from "@mui/icons-material/Close";
-import img1 from "../images/img1.png";
-import img2 from "../images/img2.png";
-import img3 from "../images/img3.png";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { useSelector, useDispatch } from "react-redux";
 import { cartActions } from "../Redux/CartSlice";
 
@@ -86,11 +81,13 @@ const Cart = () => {
                     <div className="title">{item.title}</div>
                   </div>
                   <div className="item-right">
-                    <div className="colors">
+                    <div className="colors cart">
                       {item.color.map((color) => (
                         <div
                           key={color}
-                          className="color"
+                          className={`color ${
+                            item.selectedColor === color && "active"
+                          }`}
                           data-color-type={color}
                           data-product-id={item._id}
                           data-element-type="color"
@@ -98,7 +95,9 @@ const Cart = () => {
                           onClick={changeProductDetails}
                         ></div>
                       ))}
+                      <div className="color-tag">{item.selectedColor}</div>
                     </div>
+
                     <div className="size">
                       <FormControl sx={{ m: 0, minWidth: 100 }}>
                         <Select
