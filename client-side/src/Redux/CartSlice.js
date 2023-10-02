@@ -14,29 +14,31 @@ const cartSlice = createSlice({
       let newProduct;
       let filteredProducts;
       const sameProduct = currentState.find((item) => {
-        return JSON.stringify(item._id) === JSON.stringify(action.payload._id);
+        return (
+          JSON.stringify(item._id) === JSON.stringify(action.payload._id) &&
+          JSON.stringify(item.selectedColor) ===
+            JSON.stringify(action.payload.selectedColor) &&
+          JSON.stringify(item.selectedSize) ===
+            JSON.stringify(action.payload.selectedSize)
+        );
       });
 
       console.log(sameProduct);
 
       if (sameProduct) {
-        if (
-          sameProduct.selectedColor === action.payload.selectedColor &&
-          sameProduct.selectedSize === action.payload.selectedSize
-        ) {
-          newProduct = {
-            ...sameProduct,
-            amount: sameProduct.amount + action.payload.amount,
-          };
-        } else {
-          state.quantity += 1;
-          state.products.push(action.payload);
-          state.total += action.payload.price * action.payload.amount;
-        }
+        newProduct = {
+          ...sameProduct,
+          amount: sameProduct.amount + action.payload.amount,
+        };
         filteredProducts = currentState.filter((item) => {
-          return (
-            JSON.stringify(item._id) !== JSON.stringify(action.payload._id)
-          );
+          if (JSON.stringify(item._id === JSON.stringify(action.payload._id))) {
+            return (
+              JSON.stringify(item.selectedColor) !==
+                JSON.stringify(action.payload.selectedColor) &&
+              JSON.stringify(item.selectedSize) !==
+                JSON.stringify(action.payload.selectedSize)
+            );
+          }
         });
 
         state.products = [...filteredProducts, newProduct].sort(
@@ -45,8 +47,8 @@ const cartSlice = createSlice({
       } else {
         state.quantity += 1;
         state.products.push(action.payload);
-        state.total += action.payload.price * action.payload.amount;
       }
+      state.total += action.payload.price * action.payload.amount;
 
       // console.log(currentState);
       // console.log(action.payload);
