@@ -23,8 +23,6 @@ const cartSlice = createSlice({
         );
       });
 
-      console.log(sameProduct);
-
       if (sameProduct) {
         newProduct = {
           ...sameProduct,
@@ -34,7 +32,7 @@ const cartSlice = createSlice({
           if (JSON.stringify(item._id === JSON.stringify(action.payload._id))) {
             return (
               JSON.stringify(item.selectedColor) !==
-                JSON.stringify(action.payload.selectedColor) &&
+                JSON.stringify(action.payload.selectedColor) ||
               JSON.stringify(item.selectedSize) !==
                 JSON.stringify(action.payload.selectedSize)
             );
@@ -48,39 +46,87 @@ const cartSlice = createSlice({
         state.quantity += 1;
         state.products.push(action.payload);
       }
-      state.total += action.payload.price * action.payload.amount;
-
-      // console.log(currentState);
-      // console.log(action.payload);
-      // console.log(sameData);
+      let totalPrice = 0;
+      JSON.parse(JSON.stringify(state.products)).forEach(
+        (item) => (totalPrice += item.amount * item.price)
+      );
+      state.total = totalPrice;
     },
+
     modifyOrder(state, action) {
-      console.log(action.payload.productId);
+      const currentState = JSON.parse(JSON.stringify(state.products));
 
       // find product you want to modify
-      const currentProduct = state.products.find(
-        (item) => item._id === action.payload.productId
+      const currentProduct = currentState.find(
+        (item) =>
+          JSON.stringify(item._id) ===
+            JSON.stringify(action.payload.productId) &&
+          JSON.stringify(item.selectedColor) ===
+            JSON.stringify(action.payload.productColor) &&
+          JSON.stringify(item.selectedSize) ===
+            JSON.stringify(action.payload.productSize)
       );
 
-      if (action.payload.property === "color") {
-        currentProduct.selectedColor = action.payload.selectedColor;
-      } else if (action.payload.property === "amount") {
-        if (action.payload.amountAction === "increase") {
-          currentProduct.amount = currentProduct.amount += 1;
-        } else {
-          if (currentProduct.amount > 1)
-            currentProduct.amount = currentProduct.amount -= 1;
-        }
+      if (action.payload.amountAction === "increase") {
+        currentProduct.amount = currentProduct.amount += 1;
+      } else {
+        if (currentProduct.amount > 1)
+          currentProduct.amount = currentProduct.amount -= 1;
       }
 
       // recreate the products list in the initial order
-      const filteredProducts = state.products.filter(
-        (item) => item._id !== currentProduct._id
-      );
+      const filteredProducts = currentState.filter((item) => {
+        if (
+          JSON.stringify(item._id === JSON.stringify(action.payload.productId))
+        ) {
+          return (
+            JSON.stringify(item.selectedColor) !==
+              JSON.stringify(action.payload.productColor) ||
+            JSON.stringify(item.selectedSize) !==
+              JSON.stringify(action.payload.productSize)
+          );
+        }
+      });
 
       state.products = [...filteredProducts, currentProduct].sort(
         (a, b) => a.listNumber - b.listNumber
       );
+
+      let totalPrice = 0;
+      JSON.parse(JSON.stringify(state.products)).forEach(
+        (item) => (totalPrice += item.amount * item.price)
+      );
+      state.total = totalPrice;
+    },
+
+    removeFromCart(state, action) {
+      const currentState = JSON.parse(JSON.stringify(state.products));
+
+      // find product you want to remove
+      const currentProduct = currentState.find(
+        (item) =>
+          JSON.stringify(item._id) ===
+            JSON.stringify(action.payload.productId) &&
+          JSON.stringify(item.selectedColor) ===
+            JSON.stringify(action.payload.productColor) &&
+          JSON.stringify(item.selectedSize) ===
+            JSON.stringify(action.payload.productSize)
+      );
+
+      const filteredProducts = currentState.filter(
+        (item) => JSON.stringify(item) !== JSON.stringify(currentProduct)
+      );
+
+      state.products = [...filteredProducts].sort(
+        (a, b) => a.listNumber - b.listNumber
+      );
+
+      state.quantity -= 1;
+      let totalPrice = 0;
+      JSON.parse(JSON.stringify(state.products)).forEach(
+        (item) => (totalPrice += item.amount * item.price)
+      );
+      state.total = totalPrice;
     },
   },
 });

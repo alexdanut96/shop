@@ -62,7 +62,8 @@ a {
  .colors.cart{
   .color-tag{
     top: 25px;
-    right:0;
+    right:50%;
+    transform: translateX(50%);
   }
  }
 
