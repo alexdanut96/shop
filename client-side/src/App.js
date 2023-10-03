@@ -5,6 +5,7 @@ import ProductRoutes from "./Routes/ProductRoutes";
 import CartRoutes from "./Routes/CartRoutes";
 import AuthenticationRoutes from "./Routes/AuthenticationRoutes";
 import Pay from "./Pages/Pay";
+import Success from "./Pages/Success";
 import ScrollToTop from "./Components/ScrollToTop";
 import "./scss/index.scss";
 
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/product/*" element={<ProductRoutes />} />
         <Route path="/authentication/*" element={<AuthenticationRoutes />} />
         <Route path="/pay" element={<Pay />} />
+        <Route path="/success" element={<Success />} />
       </Routes>
     </BrowserRouter>
   );

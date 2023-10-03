@@ -47,31 +47,31 @@ const Cart = () => {
   // stripe functionality
   const navigate = useNavigate();
   const KEY = process.env.REACT_APP_STRIPE;
-  const URL = "http://localhost:5000/checkout/payment";
+  const URL = "http://localhost:5000/api/checkout/payment";
   const [stripeToken, setStripeToken] = useState(null);
 
   const onToken = (token) => {
     setStripeToken(token);
   };
 
-  console.log(stripeToken);
+  // console.log(stripeToken);
 
-  // useEffect(() => {
-  //   const makeRequest = async () => {
-  //     try {
-  //       const res = await axios.post(URL, {
-  //         tokenId: stripeToken.id,
-  //         amount: 4000,
-  //       });
-  //       console.log(res.data);
-  //       navigate("/success");
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   console.log(stripeToken);
-  //   stripeToken && makeRequest();
-  // }, [stripeToken, navigate]);
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await axios.post(URL, {
+          tokenId: stripeToken.id,
+          amount: (totalPrice + savings + shipping) * 100,
+        });
+        console.log(res.data);
+        // navigate("/success");
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    console.log(stripeToken);
+    stripeToken && makeRequest();
+  }, [stripeToken, navigate]);
 
   return (
     <>
@@ -188,7 +188,7 @@ const Cart = () => {
                   billingAddress
                   shippingAddress
                   description={`Total $${totalPrice + savings + shipping}`}
-                  amount={totalPrice + savings + shipping * 100}
+                  amount={(totalPrice + savings + shipping) * 100}
                   token={onToken}
                   stripeKey={KEY}
                 >
