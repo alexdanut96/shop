@@ -1,9 +1,12 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
-import CloseIcon from "@mui/icons-material/Close";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { cartActions } from "../Redux/CartSlice";
+import axios from "axios";
+import StripeCheckout from "react-stripe-checkout";
+import { useEffect, useState } from "react";
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
@@ -41,6 +44,35 @@ const Cart = () => {
     );
   };
 
+  // stripe functionality
+  const navigate = useNavigate();
+  const KEY = process.env.REACT_APP_STRIPE;
+  const URL = "http://localhost:5000/checkout/payment";
+  const [stripeToken, setStripeToken] = useState(null);
+
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+
+  console.log(stripeToken);
+
+  // useEffect(() => {
+  //   const makeRequest = async () => {
+  //     try {
+  //       const res = await axios.post(URL, {
+  //         tokenId: stripeToken.id,
+  //         amount: 4000,
+  //       });
+  //       console.log(res.data);
+  //       navigate("/success");
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   console.log(stripeToken);
+  //   stripeToken && makeRequest();
+  // }, [stripeToken, navigate]);
+
   return (
     <>
       <Navbar />
@@ -66,8 +98,12 @@ const Cart = () => {
               <div key={index} className="item-container">
                 <div className="item">
                   <div className="item-left">
-                    <img src={item.image} />
-                    <div className="title">{item.title}</div>
+                    <Link to={`/product/${item._id}`}>
+                      <img src={item.image} />
+                    </Link>
+                    <Link to={`/product/${item._id}`} className="title">
+                      {item.title}
+                    </Link>
                   </div>
                   <div className="item-right">
                     <div className="colors cart">
@@ -128,7 +164,7 @@ const Cart = () => {
           <div className="right">
             <div className="checkout-box">
               <div className="subtotal-container">
-                <h3>Subtotal (3 items)</h3>
+                <h3>Subtotal ({products.length} items)</h3>
                 <div className="amount">${totalPrice}</div>
               </div>
               <div className="savings-container">
@@ -146,7 +182,18 @@ const Cart = () => {
                 <div className="amount">${totalPrice + savings + shipping}</div>
               </div>
               <div className="checkout-button-container">
-                <div className="checkout-button">Continue to Checkout</div>
+                <StripeCheckout
+                  name="e-comm"
+                  image="https://cdn.dribbble.com/users/614270/screenshots/14575431/media/4907a0869e9ed2ac4e2d1c2beaf9f012.gif"
+                  billingAddress
+                  shippingAddress
+                  description={`Total $${totalPrice + savings + shipping}`}
+                  amount={totalPrice + savings + shipping * 100}
+                  token={onToken}
+                  stripeKey={KEY}
+                >
+                  <div className="checkout-button">Continue to Checkout</div>
+                </StripeCheckout>
               </div>
             </div>
           </div>
