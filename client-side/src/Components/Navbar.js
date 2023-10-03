@@ -12,7 +12,9 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="right">
-        <h1>Dress-up.</h1>
+        <Link to="/">
+          <h1>Dress-up.</h1>
+        </Link>
       </div>
       <div className="center">
         <ul>
@@ -28,7 +30,9 @@ const Navbar = () => {
         </div>
       </div>
       <div className="left">
-        <PersonIcon className="icon" />
+        <Link to="/authentication/login">
+          <PersonIcon className="icon" />
+        </Link>
         <Link to="/cart">
           <Badge badgeContent={quantity} color="primary">
             <ShoppingCartIcon className="icon" color="action" />
