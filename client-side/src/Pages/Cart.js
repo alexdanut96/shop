@@ -7,6 +7,7 @@ import { cartActions } from "../Redux/CartSlice";
 import axios from "axios";
 import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
+import { checkoutPayment } from "../ApiRequests";
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
@@ -47,14 +48,12 @@ const Cart = () => {
   // stripe functionality
   const navigate = useNavigate();
   const KEY = process.env.REACT_APP_STRIPE;
-  const URL = "http://localhost:5000/api/checkout/payment";
+  const URL = checkoutPayment;
   const [stripeToken, setStripeToken] = useState(null);
 
   const onToken = (token) => {
     setStripeToken(token);
   };
-
-  // console.log(stripeToken);
 
   useEffect(() => {
     const makeRequest = async () => {
@@ -63,13 +62,11 @@ const Cart = () => {
           tokenId: stripeToken.id,
           amount: (totalPrice + savings + shipping) * 100,
         });
-        console.log(res.data);
-        // navigate("/success");
+        navigate("/success", { state: { data: res.data } });
       } catch (err) {
         console.log(err);
       }
     };
-    console.log(stripeToken);
     stripeToken && makeRequest();
   }, [stripeToken, navigate]);
 
