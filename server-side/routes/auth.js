@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const User = require("../model/User");
 const CryptoJS = require("crypto-js");
 
-router.post("/", async (req, res) => {
+router.post("/login", async (req, res) => {
   if (!req.body.email || !req.body.password) {
     return res.status(400).json({ message: "Email and passowd are required!" });
   }

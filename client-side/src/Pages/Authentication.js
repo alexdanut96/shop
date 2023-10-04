@@ -13,19 +13,23 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbar from "../Components/Navbar";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../Redux/apiCalls";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 const Authentication = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const isFetching = useSelector((state) => state.user.isFetching);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    login(dispatch, { email, password });
   };
 
   return (
@@ -48,12 +52,7 @@ const Authentication = () => {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
+            <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -63,6 +62,9 @@ const Authentication = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
               <TextField
                 margin="normal"
@@ -73,18 +75,26 @@ const Authentication = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
               <Button
-                type="submit"
+                disabled={isFetching ? true : false}
+                onClick={handleLogin}
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, height: 40 }}
               >
-                Sign In
+                {isFetching ? (
+                  <span className="button-spinner"></span>
+                ) : (
+                  <span>Sign In</span>
+                )}
               </Button>
               <Grid container>
                 <Grid item xs>
