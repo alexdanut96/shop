@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import Product from "./Product";
 import Swal from "sweetalert2";
-import { allProductsApi, categoryProductsApi, token } from "../ApiRequests";
+import { token, BASE_URL } from "../ApiRequests";
 
 const Products = ({ cat, filters, sort }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const baseUrl = allProductsApi;
-    const categoryUrl = `${categoryProductsApi}${cat}`;
+    const baseUrl = `${BASE_URL}products`;
+    const categoryUrl = `${BASE_URL}products?category=${cat}`;
 
     const getProducts = () => {
       fetch(cat ? categoryUrl : baseUrl, {

@@ -48,7 +48,7 @@ const Cart = () => {
   // stripe functionality
   const navigate = useNavigate();
   const KEY = process.env.REACT_APP_STRIPE;
-  const URL = checkoutPayment;
+  const URL = "http://localhost:5000/api/checkout/payment";
   const [stripeToken, setStripeToken] = useState(null);
 
   const onToken = (token) => {
