@@ -10,7 +10,7 @@ import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useLocation } from "react-router-dom";
-import { productApi, token } from "../ApiRequests";
+import { token, BASE_URL } from "../ApiRequests";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../Redux/CartSlice";
@@ -80,7 +80,7 @@ const Product = () => {
 
   useEffect(() => {
     const getProduct = () => {
-      fetch(`${productApi}${id}`, {
+      fetch(`${BASE_URL}products/find/${id}`, {
         method: "GET",
         headers: {
           token: token,
