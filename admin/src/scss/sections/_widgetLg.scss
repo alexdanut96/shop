@@ -17,7 +17,7 @@
       text-align: left;
     }
 
-    .widgetLgUser {
+    .widgetLgUser .widgetLgOrder {
       display: flex;
       align-items: center;
       font-weight: 600;
@@ -42,15 +42,15 @@
       border-radius: 10px;
     }
 
-    .widgetLgButton.Approved {
+    .widgetLgButton.approved {
       background-color: #e5faf2;
       color: #3bb077;
     }
-    .widgetLgButton.Declined {
+    .widgetLgButton.declined {
       background-color: #fff0f1;
       color: #d95087;
     }
-    .widgetLgButton.Pending {
+    .widgetLgButton.pending {
       background-color: #ebf1fe;
       color: #2a7ade;
     }
