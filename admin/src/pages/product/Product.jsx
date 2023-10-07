@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
-import "./product.css";
 import Chart from "../../components/chart/Chart";
 import { productData } from "../../dummyData";
 import PublishIcon from "@mui/icons-material/Publish";
 
 export default function Product() {
   return (
-    <div className="product">
+    <div className="product-container">
       <div className="productTitleContainer">
         <h1 className="productTitle">Product</h1>
         <Link to="/newproduct">

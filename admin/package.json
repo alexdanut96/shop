@@ -21,6 +21,7 @@
     "react-scripts": "^5.0.1",
     "recharts": "^2.0.9",
     "redux-persist": "^6.0.0",
+    "sass": "^1.69.0",
     "timeago.js": "^4.0.2",
     "web-vitals": "^3.5.0"
   },
@@ -28,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "compile:sass": "sass --watch scss:src/assets/css"
   },
   "eslintConfig": {
     "extends": [

@@ -5,18 +5,17 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import PublishIcon from "@mui/icons-material/Publish";
 import { Link } from "react-router-dom";
-import "./user.css";
 
 export default function User() {
   return (
-    <div className="user">
+    <div className="user-container">
       <div className="userTitleContainer">
         <h1 className="userTitle">Edit User</h1>
         <Link to="/newUser">
           <button className="userAddButton">Create</button>
         </Link>
       </div>
-      <div className="userContainer">
+      <div className="user-box">
         <div className="userShow">
           <div className="userShowTop">
             <img

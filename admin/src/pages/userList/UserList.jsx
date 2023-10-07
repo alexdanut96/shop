@@ -1,4 +1,3 @@
-import "./userList.css";
 import { DataGrid } from "@mui/x-data-grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { userRows } from "../../dummyData";
@@ -59,7 +58,7 @@ export default function UserList() {
   ];
 
   return (
-    <div className="userList">
+    <div className="userList-container">
       <DataGrid
         rows={data}
         disableSelectionOnClick

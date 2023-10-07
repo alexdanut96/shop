@@ -1,10 +1,9 @@
-import "./featuredInfo.css";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 export default function FeaturedInfo() {
   return (
-    <div className="featured">
+    <div className="featured-container">
       <div className="featuredItem">
         <span className="featuredTitle">Revanue</span>
         <div className="featuredMoneyContainer">
