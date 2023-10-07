@@ -1,6 +1,6 @@
 import "./productList.css";
-import { DataGrid } from "@material-ui/data-grid";
-import { DeleteOutline } from "@material-ui/icons";
+import { DataGrid } from "@mui/x-data-grid";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { productRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -48,7 +48,7 @@ export default function ProductList() {
             <Link to={"/product/" + params.row.id}>
               <button className="productListEdit">Edit</button>
             </Link>
-            <DeleteOutline
+            <DeleteOutlineIcon
               className="productListDelete"
               onClick={() => handleDelete(params.row.id)}
             />
