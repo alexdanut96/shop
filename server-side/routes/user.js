@@ -13,7 +13,7 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
   const query = req.query.new;
   try {
     const allUsers = query
-      ? await User.find().sort({ _id: -1 }).limit(1)
+      ? await User.find().sort({ _id: -1 }).limit(5)
       : await User.find();
     res.json(allUsers);
   } catch (err) {
@@ -104,7 +104,12 @@ router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(data);
+
+    let sortedData = data.sort((p1, p2) =>
+      p1._id < p2._id ? -1 : p1._id > p2._id ? 1 : 0
+    );
+
+    res.status(200).json(sortedData);
   } catch (err) {
     res.status(500).json(err);
   }

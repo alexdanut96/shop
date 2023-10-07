@@ -113,7 +113,12 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(income);
+
+    let sortedIncome = income.sort((p1, p2) =>
+      p1._id < p2._id ? 1 : p1._id > p2._id ? -1 : 0
+    );
+
+    res.status(200).json(sortedIncome);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

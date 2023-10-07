@@ -39,7 +39,7 @@ export const login = async (dispatch, user) => {
       icon: "error",
       title: "Oops...",
       text: `Something went wrong! ${error.message}`,
-      footer: '<a href="/">Go back to home page</a>',
+      footer: '<a href="/login">Reload the page</a>',
     });
   }
 };

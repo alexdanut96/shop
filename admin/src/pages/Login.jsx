@@ -48,7 +48,7 @@ const Login = () => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Dress-Up Admin Panel
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
