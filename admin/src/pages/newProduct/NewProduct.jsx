@@ -1,8 +1,6 @@
-import "./newProduct.css";
-
 export default function NewProduct() {
   return (
-    <div className="newProduct">
+    <div className="newProduct-container">
       <h1 className="addProductTitle">New Product</h1>
       <form className="addProductForm">
         <div className="addProductItem">

@@ -1,9 +1,8 @@
-import "./widgetSm.css";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export default function WidgetSm() {
   return (
-    <div className="widgetSm">
+    <div className="widgetSm-container">
       <span className="widgetSmTitle">New Join Members</span>
       <ul className="widgetSmList">
         <li className="widgetSmListItem">

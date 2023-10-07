@@ -1,5 +1,4 @@
 import React from "react";
-import "./topbar.css";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LanguageIcon from "@mui/icons-material/Language";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -9,7 +8,7 @@ export default function Topbar() {
     <div className="topbar">
       <div className="topbarWrapper">
         <div className="topLeft">
-          <span className="logo">lamaadmin</span>
+          <span className="logo">Dress-up Admin</span>
         </div>
         <div className="topRight">
           <div className="topbarIconContainer">
