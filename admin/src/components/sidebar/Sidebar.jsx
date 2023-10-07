@@ -10,10 +10,15 @@ import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import ReportIcon from "@mui/icons-material/Report";
-
+import { useSelector, useDispatch } from "react-redux";
+import { userActions } from "../../Redux/UserSlice";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
+  const dispatch = useDispatch();
+  const logout = () => {
+    dispatch(userActions.logout());
+  };
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -94,6 +99,11 @@ export default function Sidebar() {
               Reports
             </li>
           </ul>
+        </div>
+        <div className="sidebarMenu">
+          <button onClick={logout} className="logoutBtn">
+            Logout
+          </button>
         </div>
       </div>
     </div>
