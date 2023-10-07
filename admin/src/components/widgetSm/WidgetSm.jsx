@@ -1,5 +1,5 @@
 import "./widgetSm.css";
-import { Visibility } from "@material-ui/icons";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export default function WidgetSm() {
   return (
@@ -17,7 +17,7 @@ export default function WidgetSm() {
             <span className="widgetSmUserTitle">Software Engineer</span>
           </div>
           <button className="widgetSmButton">
-            <Visibility className="widgetSmIcon" />
+            <VisibilityIcon className="widgetSmIcon" />
             Display
           </button>
         </li>
@@ -32,7 +32,7 @@ export default function WidgetSm() {
             <span className="widgetSmUserTitle">Software Engineer</span>
           </div>
           <button className="widgetSmButton">
-            <Visibility className="widgetSmIcon" />
+            <VisibilityIcon className="widgetSmIcon" />
             Display
           </button>
         </li>
@@ -47,7 +47,7 @@ export default function WidgetSm() {
             <span className="widgetSmUserTitle">Software Engineer</span>
           </div>
           <button className="widgetSmButton">
-            <Visibility className="widgetSmIcon" />
+            <VisibilityIcon className="widgetSmIcon" />
             Display
           </button>
         </li>
@@ -62,7 +62,7 @@ export default function WidgetSm() {
             <span className="widgetSmUserTitle">Software Engineer</span>
           </div>
           <button className="widgetSmButton">
-            <Visibility className="widgetSmIcon" />
+            <VisibilityIcon className="widgetSmIcon" />
             Display
           </button>
         </li>
@@ -77,7 +77,7 @@ export default function WidgetSm() {
             <span className="widgetSmUserTitle">Software Engineer</span>
           </div>
           <button className="widgetSmButton">
-            <Visibility className="widgetSmIcon" />
+            <VisibilityIcon className="widgetSmIcon" />
             Display
           </button>
         </li>
