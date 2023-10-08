@@ -49,7 +49,7 @@ export default function Home() {
     };
 
     getUserStats();
-  }, [MONTHS]);
+  }, [MONTHS, token]);
 
   return (
     <div className="home-container">
