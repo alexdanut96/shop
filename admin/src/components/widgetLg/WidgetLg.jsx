@@ -23,35 +23,31 @@ const WidgetLg = () => {
         });
     };
     getOrders();
-  }, []);
+  }, [token]);
 
   const Button = ({ type }) => {
     return <button className={"widgetLgButton " + type}>{type}</button>;
   };
   return (
     <div className="widgetLg-container">
-      <h3 className="widgetLgTitle">Latest transactions</h3>
-      <table className="widgetLgTable">
+      <table>
+        <caption>Latest transactions</caption>
         <tbody>
-          <tr className="widgetLgTr">
-            <th className="widgetLgTh">Order Id</th>
-            <th className="widgetLgTh">User Id</th>
-            <th className="widgetLgTh">Date</th>
-            <th className="widgetLgTh">Amount</th>
-            <th className="widgetLgTh">Status</th>
+          <tr>
+            <th>Order Id</th>
+            <th>User Id</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
           </tr>
           {orders && orders.length > 0 ? (
             orders.map((order) => (
-              <tr key={order._id} className="widgetLgTr">
-                <td className="widgetLgOrder">
-                  <span className="widgetLgName">{order._id}</span>
-                </td>
-                <td className="widgetLgUser">
-                  <span className="widgetLgName">{order.userId}</span>
-                </td>
-                <td className="widgetLgDate">{format(order.createdAt)}</td>
-                <td className="widgetLgAmount">${order.amount}</td>
-                <td className="widgetLgStatus">
+              <tr key={order._id}>
+                <td data-cell="order-id">{order._id}</td>
+                <td data-cell="user-idi">{order.userId}</td>
+                <td data-cell="order-date">{format(order.createdAt)}</td>
+                <td data-cell="order-price">${order.amount}</td>
+                <td data-cell="order-status">
                   <Button type={order.status} />
                 </td>
               </tr>

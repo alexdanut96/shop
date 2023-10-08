@@ -23,37 +23,47 @@ const WidgetSm = () => {
         });
     };
     getUsers();
-  }, []);
+  }, [token]);
 
   return (
     <div className="widgetSm-container">
-      <span className="widgetSmTitle">New Join Members</span>
-      <ul className="widgetSmList">
-        {users && users.length > 0 ? (
-          users.map((user) => (
-            <li key={user._id} className="widgetSmListItem">
-              <img
-                src={
-                  user.profilePicture ||
-                  "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
-                }
-                alt=""
-                className="widgetSmImg"
-              />
-              <div className="widgetSmUser">
-                <span className="widgetSmUsername">{user.username}</span>
-                <span className="widgetSmUserTitle">{user.email}</span>
-              </div>
-              <button className="widgetSmButton">
-                <VisibilityIcon className="widgetSmIcon" />
-                Display
-              </button>
-            </li>
-          ))
-        ) : (
-          <></>
-        )}
-      </ul>
+      <table>
+        <caption>New Join Members</caption>
+        <tbody>
+          <tr>
+            <th>Profile picture</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>More</th>
+          </tr>
+
+          {users && users.length > 0 ? (
+            users.map((user) => (
+              <tr key={user._id}>
+                <td data-cell="Profile picture">
+                  <img
+                    src={
+                      user.profilePicture ||
+                      "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
+                    }
+                    alt=""
+                  />
+                </td>
+                <td data-cell="Username">{user.username}</td>
+                <td data-cell="Email">{user.email}</td>
+                <td data-cell="More">
+                  <button className="widgetSmButton">
+                    <VisibilityIcon className="widgetSmIcon" />
+                    Display
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <></>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

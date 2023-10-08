@@ -1,61 +1,77 @@
 .widgetSm-container {
-  flex: 1;
   -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
-  padding: 20px;
-  margin-right: 20px;
+  flex: 1;
+  padding: 10px;
+  height: fit-content;
 
-  .widgetSmTitle {
+  table {
+    width: 100%;
+  }
+
+  th,
+  caption {
+    padding: 10px;
+  }
+
+  td {
+    padding: 5px 10px;
+  }
+
+  caption {
     font-size: 22px;
     font-weight: 600;
   }
 
-  .widgetSmList {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  caption,
+  th {
+    text-align: left;
+  }
 
-    .widgetSmListItem {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 20px 0px;
+  tr:nth-of-type(2n) {
+    background: hsl(0 0% 0% / 0.1);
+  }
 
-      .widgetSmImg {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
-      .widgetSmUser {
-        display: flex;
-        flex-direction: column;
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    width: fit-content;
+    padding: 0 10px;
+    border: 1px solid;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
 
-        .widgetSmUsername {
-          font-weight: 600;
-        }
+@media (max-width: 900px) {
+  td {
+    display: grid;
 
-        .widgetSmUserTitle {
-          font-weight: 300;
-        }
-      }
-
-      .widgetSmButton {
-        display: flex;
-        align-items: center;
-        border: none;
-        border-radius: 10px;
-        padding: 7px 10px;
-        background-color: #eeeef7;
-        color: #555;
-        cursor: pointer;
-
-        .widgetSmIcon {
-          font-size: 16px !important;
-          margin-right: 5px;
-        }
-      }
+    &::before {
+      content: attr(data-cell) ": ";
+      font-weight: 600;
+      text-transform: capitalize;
     }
+  }
+
+  td:first-child {
+    padding-top: 1rem;
+  }
+
+  td:last-child {
+    padding-bottom: 1rem;
+  }
+
+  th {
+    display: none;
   }
 }
