@@ -58,3 +58,11 @@
     }
   }
 }
+
+@media (max-width: 900px) {
+  .sidebar-mobile {
+    position: fixed;
+    height: calc(100vh - 50px);
+    z-index: 1;
+  }
+}

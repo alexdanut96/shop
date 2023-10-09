@@ -10,10 +10,13 @@ import Product from "./pages/Product";
 import NewProduct from "./pages/NewProduct";
 import Login from "./pages/Login";
 import "./scss/index.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { sidebarActions } from "./Redux/SidebarSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  dispatch(sidebarActions.hide());
   const admin = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
   useEffect(() => {
