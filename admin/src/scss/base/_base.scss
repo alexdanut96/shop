@@ -6,15 +6,10 @@
 
 .app-container {
   display: flex;
+  position: relative;
 
   .link {
     text-decoration: none;
     color: inherit;
-  }
-}
-
-@media (max-width: 900px) {
-  .sidebar {
-    display: none;
   }
 }

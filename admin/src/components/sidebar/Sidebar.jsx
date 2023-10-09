@@ -15,12 +15,16 @@ import { userActions } from "../../Redux/UserSlice";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
+  const sidebarStatus = useSelector((state) => state.sidebar.sidebar);
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(userActions.logout());
   };
   return (
-    <div className="sidebar">
+    <div
+      // style={{ display: sidebarStatus ? "block" : "none" }}
+      className="sidebar sidebar-mobile"
+    >
       <div className="sidebarWrapper">
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Dashboard</h3>
