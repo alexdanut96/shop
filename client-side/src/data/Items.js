@@ -7,6 +7,8 @@ import img6 from "../images/img6.png";
 import img7 from "../images/img7.png";
 import img8 from "../images/img8.png";
 
+console.log("sasaas");
+
 export const popularProducts = [
   {
     id: 1,
