@@ -12,19 +12,26 @@ import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import ReportIcon from "@mui/icons-material/Report";
 import { useSelector, useDispatch } from "react-redux";
 import { userActions } from "../../Redux/UserSlice";
+import { sidebarActions } from "../../Redux/SidebarSlice";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function Sidebar() {
-  const sidebarStatus = useSelector((state) => state.sidebar.sidebar);
+  const isActive = useSelector((state) => state.sidebar.sidebar);
   const dispatch = useDispatch();
+  const location = useLocation().pathname;
   const logout = () => {
     dispatch(userActions.logout());
   };
+
+  useEffect(() => {
+    dispatch(sidebarActions.hide());
+    console.log("saas");
+  }, [location]);
+
   return (
-    <div
-      // style={{ display: sidebarStatus ? "block" : "none" }}
-      className="sidebar sidebar-mobile"
-    >
+    <div className={`sidebar sidebar-mobile ${isActive ? "active" : ""}`}>
       <div className="sidebarWrapper">
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Dashboard</h3>

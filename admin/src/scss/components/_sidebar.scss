@@ -62,7 +62,14 @@
 @media (max-width: 900px) {
   .sidebar-mobile {
     position: fixed;
-    height: calc(100vh - 50px);
+    max-width: 300px;
+    width: 100%;
     z-index: 1;
+    transform: translateX(-100%);
+    transition: ease 0.3s;
+
+    &.active {
+      transform: translateX(0);
+    }
   }
 }
