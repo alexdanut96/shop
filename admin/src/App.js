@@ -10,15 +10,14 @@ import Product from "./pages/Product";
 import NewProduct from "./pages/NewProduct";
 import Login from "./pages/Login";
 import "./scss/index.scss";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { sidebarActions } from "./Redux/SidebarSlice";
 
 function App() {
-  const dispatch = useDispatch();
-  dispatch(sidebarActions.hide());
   const admin = useSelector((state) => state.user.currentUser);
+  const isActive = useSelector((state) => state.sidebar.sidebar);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!admin) {
       navigate("/login");
@@ -31,6 +30,7 @@ function App() {
         <>
           <Topbar />
           <div className="app-container">
+            <div className={`window ${isActive ? "active" : ""}`}></div>
             <Sidebar />
             <Routes>
               <Route path="/" element={<Home />} />
