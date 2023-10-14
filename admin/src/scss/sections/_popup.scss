@@ -1,0 +1,14 @@
+.popup-container {
+  position: absolute;
+  bottom: 20px;
+  z-index: 1;
+  background-color: gray;
+  width: fit-content;
+  right: 0;
+  height: fit-content;
+  visibility: hidden;
+
+  &.active {
+    visibility: visible;
+  }
+}
