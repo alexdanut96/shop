@@ -54,25 +54,27 @@
 }
 
 @media (max-width: 900px) {
-  td {
-    display: grid;
+  .widgetLg-container {
+    td {
+      display: grid;
 
-    &::before {
-      content: attr(data-cell) ": ";
-      font-weight: 600;
-      text-transform: capitalize;
+      &::before {
+        content: attr(data-cell) ": ";
+        font-weight: 600;
+        text-transform: capitalize;
+      }
     }
-  }
 
-  td:first-child {
-    padding-top: 1rem;
-  }
+    td:first-child {
+      padding-top: 1rem;
+    }
 
-  td:last-child {
-    padding-bottom: 1rem;
-  }
+    td:last-child {
+      padding-bottom: 1rem;
+    }
 
-  th {
-    display: none;
+    th {
+      display: none;
+    }
   }
 }

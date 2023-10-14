@@ -9,6 +9,7 @@ import ProductList from "./pages/ProductList";
 import Product from "./pages/Product";
 import NewProduct from "./pages/NewProduct";
 import Login from "./pages/Login";
+import UserListNew from "./pages/UserListNew";
 import "./scss/index.scss";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -35,6 +36,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/users" element={<UserList />} />
+              <Route path="/users-new" element={<UserListNew />} />
               <Route path="/user/:userId" element={<User />} />
               <Route path="/newUser" element={<NewUser />} />
               <Route path="/products" element={<ProductList />} />
