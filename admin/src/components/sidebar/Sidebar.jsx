@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function Sidebar() {
+const Sidebar = () => {
   const isActive = useSelector((state) => state.sidebar.sidebar);
   const dispatch = useDispatch();
   const location = useLocation().pathname;
@@ -118,4 +118,5 @@ export default function Sidebar() {
       </div>
     </div>
   );
-}
+};
+export default Sidebar;

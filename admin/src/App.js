@@ -14,7 +14,7 @@ import "./scss/index.scss";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
-function App() {
+const App = () => {
   const admin = useSelector((state) => state.user.currentUser);
   const isActive = useSelector((state) => state.sidebar.sidebar);
   const navigate = useNavigate();
@@ -53,6 +53,6 @@ function App() {
       )}
     </>
   );
-}
+};
 
 export default App;

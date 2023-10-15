@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BASE_URL } from "../../ApiRequests";
 import { useSelector } from "react-redux";
 import { format } from "timeago.js";
+import Swal from "sweetalert2";
 
 const WidgetLg = () => {
   const token = useSelector((state) => state.user.currentUser.accessToken);
@@ -16,10 +17,32 @@ const WidgetLg = () => {
         },
       })
         .then((response) => {
-          return response.json();
+          switch (response.status) {
+            case 200:
+              return response.json();
+
+            case 400:
+            case 401:
+            case 403:
+              return response.json().then((error) => {
+                throw new Error(error.message);
+              });
+
+            default:
+              throw new Error(`Please contact the development departament!`);
+          }
         })
         .then((data) => {
           setOrders(data);
+        })
+        .catch((error) => {
+          console.error(error.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Something went wrong! ${error.message}`,
+            footer: '<a href="/">Go back to home page</a>',
+          });
         });
     };
     getOrders();

@@ -16,8 +16,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../Redux/apiCalls";
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 const Login = () => {

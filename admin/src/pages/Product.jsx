@@ -3,7 +3,7 @@ import Chart from "../components/chart/Chart";
 import { productData } from "../dummyData";
 import PublishIcon from "@mui/icons-material/Publish";
 
-export default function Product() {
+const Product = () => {
   return (
     <div className="product-container">
       <div className="productTitleContainer">
@@ -79,4 +79,5 @@ export default function Product() {
       </div>
     </div>
   );
-}
+};
+export default Product;

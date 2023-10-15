@@ -1,4 +1,4 @@
-export default function NewProduct() {
+const NewProduct = () => {
   return (
     <div className="newProduct-container">
       <h1 className="addProductTitle">New Product</h1>
@@ -26,4 +26,5 @@ export default function NewProduct() {
       </form>
     </div>
   );
-}
+};
+export default NewProduct;
