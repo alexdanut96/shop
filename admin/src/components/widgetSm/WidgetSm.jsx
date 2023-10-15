@@ -2,6 +2,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useState, useEffect } from "react";
 import { BASE_URL } from "../../ApiRequests";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const WidgetSm = () => {
   const token = useSelector((state) => state.user.currentUser.accessToken);
@@ -16,10 +17,32 @@ const WidgetSm = () => {
         },
       })
         .then((response) => {
-          return response.json();
+          switch (response.status) {
+            case 200:
+              return response.json();
+
+            case 400:
+            case 401:
+            case 403:
+              return response.json().then((error) => {
+                throw new Error(error.message);
+              });
+
+            default:
+              throw new Error(`Please contact the development departament!`);
+          }
         })
         .then((data) => {
           setUsers(data);
+        })
+        .catch((error) => {
+          console.error(error.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Something went wrong! ${error.message}`,
+            footer: '<a href="/">Go back to home page</a>',
+          });
         });
     };
     getUsers();

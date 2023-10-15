@@ -6,7 +6,7 @@ import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import PublishIcon from "@mui/icons-material/Publish";
 import { Link } from "react-router-dom";
 
-export default function User() {
+const User = () => {
   return (
     <div className="user-container">
       <div className="userTitleContainer">
@@ -117,4 +117,5 @@ export default function User() {
       </div>
     </div>
   );
-}
+};
+export default User;

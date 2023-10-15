@@ -7,7 +7,7 @@ import adminAvatar from "../../images/admin-avatar.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { sidebarActions } from "../../Redux/SidebarSlice";
 
-export default function Topbar() {
+const Topbar = () => {
   const sidebarStatus = useSelector((state) => state.sidebar.sidebar);
   const dispatch = useDispatch();
 
@@ -43,4 +43,5 @@ export default function Topbar() {
       </div>
     </div>
   );
-}
+};
+export default Topbar;

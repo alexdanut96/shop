@@ -7,7 +7,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function Chart({ title, data, dataKey, grid }) {
+const Chart = ({ title, data, dataKey, grid }) => {
   return (
     <div className="chart-container">
       <h3 className="chartTitle">{title}</h3>
@@ -21,4 +21,5 @@ export default function Chart({ title, data, dataKey, grid }) {
       </ResponsiveContainer>
     </div>
   );
-}
+};
+export default Chart;
