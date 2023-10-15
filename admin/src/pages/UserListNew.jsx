@@ -225,6 +225,13 @@ const UserListNew = () => {
           )}
         </tbody>
       </table>
+      {users && users.length > 0 ? (
+        <></>
+      ) : (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
     </div>
   );
 };
