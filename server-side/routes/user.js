@@ -34,14 +34,21 @@ router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
 
 // Update
 router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
-  const allowedData = ["username", "email", "password"];
+  const allowedData = [
+    "username",
+    "email",
+    "password",
+    "profilePicture",
+    "address",
+    "phoneNumber",
+  ];
   try {
     if (req.params.id) {
       const foundUser = await User.findById(req.params.id);
 
       Object.entries(req.body).forEach((item) => {
         const dataKeyProperty = item[0].toString();
-        let dataValueProperty = item[1].toString();
+        let dataValueProperty = item[1];
 
         const allowedProperty = allowedData.find(
           (item) => item === dataKeyProperty

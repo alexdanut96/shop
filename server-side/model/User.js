@@ -8,6 +8,15 @@ const UserSchema = new Schema(
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
     profilePicture: { type: String },
+    phoneNumber: { type: Number },
+    address: [
+      {
+        postalCode: { type: Number },
+        country: { type: String },
+        city: { type: String },
+        street: { type: String },
+      },
+    ],
   },
   { timestamps: true }
 );
