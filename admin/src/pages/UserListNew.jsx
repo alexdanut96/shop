@@ -166,67 +166,72 @@ const UserListNew = () => {
 
   return (
     <div className="user-list-container">
-      <Link to="/newUser">
-        <AddCircleIcon className="newUser" />
-      </Link>
-      <ScrollToTop />
-      <table>
-        <caption>Users List</caption>
-        <tbody>
-          <tr>
-            <th>
-              <div className="input-th">
-                <input onClick={handleSelectAll} type="checkbox" />
-                <div>All</div>
-              </div>
-            </th>
-            <th>ID</th>
-            <th>User</th>
-            <th>Email</th>
-            <th>Created at</th>
-            <th>Action</th>
-          </tr>
-
-          {users && users.length > 0 ? (
-            users.map((user, index) => (
-              <tr onClick={handleUser} key={user._id}>
-                <td>
-                  <div className="input-td">
-                    <input type="checkbox" />
-                    <span>{index + 1}</span>
-                  </div>
-                </td>
-                <td data-cell="ID:">{user._id}</td>
-                <td data-cell="User:">
-                  <div className="user-td">
-                    <img
-                      src={
-                        user.profilePicture ||
-                        "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
-                      }
-                      alt=""
-                    />
-                    <span>{user.username}</span>
-                  </div>
-                </td>
-                <td data-cell="Email:">{user.email}</td>
-                <td data-cell="Created at:">{format(user.createdAt)}</td>
-                <td>
-                  <div className="action-buttons">
-                    <button>Edit</button>
-                    <DeleteOutlineIcon onClick={() => handleOpen(user._id)} />
-                    {/* <ModalPopup /> */}
-                  </div>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <></>
-          )}
-        </tbody>
-      </table>
       {users && users.length > 0 ? (
-        <></>
+        <>
+          <Link to="/newUser">
+            <AddCircleIcon className="newUser" />
+          </Link>
+          <ScrollToTop />
+          <table>
+            <caption>Users List</caption>
+            <tbody>
+              <tr>
+                <th>
+                  <div className="input-th">
+                    <input onClick={handleSelectAll} type="checkbox" />
+                    <div>All</div>
+                  </div>
+                </th>
+                <th>ID</th>
+                <th>User</th>
+                <th>Email</th>
+                <th>Created at</th>
+                <th>Action</th>
+              </tr>
+
+              {users.map((user, index) => (
+                <tr onClick={handleUser} key={user._id}>
+                  <td>
+                    <div className="input-td">
+                      <input type="checkbox" />
+                      <span>{index + 1}</span>
+                    </div>
+                  </td>
+                  <td data-cell="ID:">
+                    <div className="td-text">{user._id}</div>
+                  </td>
+                  <td data-cell="User:">
+                    <div className="user-td">
+                      <img
+                        src={
+                          user.profilePicture ||
+                          "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
+                        }
+                        alt=""
+                      />
+                      <span className="td-text">{user.username}</span>
+                    </div>
+                  </td>
+                  <td data-cell="Email:">
+                    <div className="td-text">{user.email}</div>
+                  </td>
+                  <td data-cell="Created at:">
+                    <div className="td-text">{format(user.createdAt)}</div>
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <Link to={`/user/${user._id}`}>
+                        <button>Edit</button>
+                      </Link>
+                      <DeleteOutlineIcon onClick={() => handleOpen(user._id)} />
+                      {/* <ModalPopup /> */}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
       ) : (
         <div className="loader-container">
           <div className="loader"></div>
