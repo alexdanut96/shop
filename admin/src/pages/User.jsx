@@ -8,6 +8,7 @@ import FlagIcon from "@mui/icons-material/Flag";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
 import PublishIcon from "@mui/icons-material/Publish";
+import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import {
   getStorage,
@@ -22,14 +23,99 @@ import { BASE_URL } from "../ApiRequests";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import CryptoJS from "crypto-js";
+import uploadImage from "../images/upload_img.png";
 
 const User = () => {
-  const [file, setFile] = useState();
+  // const [file, setFile] = useState();
   const [user, setUSer] = useState();
   const token = useSelector((state) => state.user.currentUser.accessToken);
   const location = useLocation();
 
   const id = location.pathname.split("/")[2];
+
+  const editProfilePicture = () => {
+    Swal.fire({
+      title: user?.username ? user.username : "",
+      text: "Change or delete the avatar picture",
+      imageUrl: `${
+        user?.profilePicture
+          ? user.profilePicture
+          : "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
+      }`,
+      imageAlt: "User avatar",
+      showConfirmButton: true,
+      showDenyButton: user?.profilePicture ? true : false,
+      showCancelButton: true,
+      confirmButtonText: user?.profilePicture ? "Change" : "Add",
+      denyButtonText: "Delete",
+    })
+      .then((result) => {
+        // console.log(result);
+        if (result.isConfirmed === true) {
+          Swal.fire({
+            html: `<div id="upload-container">
+            <label for="input-file" id="drop-area">
+              <input type="file" id="input-file" accept="image/*" hidden/>
+              <div id="img-view">
+                <img id="uploadImg" src=${uploadImage} alt="avatar"/>
+                <p>Drag and drop or click here<br>to upload image</p>
+              </div>
+            </label>
+            </div>
+            `,
+            showConfirmButton: true,
+            confirmButtonText: "Save",
+            showCancelButton: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const inputFile = document.querySelector("#input-file");
+              const file = inputFile.files[0];
+              handleClick(file);
+            }
+          });
+        }
+        return result;
+      })
+      .then((result) => {
+        if (result.isConfirmed === true) {
+          const box = document.querySelector("#upload-container");
+          const dropArea = document.querySelector("#drop-area");
+          const inputFile = document.querySelector("#input-file");
+          const imageView = document.querySelector("#img-view");
+
+          const uploadImage = () => {
+            let imgLink = URL.createObjectURL(inputFile.files[0]);
+            imageView.style.backgroundImage = `url(${imgLink})`;
+            imageView.textContent = "";
+          };
+
+          inputFile.addEventListener("change", uploadImage);
+
+          box.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            if (e.target.id === "upload-container") {
+              dropArea.style.backgroundColor = "#f1f1f9";
+              dropArea.style.borderColor = "#aeadad";
+            } else {
+              dropArea.style.backgroundColor = "#ebebfb";
+              dropArea.style.borderColor = "#7e7eff";
+            }
+          });
+
+          dropArea.addEventListener("dragover", (e) => {
+            e.preventDefault();
+          });
+
+          dropArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            inputFile.files = e.dataTransfer.files;
+            uploadImage();
+            dropArea.style.backgroundColor = "#f1f1f9";
+            dropArea.style.borderColor = "#aeadad";
+          });
+        }
+      });
+  };
 
   useEffect(() => {
     const getUser = () => {
@@ -74,8 +160,8 @@ const User = () => {
   }, []);
   console.log(user);
 
-  const handleClick = (e) => {
-    e.preventDefault();
+  const handleClick = (file) => {
+    // e.preventDefault();
     const fileName = new Date().getTime() + "_" + file.name;
     const storage = getStorage(app);
     const storageRef = ref(storage, fileName);
@@ -112,6 +198,13 @@ const User = () => {
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log("File available at", downloadURL);
+          // fetch(`${BASE_URL}users/${id}`,{
+          //   method:PUT,
+          //   headers:{
+          //     "Content-Type": "application/json",
+          //     token:`Bearer ${token}`},
+          //   body:""
+          // })
         });
       }
     );
@@ -334,23 +427,32 @@ const User = () => {
                 </form>
                 <div className="form-action">
                   <div className="profile-picture">
-                    <img
-                      className="userUpdateImg"
-                      src={
-                        user.profilePicture
-                          ? user.profilePicture
-                          : "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
-                      }
-                      alt=""
-                    />
-                    <label htmlFor="upload-img">
+                    <div className="img-container">
+                      <img
+                        className="userUpdateImg"
+                        src={
+                          user.profilePicture
+                            ? user.profilePicture
+                            : "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
+                        }
+                        alt=""
+                      />
+                      <div
+                        onClick={editProfilePicture}
+                        className="editIcon-container"
+                      >
+                        <EditIcon />
+                      </div>
+                    </div>
+                    {/* <label htmlFor="upload-img">
                       <FileUploadIcon />
                     </label>
                     <input
-                      style={{ display: "none" }}
+                      // style={{ display: "none" }}
                       type="file"
                       id="upload-img"
-                    />
+                      accept="image/*"
+                    /> */}
                   </div>
                 </div>
               </div>
