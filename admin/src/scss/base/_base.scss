@@ -41,12 +41,12 @@
   & #upload-container {
     padding: 20px;
 
-    & .upload-loading{
+    & .upload-loading {
       margin-top: 10px;
       display: none;
     }
 
-    & button{
+    & button {
       display: inline-block;
       background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
       border: 0;
@@ -57,13 +57,18 @@
       font-size: 1em;
       margin: 0.3125em;
       padding: 0.625em 1.1em;
-      transition: box-shadow .1s;
-      box-shadow: 0 0 0 3px rgba(0,0,0,0);
-      font-weight: 500;   
+      transition: box-shadow 0.1s;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+      font-weight: 500;
       cursor: pointer;
-      
-      &:hover{
+
+      &:hover {
         background-color: #6054e2;
+      }
+
+      &:disabled {
+        background-color: #cecece;
+        cursor: not-allowed;
       }
     }
   }

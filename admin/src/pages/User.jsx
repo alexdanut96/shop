@@ -26,17 +26,20 @@ import CryptoJS from "crypto-js";
 import uploadImage from "../images/upload_img.png";
 
 const User = () => {
-  const [user, setUSer] = useState();
-  const [success, setSuccess] = useState(0)
+  const [user, setUser] = useState();
+  const [success, setSuccess] = useState(0);
   const token = useSelector((state) => state.user.currentUser.accessToken);
   const location = useLocation();
-
   const id = location.pathname.split("/")[2];
 
   const editProfilePicture = () => {
     Swal.fire({
       title: user?.username ? user.username : "",
-      text: "Change or delete the avatar picture",
+      text: `${
+        user?.profilePicture
+          ? "Change or delete the profile picture"
+          : "Add profile picture"
+      }`,
       imageUrl: `${
         user?.profilePicture
           ? user.profilePicture
@@ -60,12 +63,12 @@ const User = () => {
                   <p>Drag and drop or click here<br>to upload image</p>
                 </div>
               </label>
-              <button class="upload">Save</button>
+              <button disabled class="upload">Save</button>
               <div class="upload-loading">$0%</div>
             </div>
             `,
             showConfirmButton: false,
-          })
+          });
         }
         return result;
       })
@@ -82,13 +85,15 @@ const User = () => {
             let imgLink = URL.createObjectURL(inputFile.files[0]);
             imageView.style.backgroundImage = `url(${imgLink})`;
             imageView.textContent = "";
+            saveBtn.disabled = false;
           };
 
-          const uploadUserAvatar = () =>{
+          const uploadUserAvatar = () => {
             const file = inputFile.files[0];
+            if (!file) return;
             uploadLoading.style.display = "block";
-            handleClick(file)
-          }
+            addToDatabase(file);
+          };
 
           inputFile.addEventListener("change", uploadImage);
 
@@ -115,7 +120,7 @@ const User = () => {
             dropArea.style.borderColor = "#aeadad";
           });
 
-          saveBtn.addEventListener('click', uploadUserAvatar)
+          saveBtn.addEventListener("click", uploadUserAvatar);
         }
       });
   };
@@ -146,7 +151,7 @@ const User = () => {
           return user;
         })
         .then((data) => {
-          setUSer(data);
+          setUser(data);
         })
         .catch((error) => {
           console.error(error.message);
@@ -164,7 +169,7 @@ const User = () => {
 
   console.log(user);
 
-  const handleClick = (file) => {
+  const addToDatabase = (file) => {
     const fileName = new Date().getTime() + "_" + file.name;
     const storage = getStorage(app);
     const storageRef = ref(storage, fileName);
@@ -197,10 +202,10 @@ const User = () => {
       (error) => {
         // Handle unsuccessful uploads
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
+          icon: "error",
+          title: "Oops...",
           text: `${error}`,
-        })
+        });
       },
       () => {
         // Handle successful uploads on complete
@@ -208,44 +213,47 @@ const User = () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           // console.log("File available at", downloadURL);
 
-          fetch(`${BASE_URL}users/${id}`,{
-            method:"PUT",
-            headers:{
+          fetch(`${BASE_URL}users/${id}`, {
+            method: "PUT",
+            headers: {
               "Content-Type": "application/json",
-              token:`Bearer ${token}`},
-            body:JSON.stringify({profilePicture:downloadURL})
+              token: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ profilePicture: downloadURL }),
           })
-          .then((response) => {
-            switch (response.status) {
-              case 200:
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Profile picture updated!',
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-                setSuccess(success + 1)
-                return
-              case 400:
-              case 401:
-              case 403:
-                return response.json().then((error) => {
-                  throw new Error(error.message);
-                });
-  
-              default:
-                throw new Error(`Please contact the development departament!`);
-            }
-          })
-          .catch((error) => {
-            console.error(error.message);
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: `Something went wrong! ${error.message}`,
-              footer: '<a href="/">Go back to home page</a>',
+            .then((response) => {
+              switch (response.status) {
+                case 200:
+                  Swal.fire({
+                    icon: "success",
+                    title: "Profile picture updated!",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                  setSuccess(success + 1);
+                  return;
+                case 400:
+                case 401:
+                case 403:
+                  return response.json().then((error) => {
+                    throw new Error(error.message);
+                  });
+
+                default:
+                  throw new Error(
+                    `Please contact the development departament!`
+                  );
+              }
+            })
+            .catch((error) => {
+              console.error(error.message);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: `Something went wrong! ${error.message}`,
+                footer: '<a href="/">Go back to home page</a>',
+              });
             });
-          });
         });
       }
     );
@@ -485,7 +493,6 @@ const User = () => {
                         <EditIcon />
                       </div>
                     </div>
-                  
                   </div>
                 </div>
               </div>
