@@ -40,6 +40,32 @@
 .swal2-html-container {
   & #upload-container {
     padding: 20px;
+
+    & .upload-loading{
+      margin-top: 10px;
+      display: none;
+    }
+
+    & button{
+      display: inline-block;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
+      border: 0;
+      border-radius: 0.25em;
+      background: initial;
+      background-color: #7066e0;
+      color: #fff;
+      font-size: 1em;
+      margin: 0.3125em;
+      padding: 0.625em 1.1em;
+      transition: box-shadow .1s;
+      box-shadow: 0 0 0 3px rgba(0,0,0,0);
+      font-weight: 500;   
+      cursor: pointer;
+      
+      &:hover{
+        background-color: #6054e2;
+      }
+    }
   }
 
   & #drop-area {
@@ -50,7 +76,8 @@
     // align-items: center;
 
     height: 250px;
-    width: 250px;
+    max-width: 250px;
+    width: 100%;
     border-radius: 20px;
     margin: 0 auto;
     border: dashed #aeadad;

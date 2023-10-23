@@ -26,8 +26,8 @@ import CryptoJS from "crypto-js";
 import uploadImage from "../images/upload_img.png";
 
 const User = () => {
-  // const [file, setFile] = useState();
   const [user, setUSer] = useState();
+  const [success, setSuccess] = useState(0)
   const token = useSelector((state) => state.user.currentUser.accessToken);
   const location = useLocation();
 
@@ -50,29 +50,22 @@ const User = () => {
       denyButtonText: "Delete",
     })
       .then((result) => {
-        // console.log(result);
         if (result.isConfirmed === true) {
           Swal.fire({
             html: `<div id="upload-container">
-            <label for="input-file" id="drop-area">
-              <input type="file" id="input-file" accept="image/*" hidden/>
-              <div id="img-view">
-                <img id="uploadImg" src=${uploadImage} alt="avatar"/>
-                <p>Drag and drop or click here<br>to upload image</p>
-              </div>
-            </label>
+              <label for="input-file" id="drop-area">
+                <input type="file" id="input-file" accept="image/*" hidden/>
+                <div id="img-view">
+                  <img id="uploadImg" src=${uploadImage} alt="avatar"/>
+                  <p>Drag and drop or click here<br>to upload image</p>
+                </div>
+              </label>
+              <button class="upload">Save</button>
+              <div class="upload-loading">$0%</div>
             </div>
             `,
-            showConfirmButton: true,
-            confirmButtonText: "Save",
-            showCancelButton: true,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              const inputFile = document.querySelector("#input-file");
-              const file = inputFile.files[0];
-              handleClick(file);
-            }
-          });
+            showConfirmButton: false,
+          })
         }
         return result;
       })
@@ -82,12 +75,20 @@ const User = () => {
           const dropArea = document.querySelector("#drop-area");
           const inputFile = document.querySelector("#input-file");
           const imageView = document.querySelector("#img-view");
+          const saveBtn = document.querySelector("button.upload");
+          const uploadLoading = document.querySelector(".upload-loading");
 
           const uploadImage = () => {
             let imgLink = URL.createObjectURL(inputFile.files[0]);
             imageView.style.backgroundImage = `url(${imgLink})`;
             imageView.textContent = "";
           };
+
+          const uploadUserAvatar = () =>{
+            const file = inputFile.files[0];
+            uploadLoading.style.display = "block";
+            handleClick(file)
+          }
 
           inputFile.addEventListener("change", uploadImage);
 
@@ -113,6 +114,8 @@ const User = () => {
             dropArea.style.backgroundColor = "#f1f1f9";
             dropArea.style.borderColor = "#aeadad";
           });
+
+          saveBtn.addEventListener('click', uploadUserAvatar)
         }
       });
   };
@@ -157,15 +160,15 @@ const User = () => {
     };
 
     getUser();
-  }, []);
+  }, [success]);
+
   console.log(user);
 
   const handleClick = (file) => {
-    // e.preventDefault();
     const fileName = new Date().getTime() + "_" + file.name;
     const storage = getStorage(app);
     const storageRef = ref(storage, fileName);
-
+    const uploadLoading = document.querySelector(".upload-loading");
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     // Register three observers:
@@ -179,32 +182,70 @@ const User = () => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
+        // console.log("Upload is " + progress + "% done");
+        uploadLoading.innerHTML = `${parseInt(progress)}%`;
         switch (snapshot.state) {
           case "paused":
-            console.log("Upload is paused");
+            // console.log("Upload is paused");
             break;
           case "running":
-            console.log("Upload is running");
+            // console.log("Upload is running");
             break;
           default:
         }
       },
       (error) => {
         // Handle unsuccessful uploads
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `${error}`,
+        })
       },
       () => {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          // fetch(`${BASE_URL}users/${id}`,{
-          //   method:PUT,
-          //   headers:{
-          //     "Content-Type": "application/json",
-          //     token:`Bearer ${token}`},
-          //   body:""
-          // })
+          // console.log("File available at", downloadURL);
+
+          fetch(`${BASE_URL}users/${id}`,{
+            method:"PUT",
+            headers:{
+              "Content-Type": "application/json",
+              token:`Bearer ${token}`},
+            body:JSON.stringify({profilePicture:downloadURL})
+          })
+          .then((response) => {
+            switch (response.status) {
+              case 200:
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Profile picture updated!',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+                setSuccess(success + 1)
+                return
+              case 400:
+              case 401:
+              case 403:
+                return response.json().then((error) => {
+                  throw new Error(error.message);
+                });
+  
+              default:
+                throw new Error(`Please contact the development departament!`);
+            }
+          })
+          .catch((error) => {
+            console.error(error.message);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: `Something went wrong! ${error.message}`,
+              footer: '<a href="/">Go back to home page</a>',
+            });
+          });
         });
       }
     );
@@ -444,15 +485,7 @@ const User = () => {
                         <EditIcon />
                       </div>
                     </div>
-                    {/* <label htmlFor="upload-img">
-                      <FileUploadIcon />
-                    </label>
-                    <input
-                      // style={{ display: "none" }}
-                      type="file"
-                      id="upload-img"
-                      accept="image/*"
-                    /> */}
+                  
                   </div>
                 </div>
               </div>
