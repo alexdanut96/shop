@@ -33,7 +33,20 @@ const FeaturedInfo = () => {
         })
         .then((data) => {
           setIncome(data);
-          setPercent((data[0].total * 100) / data[1].total - 100);
+          // if (data[0].total === 0) {
+          //   setPercent(
+          //     (Math.abs(data[0].total - data[1].total) * 100) / data[1].total
+          //   );
+          //   return;
+          // }
+
+          setPercent(
+            100 *
+              Math.abs(
+                (data[0].total - data[1].total) /
+                  ((data[0].total + data[1].total) / 2)
+              )
+          );
         })
         .catch((error) => {
           console.error(error.message);
@@ -59,7 +72,7 @@ const FeaturedInfo = () => {
 
             <span className="featuredMoneyRate">
               {Math.floor(percent)} %
-              {percent < 0 ? (
+              {income[0].total < income[1].total ? (
                 <ArrowDownwardIcon className="featuredIcon negative" />
               ) : (
                 <ArrowUpwardIcon className="featuredIcon" />

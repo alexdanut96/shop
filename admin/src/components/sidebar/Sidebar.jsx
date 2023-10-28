@@ -54,7 +54,7 @@ const Sidebar = () => {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Quick Menu</h3>
           <ul className="sidebarList">
-            <Link to="/users-new" className="link">
+            <Link to="/users" className="link">
               <li className="sidebarListItem">
                 <PermIdentityIcon className="sidebarIcon" />
                 Users
