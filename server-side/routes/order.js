@@ -94,18 +94,15 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
 // GET MONTHLY INCOME
 router.get("/income", verifyTokenAndAdmin, async (req, res) => {
   const date = new Date();
-  const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
+  const lastMonth = new Date(date.setMonth(date.getMonth()));
   const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
-
+  console.log(lastMonth.getMonth());
   try {
-    const income = await Order.aggregate([
-      { $match: { createdAt: { $gte: previousMonth } } },
+    let income = await Order.aggregate([
       {
-        $project: {
-          month: { $month: "$createdAt" },
-          sales: "$amount",
-        },
+        $project: { month: { $month: "$createdAt" }, sales: "$amount" },
       },
+      { $match: { month: { $gte: lastMonth.getMonth() } } },
       {
         $group: {
           _id: "$month",
@@ -113,11 +110,41 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
         },
       },
     ]);
+    console.log(income);
+    // let income = await Order.aggregate([
+    //   { $match: { createdAt: { $gte: previousMonth } } },
+    //   {
+    //     $project: {
+    //       month: { $month: "$createdAt" },
+    //       sales: "$amount",
+    //     },
+    //   },
+    //   {
+    //     $group: {
+    //       _id: "$month",
+    //       total: { $sum: "$sales" },
+    //     },
+    //   },
+    // ]);
+
+    // console.log(income);
+
+    if (income.length === 0) {
+      income.push({ _id: lastMonth.getMonth(), total: 0 });
+    }
+
+    if (income.length === 1) {
+      if (income[0]._id === lastMonth.getMonth()) {
+        income.push({ _id: income[0]._id + 1, total: 0 });
+      } else {
+        income.push({ _id: income[0]._id - 1, total: 0 });
+      }
+    }
 
     let sortedIncome = income.sort((p1, p2) =>
       p1._id < p2._id ? 1 : p1._id > p2._id ? -1 : 0
     );
-
+    console.log(sortedIncome);
     res.status(200).json(sortedIncome);
   } catch (err) {
     console.log(err);

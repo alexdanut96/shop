@@ -41,6 +41,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
     "profilePicture",
     "address",
     "phoneNumber",
+    "countryCode",
   ];
   try {
     if (req.params.id) {

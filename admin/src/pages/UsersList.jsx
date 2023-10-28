@@ -10,7 +10,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Link } from "react-router-dom";
 
-const UserListNew = () => {
+const UsersList = () => {
   const [users, setUsers] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
 
@@ -220,11 +220,10 @@ const UserListNew = () => {
                   </td>
                   <td>
                     <div className="action-buttons">
-                      <Link to={`/user/${user._id}`}>
+                      <Link to={`/user/account/${user._id}`}>
                         <button>Edit</button>
                       </Link>
                       <DeleteOutlineIcon onClick={() => handleOpen(user._id)} />
-                      {/* <ModalPopup /> */}
                     </div>
                   </td>
                 </tr>
@@ -241,4 +240,4 @@ const UserListNew = () => {
   );
 };
 
-export default UserListNew;
+export default UsersList;
