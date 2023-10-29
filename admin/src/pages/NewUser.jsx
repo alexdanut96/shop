@@ -1,50 +1,124 @@
 import Swal from "sweetalert2";
 import { BASE_URL } from "../ApiRequests";
-// import { useState, useEffect } from "react";
+import { useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import {
+  ValidateEmail,
+  ValidateEmptyValue,
+  ValidatePassword,
+  ValidatePhoneNumber,
+} from "../utils/formValidation";
 
 const NewUser = () => {
+  const [usernameValidationError, setUsernameValidationError] = useState(false);
+  const [emailValidationError, setEmailValidationError] = useState(false);
+  const [passwordValidationError, setPasswordValidationError] = useState(false);
+  const [phoneValidationError, setPhoneValidationError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handlePasswordVisibility = () => {
+    const password = document.querySelector(".form-field.password");
+    const type =
+      password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+    setShowPassword(!showPassword);
+  };
+
+  const validForm = (phNumber, email, username, password) => {
+    if (!ValidateEmptyValue(username)) {
+      setUsernameValidationError(true);
+    } else {
+      setUsernameValidationError(false);
+    }
+
+    if (!ValidatePhoneNumber(phNumber)) {
+      setPhoneValidationError(true);
+    } else {
+      setPhoneValidationError(false);
+    }
+
+    if (!ValidateEmail(email)) {
+      setEmailValidationError(true);
+    } else {
+      setEmailValidationError(false);
+    }
+
+    if (!ValidatePassword(password)) {
+      setPasswordValidationError(true);
+    } else {
+      setPasswordValidationError(false);
+    }
+
+    if (
+      !ValidateEmptyValue(username) ||
+      !ValidatePhoneNumber(phNumber) ||
+      !ValidateEmail(email) ||
+      !ValidatePassword(password)
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const addNewUser = (e) => {
     e.preventDefault();
-    const username = document.querySelector(".form-field.username");
-    const email = document.querySelector(".form-field.email");
-    const password = document.querySelector(".form-field.password");
+
+    const phNumber = document
+      .querySelector("input[type=tel]")
+      .value.split(" ")
+      .slice(1)
+      .join("")
+      .replace(/[^\w]/g, "");
+    const email = document.querySelector(".form-field.email").value;
+    const username = document.querySelector(".form-field.username").value;
+    const password = document.querySelector(".form-field.password").value;
+    const countryCode = document
+      .querySelector(".selected-flag")
+      .title.split(" ")
+      .slice(-1)[0];
+
+    if (!validForm(phNumber, email, username, password)) return;
 
     const data = {
-      username: username.value,
-      email: email.value,
-      password: password.value,
+      username: username,
+      email: email,
+      password: password,
+      phoneNumber: phNumber,
+      countryCode: countryCode,
     };
 
-    if (!data.username || !data.email || !data.password) return;
+    console.log(data);
 
     fetch(`${BASE_URL}register`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     })
       .then((response) => {
         switch (response.status) {
           case 201:
-            return response.json();
-
+            Swal.fire({
+              icon: "success",
+              title: "User created!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            return;
           case 400:
+          case 401:
+          case 403:
             return response.json().then((error) => {
               throw new Error(error.message);
             });
-
           default:
             throw new Error(`Please contact the development departament!`);
         }
-      })
-      .then((newUser) => {
-        Swal.fire(
-          "Success!",
-          `${newUser.email} has been added to your Database!`,
-          "success"
-        );
-        username.value = "";
-        email.value = "";
-        password.value = "";
       })
       .catch((error) => {
         console.error(error.message);
@@ -60,70 +134,126 @@ const NewUser = () => {
   return (
     <div className="newUser-container">
       <div className="newUserTitle">New User</div>
-      <form onSubmit={addNewUser} className="newUserForm">
+      {/* Form */}
+      <form>
         <div className="form-group field">
           {/* Username */}
           <div className="wrapper">
-            <input
-              type="text"
-              className="form-field username"
-              placeholder="Username"
-              name="username"
-              id="username"
-              required
-            />
             <label htmlFor="username" className="form-label">
-              Username
+              Username *
             </label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                className={`form-field username ${
+                  usernameValidationError ? "error" : ""
+                }`}
+                placeholder="Username"
+                name="username"
+                id="username"
+                required
+              />
+            </div>
+            {usernameValidationError ? (
+              <div className="username error-message">
+                This field is required!
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
+
+          {/* Phone Number */}
+          <div className="wrapper">
+            <label htmlFor="phone-number" className="form-label">
+              Phone Number *
+            </label>
+            <div className="input-wrapper">
+              <PhoneInput
+                inputStyle={{
+                  border: `${phoneValidationError ? "1px solid red" : ""}`,
+                }}
+                country={"us"}
+                inputProps={{
+                  required: true,
+                }}
+              />
+            </div>
+            {phoneValidationError ? (
+              <div className="phoneNumber error-message">
+                Invalid phone number!
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+
           {/* Email */}
           <div className="wrapper">
-            <input
-              type="email"
-              className="form-field email"
-              placeholder="Email"
-              name="email"
-              id="email"
-              required
-            />
             <label htmlFor="email" className="form-label">
-              Email
+              Email *
             </label>
+            <div className="input-wrapper">
+              <input
+                type="email"
+                className={`form-field email ${
+                  emailValidationError ? "error" : ""
+                }`}
+                placeholder="Email"
+                name="email"
+                id="email"
+                required
+              />
+            </div>
+            {emailValidationError ? (
+              <div className="email error-message">Invalid email address!</div>
+            ) : (
+              <></>
+            )}
           </div>
+
           {/* Password */}
           <div className="wrapper">
-            <input
-              type="password"
-              className="form-field password"
-              placeholder="Password"
-              name="password"
-              id="password"
-              required
-            />
             <label htmlFor="password" className="form-label">
-              Password
+              Password *
             </label>
+            <div className="input-wrapper">
+              <input
+                type="password"
+                className={`form-field password ${
+                  passwordValidationError ? "error" : ""
+                }`}
+                placeholder="Password"
+                name="password"
+                id="password"
+                required
+              />
+              {showPassword ? (
+                <RemoveRedEyeOutlinedIcon
+                  onClick={handlePasswordVisibility}
+                  className="visibility-icon"
+                />
+              ) : (
+                <VisibilityOffOutlinedIcon
+                  onClick={handlePasswordVisibility}
+                  className="visibility-icon"
+                />
+              )}
+            </div>
+            {passwordValidationError ? (
+              <div className="password error-message">
+                Password must contain one digit from 1 to 9, one lowercase
+                letter, one uppercase letter, one special character, no space,
+                and it must be 8-16 characters long.
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
-        {/* Checkbox */}
-        <div className="checkbox-wrapper-4">
-          <input className="inp-cbx" id="morning" type="checkbox" />
-          <label className="cbx" htmlFor="morning">
-            <span>
-              <svg width="12px" height="10px">
-                <use href="#check-4"></use>
-              </svg>
-            </span>
-            <span>Is admin</span>
-          </label>
-          <svg className="inline-svg">
-            <symbol id="check-4" viewBox="0 0 12 10">
-              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-            </symbol>
-          </svg>
-        </div>
-        {/* Button */}
-        <button className="newUserButton">Create</button>
+        <button onClick={addNewUser} className="save-changes">
+          Save changes
+        </button>
       </form>
     </div>
   );

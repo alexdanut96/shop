@@ -6,8 +6,8 @@ const CrypyoJS = require("crypto-js");
 // Register
 router.post("/", async (req, res) => {
   console.log(req.body);
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
+  const { username, email, password, phoneNumber, countryCode } = req.body;
+  if (!username || !email || !password || !phoneNumber || !countryCode) {
     return res.status(400).json({ message: "All the fields are required!" });
   }
 
@@ -18,6 +18,8 @@ router.post("/", async (req, res) => {
       password,
       process.env.HASHED_PASSWORD
     ).toString(),
+    phoneNumber: phoneNumber,
+    countryCode: countryCode,
   });
 
   try {
