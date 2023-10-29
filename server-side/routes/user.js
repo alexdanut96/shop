@@ -25,7 +25,6 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
 router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const foundUser = await User.findById(req.params.id);
-    console.log(foundUser);
     res.status(200).json(foundUser);
   } catch (err) {
     res.status(500).json(err);
@@ -67,7 +66,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
           console.log(`"${dataKeyProperty}" doesn't exist in Database`);
         }
       });
-      console.log(foundUser);
+
       const result = await foundUser.save();
       res.json(result);
     } else {

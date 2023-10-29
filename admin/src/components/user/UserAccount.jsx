@@ -1,5 +1,7 @@
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import CryptoJS from "crypto-js";
@@ -26,6 +28,7 @@ import {
 const UserAccount = () => {
   const [user, setUser] = useState();
   const [userSuccess, setUserSuccess] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
   const token = useSelector((state) => state.user.currentUser.accessToken);
   const location = useLocation();
   const id = location.pathname.split("/")[3];
@@ -38,6 +41,14 @@ const UserAccount = () => {
   const [emailValidationError, setEmailValidationError] = useState(false);
   const [passwordValidationError, setPasswordValidationError] = useState(false);
   const [phoneValidationError, setPhoneValidationError] = useState(false);
+
+  const handlePasswordVisibility = () => {
+    const password = document.querySelector(".form-field.password");
+    const type =
+      password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+    setShowPassword(!showPassword);
+  };
 
   const validForm = (phNumber, email, username, password) => {
     if (!ValidateEmptyValue(username)) {
@@ -415,17 +426,19 @@ const UserAccount = () => {
                   <label htmlFor="username" className="form-label">
                     Username *
                   </label>
-                  <input
-                    type="text"
-                    className={`form-field username ${
-                      usernameValidationError ? "error" : ""
-                    }`}
-                    placeholder="Username"
-                    name="username"
-                    id="username"
-                    defaultValue={user.username}
-                    required
-                  />
+                  <div className="input-wrapper">
+                    <input
+                      type="text"
+                      className={`form-field username ${
+                        usernameValidationError ? "error" : ""
+                      }`}
+                      placeholder="Username"
+                      name="username"
+                      id="username"
+                      defaultValue={user.username}
+                      required
+                    />
+                  </div>
                   {usernameValidationError ? (
                     <div className="username error-message">
                       This field is required!
@@ -440,17 +453,19 @@ const UserAccount = () => {
                   <label htmlFor="phone-number" className="form-label">
                     Phone Number *
                   </label>
-                  <PhoneInput
-                    country={"us"}
-                    value={
-                      user.phoneNumber
-                        ? `${user.countryCode}${user.phoneNumber}`
-                        : ""
-                    }
-                    inputProps={{
-                      required: true,
-                    }}
-                  />
+                  <div className="input-wrapper">
+                    <PhoneInput
+                      country={"us"}
+                      value={
+                        user.phoneNumber
+                          ? `${user.countryCode}${user.phoneNumber}`
+                          : ""
+                      }
+                      inputProps={{
+                        required: true,
+                      }}
+                    />
+                  </div>
                   {phoneValidationError ? (
                     <div className="phoneNumber error-message">
                       Invalid phone number!
@@ -465,15 +480,17 @@ const UserAccount = () => {
                   <label htmlFor="email" className="form-label">
                     Email *
                   </label>
-                  <input
-                    type="email"
-                    className="form-field email"
-                    placeholder="Email"
-                    name="email"
-                    id="email"
-                    defaultValue={user.email}
-                    required
-                  />
+                  <div className="input-wrapper">
+                    <input
+                      type="email"
+                      className="form-field email"
+                      placeholder="Email"
+                      name="email"
+                      id="email"
+                      defaultValue={user.email}
+                      required
+                    />
+                  </div>
                   {emailValidationError ? (
                     <div className="email error-message">
                       Invalid email address!
@@ -488,18 +505,31 @@ const UserAccount = () => {
                   <label htmlFor="password" className="form-label">
                     Password *
                   </label>
-                  <input
-                    type="password"
-                    className="form-field password"
-                    placeholder="Password"
-                    name="password"
-                    id="password"
-                    defaultValue={CryptoJS.AES.decrypt(
-                      user.password,
-                      process.env.REACT_APP_HPASSWORD
-                    ).toString(CryptoJS.enc.Utf8)}
-                    required
-                  />
+                  <div className="input-wrapper">
+                    <input
+                      type="password"
+                      className="form-field password"
+                      placeholder="Password"
+                      name="password"
+                      id="password"
+                      defaultValue={CryptoJS.AES.decrypt(
+                        user.password,
+                        process.env.REACT_APP_HPASSWORD
+                      ).toString(CryptoJS.enc.Utf8)}
+                      required
+                    />
+                    {showPassword ? (
+                      <RemoveRedEyeOutlinedIcon
+                        onClick={handlePasswordVisibility}
+                        className="visibility-icon"
+                      />
+                    ) : (
+                      <VisibilityOffOutlinedIcon
+                        onClick={handlePasswordVisibility}
+                        className="visibility-icon"
+                      />
+                    )}
+                  </div>
                   {passwordValidationError ? (
                     <div className="password error-message">
                       Password must contain one digit from 1 to 9, one lowercase
