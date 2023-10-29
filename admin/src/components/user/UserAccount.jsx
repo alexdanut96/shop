@@ -116,8 +116,6 @@ const UserAccount = () => {
       countryCode: countryCode,
     };
 
-    console.log(data);
-
     fetch(`${BASE_URL}users/${id}`, {
       method: "PUT",
       headers: {
@@ -419,7 +417,7 @@ const UserAccount = () => {
             </div>
 
             {/* Form */}
-            <form className="newUserForm">
+            <form>
               <div className="form-group field">
                 {/* Username */}
                 <div className="wrapper">
@@ -455,6 +453,11 @@ const UserAccount = () => {
                   </label>
                   <div className="input-wrapper">
                     <PhoneInput
+                      inputStyle={{
+                        border: `${
+                          phoneValidationError ? "1px solid red" : ""
+                        }`,
+                      }}
                       country={"us"}
                       value={
                         user.phoneNumber
@@ -483,7 +486,9 @@ const UserAccount = () => {
                   <div className="input-wrapper">
                     <input
                       type="email"
-                      className="form-field email"
+                      className={`form-field email ${
+                        emailValidationError ? "error" : ""
+                      }`}
                       placeholder="Email"
                       name="email"
                       id="email"
@@ -508,7 +513,9 @@ const UserAccount = () => {
                   <div className="input-wrapper">
                     <input
                       type="password"
-                      className="form-field password"
+                      className={`form-field password ${
+                        passwordValidationError ? "error" : ""
+                      }`}
                       placeholder="Password"
                       name="password"
                       id="password"

@@ -1,0 +1,112 @@
+.wrapper {
+  width: 100%;
+  position: relative;
+
+  & .input-wrapper {
+    position: relative;
+    margin-top: 5px;
+
+    // react tel input
+    & .react-tel-input {
+      & .form-control {
+        width: 100%;
+        font-size: 16px;
+        line-height: normal;
+        height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: darkblue;
+
+        &:focus {
+          outline: none;
+          border: 1px solid #0d6efded;
+        }
+
+        &.error {
+          border: 1px solid red;
+
+          &:focus {
+            outline: none;
+            border: 1px solid red;
+          }
+        }
+      }
+
+      & .flag-dropdown {
+        font-size: 20px;
+        background-color: inherit;
+        border-bottom: none;
+        border-top: none;
+        border-left: none;
+        border-right: 1px solid #cacaca;
+        border-radius: 5px 0 0 5px;
+
+        &:hover {
+          border-right: 1px solid #0d6efded;
+          border-bottom: 1px solid #0d6efded;
+          border-top: 1px solid #0d6efded;
+          border-left: 1px solid #0d6efded;
+        }
+      }
+
+      .country {
+        font-size: 16px;
+      }
+    }
+    // react tel input
+
+    & input.form-field {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #d5cece;
+      border-radius: 5px;
+      color: darkblue;
+
+      &.password {
+        padding: 10px 40px 10px 10px;
+      }
+
+      &.error {
+        border: 1px solid red;
+
+        &:focus {
+          outline: none;
+          border: 1px solid red;
+        }
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid #0d6efded;
+      }
+
+      &::placeholder {
+        color: #d5cece;
+      }
+    }
+  }
+
+  & .error-message {
+    color: red;
+    // position: absolute;
+    // right: 0;
+    background: white;
+    opacity: 0.9;
+    // display: none;
+  }
+
+  & label {
+    color: gray;
+    font-weight: 600;
+  }
+
+  & .visibility-icon {
+    color: #96c1ff;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}
