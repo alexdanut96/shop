@@ -2,11 +2,13 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { BASE_URL } from "../../ApiRequests";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import EditIcon from "@mui/icons-material/Edit";
+import Modal from "../Modal";
+import { modalActions } from "../../Redux/ModalSlice";
 
 const UserBilling = () => {
   const [bill, setBill] = useState();
@@ -14,6 +16,16 @@ const UserBilling = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[3];
   const token = useSelector((state) => state.user.currentUser.accessToken);
+  const dispatch = useDispatch();
+  const [usernameValidationError, setUsernameValidationError] = useState(false);
+  const [selectedBill, setSelectedBill] = useState("");
+
+  const showEditModal = (e) => {
+    setSelectedBill(
+      bill.address.find((item) => item._id === e.currentTarget.dataset.billId)
+    );
+    dispatch(modalActions.show());
+  };
 
   useEffect(() => {
     const getUserBillAddress = () => {
@@ -56,9 +68,10 @@ const UserBilling = () => {
 
     getUserBillAddress();
   }, [billSuccess]);
-  console.log(bill);
+  // console.log(bill);
   return (
     <>
+      {selectedBill && <Modal bill={selectedBill} />}
       {bill ? (
         bill.address.map((bill) => {
           return (
@@ -89,7 +102,11 @@ const UserBilling = () => {
                 </div>
               </div>
               <div className="billing-buttons">
-                <div className="edit-billing-button">
+                <div
+                  data-bill-id={bill._id}
+                  onClick={showEditModal}
+                  className="edit-billing-button"
+                >
                   <EditIcon />
                 </div>
                 <div className="delete-billing-button">
