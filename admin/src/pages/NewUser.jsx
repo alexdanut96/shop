@@ -109,6 +109,10 @@ const NewUser = () => {
               showConfirmButton: false,
               timer: 1500,
             });
+            document.querySelector("input[type=tel]").value = "";
+            document.querySelector(".form-field.email").value = "";
+            document.querySelector(".form-field.username").value = "";
+            document.querySelector(".form-field.password").value = "";
             return;
           case 400:
           case 401:

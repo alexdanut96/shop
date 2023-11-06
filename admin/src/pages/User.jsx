@@ -33,6 +33,7 @@ const User = () => {
 
   return (
     <div className="user-container">
+      <div className="title">User Information</div>
       <div className="user-edit-bar">
         {barOptions.map((option) => {
           return (

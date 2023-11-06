@@ -1,6 +1,12 @@
 .user-container {
   flex: 4;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
+
+  & .title {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
 
   .user-edit-bar {
     display: flex;

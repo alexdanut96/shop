@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./UserSlice";
 import sidebarSlice from "./SidebarSlice";
+import modalSlice from "./ModalSlice";
 import {
   persistStore,
   persistReducer,
@@ -25,6 +26,7 @@ export const store = configureStore({
   reducer: {
     user: persistedUserReducer,
     sidebar: sidebarSlice.reducer,
+    modal: modalSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
