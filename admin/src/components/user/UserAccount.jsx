@@ -387,6 +387,7 @@ const UserAccount = () => {
 
     getUser();
   }, [userSuccess]);
+  console.log(user);
 
   return (
     <>

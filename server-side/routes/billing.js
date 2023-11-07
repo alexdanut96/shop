@@ -41,7 +41,9 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
               req.body.address[0].street.toString() &&
             address.phoneNumber.toString() ===
               req.body.address[0].phoneNumber.toString() &&
-            address.name.toString() === req.body.address[0].name.toString()
+            address.name.toString() === req.body.address[0].name.toString() &&
+            address.countryCode.toString() ===
+              req.body.address[0].countryCode.toString()
           ) {
             return address;
           }
