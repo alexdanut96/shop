@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { modalActions } from "../Redux/ModalSlice";
 import { useSelector, useDispatch } from "react-redux";
 import PhoneInput from "react-phone-input-2";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Modal({ bill }) {
   const dispatch = useDispatch();
@@ -28,7 +29,12 @@ export default function Modal({ bill }) {
         <div className="modal">
           <div onClick={closeModal} className="overlay"></div>
           <div className="modal-content">
-            <h2>Edit billing address</h2>
+            <div className="header">
+              <div className="modal-title">Edit billing address</div>
+              <button onClick={closeModal} className="close-modal">
+                <CloseIcon />
+              </button>
+            </div>
 
             {/* Form */}
             <form>
@@ -200,10 +206,6 @@ export default function Modal({ bill }) {
                 Save changes
               </button>
             </form>
-
-            <button onClick={closeModal} className="close-modal">
-              CLOSE
-            </button>
           </div>
         </div>
       )}

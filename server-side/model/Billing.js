@@ -11,6 +11,7 @@ const BillingSchema = new Schema(
         city: { type: String, required: true },
         street: { type: String, required: true },
         phoneNumber: { type: String, required: true },
+        countryCode: { type: String, required: true },
         name: { type: String, required: true },
       },
     ],
