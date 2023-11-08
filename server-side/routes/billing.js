@@ -66,4 +66,49 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
+// Edit bill
+router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
+  console.log(req.params.id);
+
+  const allowedData = [
+    "postalCode",
+    "country",
+    "city",
+    "street",
+    "phoneNumber",
+    "countryCode",
+    "name",
+  ];
+  try {
+    if (req.params.id) {
+      const updatedBill = await Billing.findById(req.params.id);
+      console.log(updatedBill);
+      return;
+
+      Object.entries(req.body).forEach((item) => {
+        const dataKeyProperty = item[0].toString();
+        let dataValueProperty = item[1].toString();
+
+        const allowedProperty = allowedData.find(
+          (item) => item === dataKeyProperty
+        );
+
+        if (allowedProperty) {
+          updatedBill[dataKeyProperty] = dataValueProperty;
+        } else {
+          console.log(`"${dataKeyProperty}" doesn't exist in Database`);
+        }
+      });
+      console.log(updatedBill);
+      const result = await updatedBill.save();
+      res.json(result);
+    } else {
+      res.status(401).json({ message: "Product Id is required" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

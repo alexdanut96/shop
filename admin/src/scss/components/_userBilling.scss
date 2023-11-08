@@ -1,64 +1,74 @@
-.billing-container {
-  padding: 20px;
+.info-billing {
   display: flex;
-  flex-direction: column;
   gap: 20px;
-  border-radius: 10px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  flex-wrap: wrap;
 
-  & .billing-title {
+  & .billing-container {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
     display: flex;
-    gap: 5px;
-
-    svg {
-      color: #0d6efd;
-      font-size: 30px;
-    }
-
-    & .billing-title-container {
-      display: flex;
-      flex-wrap: wrap;
-      font-weight: 600;
-
-      & .billing-name {
-        margin-right: 10px;
-      }
-    }
-  }
-
-  & .billing-address {
-    display: flex;
-    color: gray;
-    flex-wrap: wrap;
-
-    & .billing-address-field {
-      margin-right: 5px;
-    }
-  }
-
-  & .billing-buttons {
-    justify-content: flex-end;
-    display: flex;
+    flex-direction: column;
     gap: 20px;
-
-    & .edit-billing-button,
-    & .delete-billing-button {
+    border-radius: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  
+    & .billing-title {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 30px;
-      width: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #e5eeff;
-      }
-
+      gap: 5px;
+  
       svg {
-        font-size: 20px;
         color: #0d6efd;
+        font-size: 30px;
+      }
+  
+      & .billing-title-container {
+        display: flex;
+        flex-wrap: wrap;
+        font-weight: 600;
+  
+        & .billing-name {
+          margin-right: 10px;
+        }
+      }
+    }
+  
+    & .billing-address {
+      display: flex;
+      color: gray;
+      flex-wrap: wrap;
+  
+      & .billing-address-field {
+        margin-right: 5px;
+      }
+    }
+  
+    & .billing-buttons {
+      justify-content: flex-end;
+      display: flex;
+      gap: 20px;
+  
+      & .edit-billing-button,
+      & .delete-billing-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: #e5eeff;
+        }
+  
+        svg {
+          font-size: 20px;
+          color: #0d6efd;
+        }
       }
     }
   }
 }
+
+
