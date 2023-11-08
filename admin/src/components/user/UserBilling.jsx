@@ -16,8 +16,8 @@ const UserBilling = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[3];
   const token = useSelector((state) => state.user.currentUser.accessToken);
+  const refresh = useSelector((state) => state.modal.modal);
   const dispatch = useDispatch();
-  const [usernameValidationError, setUsernameValidationError] = useState(false);
   const [selectedBill, setSelectedBill] = useState("");
 
   const showEditModal = (e) => {
@@ -67,22 +67,26 @@ const UserBilling = () => {
     };
 
     getUserBillAddress();
-  }, [billSuccess]);
+  }, [refresh]);
   console.log(bill);
   return (
     <>
-      {selectedBill && <Modal bill={selectedBill} token={token} />}
+      {selectedBill && (
+        <Modal bill={selectedBill} userId={bill.userId} token={token} />
+      )}
       <div className="info-billing">
-      {bill ? (
-        bill.address.map((bill) => {
-          return (
-            
+        {bill ? (
+          bill.address.map((bill) => {
+            return (
               <div key={bill._id} className="billing-container">
                 <div className="billing-title">
                   <FmdGoodOutlinedIcon />
                   <div className="billing-title-container">
-                    <div className="billing-name">Burcea Alexandru-Danut</div>
-                    <div className="billing-phoneNumber">0767061115</div>
+                    <div className="billing-name">{bill.name}</div>
+                    <div className="billing-phoneNumber">
+                      +{bill.countryCode}
+                      {bill.phoneNumber}
+                    </div>
                   </div>
                 </div>
 
@@ -116,11 +120,11 @@ const UserBilling = () => {
                   </div>
                 </div>
               </div>
-          );
-        })
-      ) : (
-        <></>
-      )}
+            );
+          })
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );
