@@ -4,8 +4,10 @@ import { modalActions } from "../Redux/ModalSlice";
 import { useSelector, useDispatch } from "react-redux";
 import PhoneInput from "react-phone-input-2";
 import CloseIcon from "@mui/icons-material/Close";
+import { BASE_URL } from "../ApiRequests";
+import Swal from "sweetalert2";
 
-export default function Modal({ bill }) {
+export default function Modal({ bill, token }) {
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.modal.modal);
   const [phoneValidationError, setPhoneValidationError] = useState(false);
@@ -21,7 +23,45 @@ export default function Modal({ bill }) {
   };
   console.log(bill);
 
-  const saveChanges = () => {};
+  const saveChanges = (e) => {
+    e.preventDefault();
+    fetch(`${BASE_URL}billing/${bill._id}`, {
+      method: "PUT",
+      headers: { token: `Bearer ${token}` },
+    })
+      .then((response) => {
+        console.log(response);
+        switch (response.status) {
+          case 200:
+            return response.json();
+
+          case 400:
+          case 401:
+          case 403:
+            return response.json().then((error) => {
+              throw new Error(error.message);
+            });
+
+          default:
+            throw new Error(`Please contact the development departament!`);
+        }
+      })
+      .then((data) => {
+        return data;
+      })
+      // .then((data) => {
+      //   setBill(data);
+      // })
+      .catch((error) => {
+        console.error(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `Something went wrong! ${error.message}`,
+          footer: '<a href="/">Go back to home page</a>',
+        });
+      });
+  };
 
   return (
     <>

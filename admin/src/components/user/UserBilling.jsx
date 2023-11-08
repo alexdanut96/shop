@@ -68,57 +68,60 @@ const UserBilling = () => {
 
     getUserBillAddress();
   }, [billSuccess]);
-  // console.log(bill);
+  console.log(bill);
   return (
     <>
-      {selectedBill && <Modal bill={selectedBill} />}
+      {selectedBill && <Modal bill={selectedBill} token={token} />}
+      <div className="info-billing">
       {bill ? (
         bill.address.map((bill) => {
           return (
-            <div key={bill._id} className="billing-container">
-              <div className="billing-title">
-                <FmdGoodOutlinedIcon />
-                <div className="billing-title-container">
-                  <div className="billing-name">Burcea Alexandru-Danut</div>
-                  <div className="billing-phoneNumber">0767061115</div>
+            
+              <div key={bill._id} className="billing-container">
+                <div className="billing-title">
+                  <FmdGoodOutlinedIcon />
+                  <div className="billing-title-container">
+                    <div className="billing-name">Burcea Alexandru-Danut</div>
+                    <div className="billing-phoneNumber">0767061115</div>
+                  </div>
+                </div>
+
+                <div className="billing-address">
+                  <div className="billing-address-field">
+                    {bill.street ? bill.street : "-"},
+                  </div>
+
+                  <div className="billing-address-field">
+                    {bill.city ? bill.city : "-"}
+                  </div>
+
+                  <div className="billing-address-field">
+                    {bill.postalCode ? bill.postalCode : "-"},
+                  </div>
+
+                  <div className="billing-address-field">
+                    {bill.country ? bill.country : "-"}
+                  </div>
+                </div>
+                <div className="billing-buttons">
+                  <div
+                    data-bill-id={bill._id}
+                    onClick={showEditModal}
+                    className="edit-billing-button"
+                  >
+                    <EditIcon />
+                  </div>
+                  <div className="delete-billing-button">
+                    <DeleteOutlineOutlinedIcon />
+                  </div>
                 </div>
               </div>
-
-              <div className="billing-address">
-                <div className="billing-address-field">
-                  {bill.street ? bill.street : "-"},
-                </div>
-
-                <div className="billing-address-field">
-                  {bill.city ? bill.city : "-"}
-                </div>
-
-                <div className="billing-address-field">
-                  {bill.postalCode ? bill.postalCode : "-"},
-                </div>
-
-                <div className="billing-address-field">
-                  {bill.country ? bill.country : "-"}
-                </div>
-              </div>
-              <div className="billing-buttons">
-                <div
-                  data-bill-id={bill._id}
-                  onClick={showEditModal}
-                  className="edit-billing-button"
-                >
-                  <EditIcon />
-                </div>
-                <div className="delete-billing-button">
-                  <DeleteOutlineOutlinedIcon />
-                </div>
-              </div>
-            </div>
           );
         })
       ) : (
         <></>
       )}
+      </div>
     </>
   );
 };
