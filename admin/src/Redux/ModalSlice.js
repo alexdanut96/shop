@@ -4,6 +4,7 @@ const modalSlice = createSlice({
   name: "modal",
   initialState: {
     modal: false,
+    refresh: false,
   },
   reducers: {
     show(state) {
@@ -11,6 +12,9 @@ const modalSlice = createSlice({
     },
     hide(state) {
       state.modal = false;
+    },
+    refresh(state) {
+      state.refresh = !state.refresh;
     },
   },
 });

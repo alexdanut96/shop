@@ -13,6 +13,7 @@ const BillingSchema = new Schema(
         phoneNumber: { type: String, required: true },
         countryCode: { type: String, required: true },
         name: { type: String, required: true },
+        createdAt: { type: Date, default: new Date().toJSON() },
       },
     ],
   },

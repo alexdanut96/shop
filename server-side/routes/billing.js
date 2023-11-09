@@ -5,6 +5,7 @@ const {
   verifyTokenAndAdmin,
 } = require("../middlewares/verifyToken");
 const router = require("express").Router();
+const fns = require("date-fns");
 
 // Get billing
 router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
@@ -54,7 +55,7 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
       }
 
       foundBill.address.push(req.body.address[0]);
-      const result = await foundUser.save();
+      const result = await foundBill.save();
       res.json(result);
     }
 
@@ -102,7 +103,10 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       updatedAddress.name = req.body.name;
 
       const newAddressArray = [...filteredAddresses, updatedAddress];
-      updatedBill.address = newAddressArray;
+      updatedBill.address = newAddressArray.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
 
       const result = await updatedBill.save();
       res.json(result);

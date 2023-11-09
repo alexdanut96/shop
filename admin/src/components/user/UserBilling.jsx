@@ -12,11 +12,10 @@ import { modalActions } from "../../Redux/ModalSlice";
 
 const UserBilling = () => {
   const [bill, setBill] = useState();
-  const [billSuccess, setBillSuccess] = useState(0);
   const location = useLocation();
   const id = location.pathname.split("/")[3];
   const token = useSelector((state) => state.user.currentUser.accessToken);
-  const refresh = useSelector((state) => state.modal.modal);
+  const refresh = useSelector((state) => state.modal.refresh);
   const dispatch = useDispatch();
   const [selectedBill, setSelectedBill] = useState("");
 
