@@ -74,17 +74,19 @@ export default function Home() {
   }, [MONTHS, token]);
 
   return (
-    <div className="home-container animated">
-      <FeaturedInfo />
-      <Chart
-        data={userStats || ""}
-        title="User Analytics"
-        grid
-        dataKey="Active User"
-      />
-      <div className="homeWidgets">
-        <WidgetSm />
-        <WidgetLg />
+    <div className="right-side-container">
+      <div className="home-container animated">
+        <FeaturedInfo />
+        <Chart
+          data={userStats || ""}
+          title="User Analytics"
+          grid
+          dataKey="Active User"
+        />
+        <div className="homeWidgets">
+          <WidgetSm />
+          <WidgetLg />
+        </div>
       </div>
     </div>
   );

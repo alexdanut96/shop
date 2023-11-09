@@ -1,7 +1,7 @@
 .user-list-container {
-  flex: 4;
-  padding: 10px;
-  height: fit-content;
+  // flex: 4;
+  // padding: 0 20px 20px 20px;
+  // height: fit-content;
 
   table {
     width: 100%;
@@ -17,13 +17,9 @@
     }
   }
 
-  th,
-  caption {
-    padding: 10px;
-  }
-
   th {
     color: gray;
+    padding: 10px;
   }
 
   td {
@@ -55,39 +51,12 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      button {
-        border: 1px solid;
-        padding: 5px 16px;
-        border-radius: 5px;
-        background-color: rgb(0, 246, 0);
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.2s;
-
-        &:hover {
-          // background-color: rgb(2, 144, 2);
-          background-color: white;
-          border: 1px solid rgb(0, 246, 0);
-          color: gray;
-        }
-      }
-      svg {
-        color: rgb(254, 70, 70);
-        font-size: 30px;
-        cursor: pointer;
-        transition: color 0.5s;
-
-        &:hover {
-          // color: rgb(158, 2, 2);
-          color: gray;
-        }
-      }
     }
   }
 
   caption {
-    font-size: 22px;
-    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 20px;
   }
 
   caption,
@@ -138,7 +107,7 @@
     font-size: 28px;
     z-index: 100;
     position: fixed;
-    top: 70px;
+    top: 55px;
     right: 20px;
     border-radius: 5rem;
     background-color: white;
@@ -154,8 +123,10 @@
   // add
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .user-list-container {
+    padding: 0 10px 10px 10px;
+
     tbody {
       display: flex;
       flex-direction: column;
@@ -164,8 +135,8 @@
 
     tr {
       position: relative;
-      -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
-      box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+      border-radius: 10px;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
       &:first-child {
         border: none;
@@ -176,7 +147,7 @@
       display: grid;
       //   padding: 10px;
       & .td-text {
-        color: #45458e;
+        color: #1e54a3ed;
         font-weight: 600;
       }
 
@@ -204,7 +175,7 @@
         }
 
         svg {
-          font-size: 36px;
+          font-size: 26px;
         }
       }
     }

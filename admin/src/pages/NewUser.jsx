@@ -136,129 +136,133 @@ const NewUser = () => {
   };
 
   return (
-    <div className="newUser-container animated">
-      <div className="newUserTitle">New User</div>
-      {/* Form */}
-      <form>
-        <div className="form-group field">
-          {/* Username */}
-          <div className="wrapper">
-            <label htmlFor="username" className="form-label">
-              Username *
-            </label>
-            <div className="input-wrapper">
-              <input
-                type="text"
-                className={`form-field username ${
-                  usernameValidationError ? "error" : ""
-                }`}
-                placeholder="Username"
-                name="username"
-                id="username"
-                required
-              />
-            </div>
-            {usernameValidationError ? (
-              <div className="username error-message">
-                This field is required!
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
-
-          {/* Phone Number */}
-          <div className="wrapper">
-            <label htmlFor="phone-number" className="form-label">
-              Phone Number *
-            </label>
-            <div className="input-wrapper">
-              <PhoneInput
-                inputStyle={{
-                  border: `${phoneValidationError ? "1px solid red" : ""}`,
-                }}
-                country={"us"}
-                inputProps={{
-                  required: true,
-                }}
-              />
-            </div>
-            {phoneValidationError ? (
-              <div className="phoneNumber error-message">
-                Invalid phone number!
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
-
-          {/* Email */}
-          <div className="wrapper">
-            <label htmlFor="email" className="form-label">
-              Email *
-            </label>
-            <div className="input-wrapper">
-              <input
-                type="email"
-                className={`form-field email ${
-                  emailValidationError ? "error" : ""
-                }`}
-                placeholder="Email"
-                name="email"
-                id="email"
-                required
-              />
-            </div>
-            {emailValidationError ? (
-              <div className="email error-message">Invalid email address!</div>
-            ) : (
-              <></>
-            )}
-          </div>
-
-          {/* Password */}
-          <div className="wrapper">
-            <label htmlFor="password" className="form-label">
-              Password *
-            </label>
-            <div className="input-wrapper">
-              <input
-                type="password"
-                className={`form-field password ${
-                  passwordValidationError ? "error" : ""
-                }`}
-                placeholder="Password"
-                name="password"
-                id="password"
-                required
-              />
-              {showPassword ? (
-                <RemoveRedEyeOutlinedIcon
-                  onClick={handlePasswordVisibility}
-                  className="visibility-icon"
+    <div className="right-side-container">
+      <div className="newUser-container animated">
+        <div className="newUserTitle">New User</div>
+        {/* Form */}
+        <form>
+          <div className="form-group field">
+            {/* Username */}
+            <div className="wrapper">
+              <label htmlFor="username" className="form-label">
+                Username *
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  className={`form-field username ${
+                    usernameValidationError ? "error" : ""
+                  }`}
+                  placeholder="Username"
+                  name="username"
+                  id="username"
+                  required
                 />
+              </div>
+              {usernameValidationError ? (
+                <div className="username error-message">
+                  This field is required!
+                </div>
               ) : (
-                <VisibilityOffOutlinedIcon
-                  onClick={handlePasswordVisibility}
-                  className="visibility-icon"
-                />
+                <></>
               )}
             </div>
-            {passwordValidationError ? (
-              <div className="password error-message">
-                Password must contain one digit from 1 to 9, one lowercase
-                letter, one uppercase letter, one special character, no space,
-                and it must be 8-16 characters long.
+
+            {/* Phone Number */}
+            <div className="wrapper">
+              <label htmlFor="phone-number" className="form-label">
+                Phone Number *
+              </label>
+              <div className="input-wrapper">
+                <PhoneInput
+                  inputStyle={{
+                    border: `${phoneValidationError ? "1px solid red" : ""}`,
+                  }}
+                  country={"us"}
+                  inputProps={{
+                    required: true,
+                  }}
+                />
               </div>
-            ) : (
-              <></>
-            )}
+              {phoneValidationError ? (
+                <div className="phoneNumber error-message">
+                  Invalid phone number!
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+
+            {/* Email */}
+            <div className="wrapper">
+              <label htmlFor="email" className="form-label">
+                Email *
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="email"
+                  className={`form-field email ${
+                    emailValidationError ? "error" : ""
+                  }`}
+                  placeholder="Email"
+                  name="email"
+                  id="email"
+                  required
+                />
+              </div>
+              {emailValidationError ? (
+                <div className="email error-message">
+                  Invalid email address!
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+
+            {/* Password */}
+            <div className="wrapper">
+              <label htmlFor="password" className="form-label">
+                Password *
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="password"
+                  className={`form-field password ${
+                    passwordValidationError ? "error" : ""
+                  }`}
+                  placeholder="Password"
+                  name="password"
+                  id="password"
+                  required
+                />
+                {showPassword ? (
+                  <RemoveRedEyeOutlinedIcon
+                    onClick={handlePasswordVisibility}
+                    className="visibility-icon"
+                  />
+                ) : (
+                  <VisibilityOffOutlinedIcon
+                    onClick={handlePasswordVisibility}
+                    className="visibility-icon"
+                  />
+                )}
+              </div>
+              {passwordValidationError ? (
+                <div className="password error-message">
+                  Password must contain one digit from 1 to 9, one lowercase
+                  letter, one uppercase letter, one special character, no space,
+                  and it must be 8-16 characters long.
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
-        </div>
-        <button onClick={addNewUser} className="save-changes">
-          Save changes
-        </button>
-      </form>
+          <button onClick={addNewUser} className="save-changes">
+            Save changes
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

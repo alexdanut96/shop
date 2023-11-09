@@ -1,7 +1,11 @@
 import React from "react";
 
 const UserPayment = () => {
-  return <div className="animated">Coming Soon</div>;
+  return (
+    <div className="info-payments animated">
+      <div className="no-payments-title">No payments!</div>
+    </div>
+  );
 };
 
 export default UserPayment;

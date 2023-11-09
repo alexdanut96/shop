@@ -143,7 +143,7 @@ const UserBilling = () => {
           {bill ? (
             bill.address.map((address) => {
               return (
-                <div key={address._id} className="billing-container">
+                <div key={address._id} className="billing-container animated">
                   <div className="billing-title">
                     <FmdGoodOutlinedIcon />
                     <div className="billing-title-container">
@@ -176,13 +176,13 @@ const UserBilling = () => {
                     <div
                       data-bill-id={address._id}
                       onClick={showEditModal}
-                      className="edit-billing-button"
+                      className="edit-button"
                     >
                       <EditIcon />
                     </div>
                     <div
                       onClick={() => showRemoveModal(bill.userId, address._id)}
-                      className="delete-billing-button"
+                      className="delete-button"
                     >
                       <DeleteOutlineOutlinedIcon />
                     </div>

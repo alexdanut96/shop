@@ -1,0 +1,73 @@
+.edit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e5eeff;
+  }
+
+  svg {
+    font-size: 20px;
+    color: #0d6efd;
+  }
+}
+
+.delete-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ffeaea;
+  }
+
+  svg {
+    font-size: 20px;
+    color: #ff5f5f;
+  }
+}
+
+.logout-button {
+  cursor: pointer;
+  // margin-top: 30px;
+  width: 100%;
+  font-weight: 400;
+  text-align: center;
+  border: 1px solid transparent;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 20px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-color: #0d6efd;
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+
+  &:disabled {
+    background-color: #d9d3d3;
+    cursor: not-allowed;
+    border-color: #d9d3d3;
+
+    &:hover {
+      background-color: #d9d3d3;
+      border-color: #d9d3d3;
+      color: #fff;
+    }
+  }
+
+  &:hover {
+    color: #0d6efd;
+    background-color: transparent;
+    border-color: #0d6efd;
+  }
+}
