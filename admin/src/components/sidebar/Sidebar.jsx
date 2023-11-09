@@ -113,7 +113,7 @@ const Sidebar = () => {
           </ul>
         </div>
         <div className="sidebarMenu">
-          <button onClick={logout} className="logoutBtn">
+          <button onClick={logout} className="logout-button">
             Logout
           </button>
         </div>

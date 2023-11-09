@@ -32,6 +32,7 @@ const UserAccount = () => {
   const token = useSelector((state) => state.user.currentUser.accessToken);
   const location = useLocation();
   const id = location.pathname.split("/")[3];
+  console.log(id);
 
   //phone number
 

@@ -32,29 +32,31 @@ const User = () => {
   }
 
   return (
-    <div className="user-container">
-      <div className="title">User Information</div>
-      <div className="user-edit-bar">
-        {barOptions.map((option) => {
-          return (
-            <NavLink
-              key={option.name}
-              style={({ isActive }) => {
-                return {
-                  color: isActive ? "#0d6efd" : "",
-                  borderBottom: isActive ? "2px solid #0d6efd" : "",
-                };
-              }}
-              to={option.href}
-            >
-              {option.name}
-            </NavLink>
-          );
-        })}
-      </div>
-      <div className="user-box">
-        {component}
-        {/* <div className="info-billing">{component}</div> */}
+    <div className="right-side-container">
+      <div className="user-container">
+        <div className="title">User Information</div>
+        <div className="user-edit-bar">
+          {barOptions.map((option) => {
+            return (
+              <NavLink
+                key={option.name}
+                style={({ isActive }) => {
+                  return {
+                    color: isActive ? "#0d6efd" : "",
+                    borderBottom: isActive ? "2px solid #0d6efd" : "",
+                  };
+                }}
+                to={option.href}
+              >
+                {option.name}
+              </NavLink>
+            );
+          })}
+        </div>
+        <div className="user-box">
+          {component}
+          {/* <div className="info-billing">{component}</div> */}
+        </div>
       </div>
     </div>
   );

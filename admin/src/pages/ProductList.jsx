@@ -58,14 +58,16 @@ const ProductList = () => {
   ];
 
   return (
-    <div className="productList-container animated">
-      <DataGrid
-        rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        pageSize={8}
-        checkboxSelection
-      />
+    <div className="right-side-container">
+      <div className="productList-container animated">
+        <DataGrid
+          rows={data}
+          disableSelectionOnClick
+          columns={columns}
+          pageSize={8}
+          checkboxSelection
+        />
+      </div>
     </div>
   );
 };

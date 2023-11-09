@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import EditIcon from "@mui/icons-material/Edit";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { Link } from "react-router-dom";
 
 const UsersList = () => {
@@ -165,77 +166,86 @@ const UsersList = () => {
   console.log(users);
 
   return (
-    <div className="user-list-container animated">
-      {users && users.length > 0 ? (
-        <>
-          <Link to="/newUser">
-            <AddCircleIcon className="newUser" />
-          </Link>
-          <ScrollToTop />
-          <table>
-            <caption>Users List</caption>
-            <tbody>
-              <tr>
-                <th>
-                  <div className="input-th">
-                    <input onClick={handleSelectAll} type="checkbox" />
-                    <div>All</div>
-                  </div>
-                </th>
-                <th>ID</th>
-                <th>User</th>
-                <th>Email</th>
-                <th>Created at</th>
-                <th>Action</th>
-              </tr>
-
-              {users.map((user, index) => (
-                <tr onClick={handleUser} key={user._id}>
-                  <td>
-                    <div className="input-td">
-                      <input type="checkbox" />
-                      <span>{index + 1}</span>
+    <div className="right-side-container">
+      <div className="user-list-container animated">
+        {users && users.length > 0 ? (
+          <>
+            <Link to="/newUser">
+              <AddCircleIcon className="newUser" />
+            </Link>
+            <ScrollToTop />
+            <table>
+              <caption>Users List</caption>
+              <tbody>
+                <tr>
+                  <th>
+                    <div className="input-th">
+                      <input onClick={handleSelectAll} type="checkbox" />
+                      <div>All</div>
                     </div>
-                  </td>
-                  <td data-cell="ID:">
-                    <div className="td-text">{user._id}</div>
-                  </td>
-                  <td data-cell="User:">
-                    <div className="user-td">
-                      <img
-                        src={
-                          user.profilePicture ||
-                          "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
-                        }
-                        alt=""
-                      />
-                      <span className="td-text">{user.username}</span>
-                    </div>
-                  </td>
-                  <td data-cell="Email:">
-                    <div className="td-text">{user.email}</div>
-                  </td>
-                  <td data-cell="Created at:">
-                    <div className="td-text">{format(user.createdAt)}</div>
-                  </td>
-                  <td>
-                    <div className="action-buttons">
-                      <Link to={`/user/account/${user._id}`}>
-                        <button>Edit</button>
-                      </Link>
-                      <DeleteOutlineIcon onClick={() => handleOpen(user._id)} />
-                    </div>
-                  </td>
+                  </th>
+                  <th>ID</th>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Created at</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      ) : (
-        <div className="loader-container">
-          <div className="loader"></div>
-        </div>
-      )}
+
+                {users.map((user, index) => (
+                  <tr onClick={handleUser} key={user._id}>
+                    <td>
+                      <div className="input-td">
+                        <input type="checkbox" />
+                        <span>{index + 1}</span>
+                      </div>
+                    </td>
+                    <td data-cell="ID:">
+                      <div className="td-text">{user._id}</div>
+                    </td>
+                    <td data-cell="User:">
+                      <div className="user-td">
+                        <img
+                          src={
+                            user.profilePicture ||
+                            "https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
+                          }
+                          alt=""
+                        />
+                        <span className="td-text">{user.username}</span>
+                      </div>
+                    </td>
+                    <td data-cell="Email:">
+                      <div className="td-text">{user.email}</div>
+                    </td>
+                    <td data-cell="Created at:">
+                      <div className="td-text">{format(user.createdAt)}</div>
+                    </td>
+                    <td>
+                      <div className="action-buttons">
+                        <Link to={`/user/account/${user._id}`}>
+                          <div className="edit-button">
+                            <EditIcon />
+                          </div>
+                        </Link>
+                        <div
+                          onClick={() => handleOpen(user._id)}
+                          className="delete-button"
+                        >
+                          <DeleteOutlineOutlinedIcon />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <div className="loader-container">
+            <div className="loader"></div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
