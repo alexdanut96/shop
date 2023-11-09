@@ -5,7 +5,7 @@ import PublishIcon from "@mui/icons-material/Publish";
 
 const Product = () => {
   return (
-    <div className="product-container">
+    <div className="product-container animated">
       <div className="productTitleContainer">
         <h1 className="productTitle">Product</h1>
         <Link to="/newproduct">

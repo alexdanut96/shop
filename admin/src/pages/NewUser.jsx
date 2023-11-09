@@ -136,7 +136,7 @@ const NewUser = () => {
   };
 
   return (
-    <div className="newUser-container">
+    <div className="newUser-container animated">
       <div className="newUserTitle">New User</div>
       {/* Form */}
       <form>

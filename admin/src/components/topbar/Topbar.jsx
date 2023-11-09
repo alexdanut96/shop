@@ -20,7 +20,7 @@ const Topbar = () => {
   };
 
   return (
-    <div className="topbar">
+    <div className="topbar animated">
       <div className="topbarWrapper">
         <div className="topLeft">
           <MenuIcon onClick={handleSidebar} className="menu-icon" />

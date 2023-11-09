@@ -306,7 +306,7 @@ export default function Modal({ bill, userId, token }) {
   return (
     <>
       {showModal && (
-        <div className="modal">
+        <div className="modal animated">
           <div onClick={closeModal} className="overlay"></div>
           <div className="modal-content">
             <div className="header">

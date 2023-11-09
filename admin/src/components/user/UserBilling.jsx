@@ -134,7 +134,7 @@ const UserBilling = () => {
   return (
     <>
       {showModal && <Modal bill={selectedBill} userId={userId} token={token} />}
-      <div className="info-billing">
+      <div className="info-billing animated">
         <button onClick={showAddModal} className="add-new-bill-address">
           <AddIcon />
           Add billing address

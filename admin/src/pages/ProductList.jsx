@@ -58,7 +58,7 @@ const ProductList = () => {
   ];
 
   return (
-    <div className="productList-container">
+    <div className="productList-container animated">
       <DataGrid
         rows={data}
         disableSelectionOnClick
