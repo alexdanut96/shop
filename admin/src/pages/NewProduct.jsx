@@ -1,6 +1,6 @@
 const NewProduct = () => {
   return (
-    <div className="newProduct-container">
+    <div className="newProduct-container animated">
       <h1 className="addProductTitle">New Product</h1>
       <form className="addProductForm">
         <div className="addProductItem">

@@ -165,7 +165,7 @@ const UsersList = () => {
   console.log(users);
 
   return (
-    <div className="user-list-container">
+    <div className="user-list-container animated">
       {users && users.length > 0 ? (
         <>
           <Link to="/newUser">

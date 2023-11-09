@@ -74,7 +74,7 @@ export default function Home() {
   }, [MONTHS, token]);
 
   return (
-    <div className="home-container">
+    <div className="home-container animated">
       <FeaturedInfo />
       <Chart
         data={userStats || ""}

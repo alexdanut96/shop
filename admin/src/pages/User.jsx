@@ -53,7 +53,7 @@ const User = () => {
         })}
       </div>
       <div className="user-box">
-      {component}
+        {component}
         {/* <div className="info-billing">{component}</div> */}
       </div>
     </div>

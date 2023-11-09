@@ -30,7 +30,9 @@ const Sidebar = () => {
   }, [location]);
 
   return (
-    <div className={`sidebar sidebar-mobile ${isActive ? "active" : ""}`}>
+    <div
+      className={`sidebar sidebar-mobile animated ${isActive ? "active" : ""}`}
+    >
       <div className="sidebarWrapper">
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Dashboard</h3>

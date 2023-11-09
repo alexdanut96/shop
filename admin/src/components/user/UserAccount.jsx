@@ -392,7 +392,7 @@ const UserAccount = () => {
   return (
     <>
       {user ? (
-        <div className="userUpdate">
+        <div className="userUpdate animated">
           <div className="form-container">
             {/* Form Action */}
             <div className="form-action">

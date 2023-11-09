@@ -30,7 +30,7 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div className="animated">
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -108,7 +108,7 @@ const Login = () => {
           </Box>
         </Container>
       </ThemeProvider>
-    </>
+    </div>
   );
 };
 
