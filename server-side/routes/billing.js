@@ -68,8 +68,6 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
 
 // Edit bill
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
-  console.log(req.params.id);
-
   const allowedData = [
     "postalCode",
     "country",
@@ -81,25 +79,31 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   ];
   try {
     if (req.params.id) {
-      const updatedBill = await Billing.findById(req.params.id);
-      console.log(updatedBill);
-      return;
+      const updatedBill = await Billing.findOne({ userId: req.params.id });
 
-      Object.entries(req.body).forEach((item) => {
-        const dataKeyProperty = item[0].toString();
-        let dataValueProperty = item[1].toString();
+      if (!updatedBill) return;
 
-        const allowedProperty = allowedData.find(
-          (item) => item === dataKeyProperty
-        );
-
-        if (allowedProperty) {
-          updatedBill[dataKeyProperty] = dataValueProperty;
-        } else {
-          console.log(`"${dataKeyProperty}" doesn't exist in Database`);
-        }
+      const updatedAddress = updatedBill.address.find((address) => {
+        return address._id.toString() === req.body.billId;
       });
-      console.log(updatedBill);
+
+      if (!updatedAddress) return;
+
+      const filteredAddresses = updatedBill.address.filter((address) => {
+        return address._id.toString() !== req.body.billId;
+      });
+
+      updatedAddress.postalCode = req.body.postalCode;
+      updatedAddress.country = req.body.country;
+      updatedAddress.city = req.body.city;
+      updatedAddress.street = req.body.street;
+      updatedAddress.phoneNumber = req.body.phoneNumber;
+      updatedAddress.countryCode = req.body.countryCode;
+      updatedAddress.name = req.body.name;
+
+      const newAddressArray = [...filteredAddresses, updatedAddress];
+      updatedBill.address = newAddressArray;
+
       const result = await updatedBill.save();
       res.json(result);
     } else {

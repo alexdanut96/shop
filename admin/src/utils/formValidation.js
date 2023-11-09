@@ -24,9 +24,18 @@ const ValidatePassword = (value) => {
   return passwordPattern.test(value);
 };
 
+const ValidateLength = (value, length) => {
+  if (value.trim().length < length) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 export {
   ValidatePhoneNumber,
   ValidateEmail,
   ValidateEmptyValue,
   ValidatePassword,
+  ValidateLength,
 };

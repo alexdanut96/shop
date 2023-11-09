@@ -6,10 +6,16 @@ import PhoneInput from "react-phone-input-2";
 import CloseIcon from "@mui/icons-material/Close";
 import { BASE_URL } from "../ApiRequests";
 import Swal from "sweetalert2";
+import {
+  ValidateEmptyValue,
+  ValidatePhoneNumber,
+  ValidateLength,
+} from "../utils/formValidation";
 
-export default function Modal({ bill, token }) {
+export default function Modal({ bill, userId, token }) {
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.modal.modal);
+  const [billSuccess, setBillSuccess] = useState(0);
   const [phoneValidationError, setPhoneValidationError] = useState(false);
   const [cityValidationError, setCityValidationError] = useState(false);
   const [countryValidationError, setCountryValidationError] = useState(false);
@@ -17,22 +23,168 @@ export default function Modal({ bill, token }) {
   const [postalCodeValidationError, setPostalCodeValidationError] =
     useState(false);
   const [streetValidationError, setStreetValidationError] = useState(false);
+  let editedData = {};
+  editedData.billId = bill._id;
 
   const closeModal = () => {
     dispatch(modalActions.hide());
+    setPhoneValidationError(false);
+    setCityValidationError(false);
+    setCountryValidationError(false);
+    setNameValidationError(false);
+    setPostalCodeValidationError(false);
+    setStreetValidationError(false);
   };
-  console.log(bill);
+  // console.log(bill);
+
+  const validateForm = () => {
+    const inputs = document.querySelectorAll("input");
+    Array.from(inputs).forEach((input) => {
+      if (input.classList.contains("city")) {
+        if (!ValidateEmptyValue(input.value)) {
+          setCityValidationError("This field is required!");
+          return;
+        } else {
+          setCityValidationError(false);
+        }
+
+        if (!ValidateLength(input.value, 2)) {
+          setCityValidationError("Minimum 2 characters are allowed!");
+          return;
+        } else {
+          setCityValidationError(false);
+        }
+
+        editedData.city = input.value;
+      }
+
+      if (input.classList.contains("country")) {
+        if (!ValidateEmptyValue(input.value)) {
+          setCountryValidationError("This field is required!");
+          return;
+        } else {
+          setCountryValidationError(false);
+        }
+
+        if (!ValidateLength(input.value, 2)) {
+          setCountryValidationError("Minimum 2 characters are allowed!");
+          return;
+        } else {
+          setCountryValidationError(false);
+        }
+        editedData.country = input.value;
+      }
+
+      if (input.classList.contains("form-control")) {
+        const phNumber = input.value
+          .split(" ")
+          .slice(1)
+          .join("")
+          .replace(/[^\w]/g, "");
+        if (!ValidateEmptyValue(phNumber)) {
+          setPhoneValidationError("This field is required!");
+          return;
+        } else {
+          setPhoneValidationError(false);
+        }
+
+        if (!ValidatePhoneNumber(phNumber)) {
+          setPhoneValidationError("Invalid phone number!");
+          return;
+        } else {
+          setPhoneValidationError(false);
+        }
+        editedData.phoneNumber = phNumber;
+        const countryCode = document
+          .querySelector(".selected-flag")
+          .title.split(" ")
+          .slice(-1)[0];
+        editedData.countryCode = countryCode;
+      }
+
+      if (input.classList.contains("name")) {
+        if (!ValidateEmptyValue(input.value)) {
+          setNameValidationError("This field is required!");
+          return;
+        } else {
+          setNameValidationError(false);
+        }
+
+        if (!ValidateLength(input.value, 2)) {
+          setNameValidationError("Minimum 2 characters are allowed!");
+          return;
+        } else {
+          setNameValidationError(false);
+        }
+        editedData.name = input.value;
+      }
+
+      if (input.classList.contains("street")) {
+        if (!ValidateEmptyValue(input.value)) {
+          setStreetValidationError("This field is required!");
+          return;
+        } else {
+          setStreetValidationError(false);
+        }
+
+        if (!ValidateLength(input.value, 5)) {
+          setStreetValidationError("Minimum 5 characters are allowed!");
+          return;
+        } else {
+          setStreetValidationError(false);
+        }
+        editedData.street = input.value;
+      }
+
+      if (input.classList.contains("postalCode")) {
+        if (!ValidateEmptyValue(input.value)) {
+          setPostalCodeValidationError("This field is required!");
+          return;
+        } else {
+          setPostalCodeValidationError(false);
+        }
+        editedData.postalCode = input.value;
+      }
+    });
+    // console.log(data);
+
+    if (
+      editedData.phoneNumber &&
+      editedData.city &&
+      editedData.country &&
+      editedData.name &&
+      editedData.postalCode &&
+      editedData.street &&
+      editedData.countryCode
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const saveChanges = (e) => {
     e.preventDefault();
-    fetch(`${BASE_URL}billing/${bill._id}`, {
+    console.log(validateForm());
+    if (!validateForm()) return;
+
+    fetch(`${BASE_URL}billing/${userId}`, {
       method: "PUT",
-      headers: { token: `Bearer ${token}` },
+      headers: { token: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify(editedData),
     })
       .then((response) => {
         console.log(response);
         switch (response.status) {
           case 200:
+            closeModal();
+            Swal.fire({
+              icon: "success",
+              title: "Bill updated!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setBillSuccess(billSuccess + 1);
             return response.json();
 
           case 400:
@@ -46,12 +198,6 @@ export default function Modal({ bill, token }) {
             throw new Error(`Please contact the development departament!`);
         }
       })
-      .then((data) => {
-        return data;
-      })
-      // .then((data) => {
-      //   setBill(data);
-      // })
       .catch((error) => {
         console.error(error.message);
         Swal.fire({
@@ -99,7 +245,7 @@ export default function Modal({ bill, token }) {
                   </div>
                   {cityValidationError ? (
                     <div className="city error-message">
-                      This field is required!
+                      {cityValidationError}
                     </div>
                   ) : (
                     <></>
@@ -131,7 +277,7 @@ export default function Modal({ bill, token }) {
                   </div>
                   {phoneValidationError ? (
                     <div className="phoneNumber error-message">
-                      Invalid phone number!
+                      {phoneValidationError}
                     </div>
                   ) : (
                     <></>
@@ -158,7 +304,7 @@ export default function Modal({ bill, token }) {
                   </div>
                   {countryValidationError ? (
                     <div className="country error-message">
-                      Invalid country!
+                      {countryValidationError}
                     </div>
                   ) : (
                     <></>
@@ -184,7 +330,9 @@ export default function Modal({ bill, token }) {
                     />
                   </div>
                   {nameValidationError ? (
-                    <div className="name error-message">Invalid name!</div>
+                    <div className="name error-message">
+                      {nameValidationError}
+                    </div>
                   ) : (
                     <></>
                   )}
@@ -210,7 +358,7 @@ export default function Modal({ bill, token }) {
                   </div>
                   {postalCodeValidationError ? (
                     <div className="postalCode error-message">
-                      Invalid postal code!
+                      {postalCodeValidationError}
                     </div>
                   ) : (
                     <></>
@@ -236,7 +384,9 @@ export default function Modal({ bill, token }) {
                     />
                   </div>
                   {streetValidationError ? (
-                    <div className="street error-message">Invalid street!</div>
+                    <div className="street error-message">
+                      {streetValidationError}
+                    </div>
                   ) : (
                     <></>
                   )}
