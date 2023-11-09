@@ -15,7 +15,6 @@ import {
 export default function Modal({ bill, userId, token }) {
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.modal.modal);
-  const [billSuccess, setBillSuccess] = useState(0);
   const [phoneValidationError, setPhoneValidationError] = useState(false);
   const [cityValidationError, setCityValidationError] = useState(false);
   const [countryValidationError, setCountryValidationError] = useState(false);
@@ -165,7 +164,6 @@ export default function Modal({ bill, userId, token }) {
 
   const saveChanges = (e) => {
     e.preventDefault();
-    console.log(validateForm());
     if (!validateForm()) return;
 
     fetch(`${BASE_URL}billing/${userId}`, {
@@ -174,7 +172,6 @@ export default function Modal({ bill, userId, token }) {
       body: JSON.stringify(editedData),
     })
       .then((response) => {
-        console.log(response);
         switch (response.status) {
           case 200:
             closeModal();
@@ -184,7 +181,7 @@ export default function Modal({ bill, userId, token }) {
               showConfirmButton: false,
               timer: 1500,
             });
-            setBillSuccess(billSuccess + 1);
+            dispatch(modalActions.refresh());
             return response.json();
 
           case 400:
@@ -200,6 +197,7 @@ export default function Modal({ bill, userId, token }) {
       })
       .catch((error) => {
         console.error(error.message);
+        closeModal();
         Swal.fire({
           icon: "error",
           title: "Oops...",
