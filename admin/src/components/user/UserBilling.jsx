@@ -9,15 +9,57 @@ import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import Modal from "../Modal";
 import { modalActions } from "../../Redux/ModalSlice";
+import AddIcon from "@mui/icons-material/Add";
 
 const UserBilling = () => {
   const [bill, setBill] = useState();
   const location = useLocation();
-  const id = location.pathname.split("/")[3];
+  const userId = location.pathname.split("/")[3];
   const token = useSelector((state) => state.user.currentUser.accessToken);
   const refresh = useSelector((state) => state.modal.refresh);
+  const showModal = useSelector((state) => state.modal.modal);
   const dispatch = useDispatch();
   const [selectedBill, setSelectedBill] = useState("");
+
+  const deleteBill = (userId, billId) => {
+    fetch(`${BASE_URL}billing/${userId}`, {
+      method: "DELETE",
+      headers: { token: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ billId }),
+    })
+      .then((response) => {
+        switch (response.status) {
+          case 200:
+            return response.json();
+
+          case 400:
+          case 401:
+          case 403:
+            return response.json().then((error) => {
+              throw new Error(error.message);
+            });
+
+          default:
+            throw new Error(`Please contact the development departament!`);
+        }
+      })
+      .then((success) => {
+        dispatch(modalActions.refresh());
+        return success;
+      })
+      .then((data) => {
+        Swal.fire("Deleted!", data.message, "success");
+      })
+      .catch((error) => {
+        console.error(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `Something went wrong! ${error.message}`,
+          footer: '<a href="/">Go back to home page</a>',
+        });
+      });
+  };
 
   const showEditModal = (e) => {
     setSelectedBill(
@@ -26,9 +68,30 @@ const UserBilling = () => {
     dispatch(modalActions.show());
   };
 
+  const showAddModal = () => {
+    setSelectedBill(false);
+    dispatch(modalActions.show());
+  };
+
+  const showRemoveModal = (userId, billId) => {
+    Swal.fire({
+      title: `Bill ID: ${billId}`,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteBill(userId, billId);
+      }
+    });
+  };
+
   useEffect(() => {
     const getUserBillAddress = () => {
-      fetch(`${BASE_URL}billing/find/${id}`, {
+      fetch(`${BASE_URL}billing/find/${userId}`, {
         method: "GET",
         headers: { token: `Bearer ${token}` },
       })
@@ -70,60 +133,68 @@ const UserBilling = () => {
   console.log(bill);
   return (
     <>
-      {selectedBill && (
-        <Modal bill={selectedBill} userId={bill.userId} token={token} />
-      )}
+      {showModal && <Modal bill={selectedBill} userId={userId} token={token} />}
       <div className="info-billing">
-        {bill ? (
-          bill.address.map((bill) => {
-            return (
-              <div key={bill._id} className="billing-container">
-                <div className="billing-title">
-                  <FmdGoodOutlinedIcon />
-                  <div className="billing-title-container">
-                    <div className="billing-name">{bill.name}</div>
-                    <div className="billing-phoneNumber">
-                      +{bill.countryCode}
-                      {bill.phoneNumber}
+        <button onClick={showAddModal} className="add-new-bill-address">
+          <AddIcon />
+          Add billing address
+        </button>
+        <div className="bill-cards-container">
+          {bill ? (
+            bill.address.map((address) => {
+              return (
+                <div key={address._id} className="billing-container">
+                  <div className="billing-title">
+                    <FmdGoodOutlinedIcon />
+                    <div className="billing-title-container">
+                      <div className="billing-name">{address.name}</div>
+                      <div className="billing-phoneNumber">
+                        +{address.countryCode}
+                        {address.phoneNumber}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="billing-address">
+                    <div className="billing-address-field">
+                      {address.street ? address.street : "-"},
+                    </div>
+
+                    <div className="billing-address-field">
+                      {address.city ? address.city : "-"}
+                    </div>
+
+                    <div className="billing-address-field">
+                      {address.postalCode ? address.postalCode : "-"},
+                    </div>
+
+                    <div className="billing-address-field">
+                      {address.country ? address.country : "-"}
+                    </div>
+                  </div>
+                  <div className="billing-buttons">
+                    <div
+                      data-bill-id={address._id}
+                      onClick={showEditModal}
+                      className="edit-billing-button"
+                    >
+                      <EditIcon />
+                    </div>
+                    <div
+                      onClick={() => showRemoveModal(bill.userId, address._id)}
+                      className="delete-billing-button"
+                    >
+                      <DeleteOutlineOutlinedIcon />
                     </div>
                   </div>
                 </div>
-
-                <div className="billing-address">
-                  <div className="billing-address-field">
-                    {bill.street ? bill.street : "-"},
-                  </div>
-
-                  <div className="billing-address-field">
-                    {bill.city ? bill.city : "-"}
-                  </div>
-
-                  <div className="billing-address-field">
-                    {bill.postalCode ? bill.postalCode : "-"},
-                  </div>
-
-                  <div className="billing-address-field">
-                    {bill.country ? bill.country : "-"}
-                  </div>
-                </div>
-                <div className="billing-buttons">
-                  <div
-                    data-bill-id={bill._id}
-                    onClick={showEditModal}
-                    className="edit-billing-button"
-                  >
-                    <EditIcon />
-                  </div>
-                  <div className="delete-billing-button">
-                    <DeleteOutlineOutlinedIcon />
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <></>
-        )}
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </div>
+        {!bill && <div className="no-billing-title">No billing address!</div>}
       </div>
     </>
   );

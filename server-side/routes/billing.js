@@ -5,12 +5,17 @@ const {
   verifyTokenAndAdmin,
 } = require("../middlewares/verifyToken");
 const router = require("express").Router();
-const fns = require("date-fns");
 
 // Get billing
 router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const foundBill = await Billing.findOne({ userId: req.params.id });
+    if (foundBill) {
+      foundBill.address.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    }
     res.status(200).json(foundBill);
   } catch (err) {
     console.log(err);
@@ -20,14 +25,10 @@ router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
 
 // Add new billing
 router.post("/new", verifyTokenAndAdmin, async (req, res) => {
-  // const newBill = new Billing(req.body);
   try {
     const foundBill = await Billing.findOne({ userId: req.body.userId });
     if (foundBill) {
       const alreadyExists = foundBill.address.find((address) => {
-        // console.log(address.phoneNumber.toString());
-        // console.log(req.body.address[0].phoneNumber.toString());
-
         if (
           Object.entries(address).length ===
           Object.entries(req.body.address[0]).length
@@ -57,10 +58,32 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
       foundBill.address.push(req.body.address[0]);
       const result = await foundBill.save();
       res.json(result);
-    }
+    } else {
+      const { userId, address } = req.body;
 
-    // const result = await newBill.save();
-    // res.status(201).json(result);
+      if (
+        !userId ||
+        !address[0].postalCode ||
+        !address[0].country ||
+        !address[0].city ||
+        !address[0].street ||
+        !address[0].phoneNumber ||
+        !address[0].name ||
+        !address[0].countryCode
+      ) {
+        return res
+          .status(400)
+          .json({ message: "All the fields are required!" });
+      }
+
+      const newBillingData = new Billing({
+        userId: userId,
+        address: address,
+      });
+
+      const savedBillingData = await newBillingData.save();
+      res.status(201).json(savedBillingData);
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json(err._message);
@@ -103,15 +126,47 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       updatedAddress.name = req.body.name;
 
       const newAddressArray = [...filteredAddresses, updatedAddress];
-      updatedBill.address = newAddressArray.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
+      updatedBill.address = newAddressArray;
 
       const result = await updatedBill.save();
       res.json(result);
     } else {
       res.status(401).json({ message: "Product Id is required" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+// Delete bill
+router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).json({ message: "ID parameter is required!" });
+  }
+
+  try {
+    const foundBill = await Billing.findOne({ userId: req.params.id });
+
+    if (!foundBill) return;
+
+    const filteredAddresses = foundBill.address.filter((address) => {
+      return address._id.toString() !== req.body.billId;
+    });
+
+    if (filteredAddresses.length === 0) {
+      await Billing.findOneAndDelete({ userId: req.params.id });
+      res.status(200).json({
+        message: `Bill with the ID ${req.body.billId} has been removed!`,
+      });
+    } else {
+      foundBill.address = filteredAddresses;
+
+      await foundBill.save();
+
+      res.status(200).json({
+        message: `Bill with the ID ${req.body.billId} has been removed!`,
+      });
     }
   } catch (err) {
     console.log(err);

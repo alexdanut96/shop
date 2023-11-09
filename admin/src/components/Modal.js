@@ -23,7 +23,13 @@ export default function Modal({ bill, userId, token }) {
     useState(false);
   const [streetValidationError, setStreetValidationError] = useState(false);
   let editedData = {};
-  editedData.billId = bill._id;
+  let newData = {};
+  if (bill) {
+    editedData.billId = bill._id;
+  } else {
+    newData.userId = userId;
+    newData.address = [{}];
+  }
 
   const closeModal = () => {
     dispatch(modalActions.hide());
@@ -34,7 +40,6 @@ export default function Modal({ bill, userId, token }) {
     setPostalCodeValidationError(false);
     setStreetValidationError(false);
   };
-  // console.log(bill);
 
   const validateForm = () => {
     const inputs = document.querySelectorAll("input");
@@ -53,8 +58,11 @@ export default function Modal({ bill, userId, token }) {
         } else {
           setCityValidationError(false);
         }
-
-        editedData.city = input.value;
+        if (bill) {
+          editedData.city = input.value;
+        } else {
+          newData.address[0].city = input.value;
+        }
       }
 
       if (input.classList.contains("country")) {
@@ -71,7 +79,12 @@ export default function Modal({ bill, userId, token }) {
         } else {
           setCountryValidationError(false);
         }
-        editedData.country = input.value;
+
+        if (bill) {
+          editedData.country = input.value;
+        } else {
+          newData.address[0].country = input.value;
+        }
       }
 
       if (input.classList.contains("form-control")) {
@@ -93,12 +106,19 @@ export default function Modal({ bill, userId, token }) {
         } else {
           setPhoneValidationError(false);
         }
-        editedData.phoneNumber = phNumber;
+
         const countryCode = document
           .querySelector(".selected-flag")
           .title.split(" ")
           .slice(-1)[0];
-        editedData.countryCode = countryCode;
+
+        if (bill) {
+          editedData.phoneNumber = phNumber;
+          editedData.countryCode = countryCode;
+        } else {
+          newData.address[0].phoneNumber = phNumber;
+          newData.address[0].countryCode = countryCode;
+        }
       }
 
       if (input.classList.contains("name")) {
@@ -115,7 +135,12 @@ export default function Modal({ bill, userId, token }) {
         } else {
           setNameValidationError(false);
         }
-        editedData.name = input.value;
+
+        if (bill) {
+          editedData.name = input.value;
+        } else {
+          newData.address[0].name = input.value;
+        }
       }
 
       if (input.classList.contains("street")) {
@@ -132,7 +157,12 @@ export default function Modal({ bill, userId, token }) {
         } else {
           setStreetValidationError(false);
         }
-        editedData.street = input.value;
+
+        if (bill) {
+          editedData.street = input.value;
+        } else {
+          newData.address[0].street = input.value;
+        }
       }
 
       if (input.classList.contains("postalCode")) {
@@ -142,23 +172,43 @@ export default function Modal({ bill, userId, token }) {
         } else {
           setPostalCodeValidationError(false);
         }
-        editedData.postalCode = input.value;
+
+        if (bill) {
+          editedData.postalCode = input.value;
+        } else {
+          newData.address[0].postalCode = input.value;
+        }
       }
     });
-    // console.log(data);
 
-    if (
-      editedData.phoneNumber &&
-      editedData.city &&
-      editedData.country &&
-      editedData.name &&
-      editedData.postalCode &&
-      editedData.street &&
-      editedData.countryCode
-    ) {
-      return true;
+    if (bill) {
+      if (
+        editedData.phoneNumber &&
+        editedData.city &&
+        editedData.country &&
+        editedData.name &&
+        editedData.postalCode &&
+        editedData.street &&
+        editedData.countryCode
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      if (
+        newData.address[0].phoneNumber &&
+        newData.address[0].city &&
+        newData.address[0].country &&
+        newData.address[0].name &&
+        newData.address[0].postalCode &&
+        newData.address[0].street &&
+        newData.address[0].countryCode
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     }
   };
 
@@ -207,6 +257,52 @@ export default function Modal({ bill, userId, token }) {
       });
   };
 
+  const addNewAddress = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    fetch(`${BASE_URL}billing/new`, {
+      method: "POST",
+      headers: { token: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify(newData),
+    })
+      .then((response) => {
+        switch (response.status) {
+          case 200:
+          case 201:
+            closeModal();
+            Swal.fire({
+              icon: "success",
+              title: "Bill added to your database!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            dispatch(modalActions.refresh());
+            return response.json();
+
+          case 400:
+          case 401:
+          case 403:
+            return response.json().then((error) => {
+              throw new Error(error.message);
+            });
+
+          default:
+            throw new Error(`Please contact the development departament!`);
+        }
+      })
+      .catch((error) => {
+        console.error(error.message);
+        closeModal();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `Something went wrong! ${error.message}`,
+          footer: '<a href="/">Go back to home page</a>',
+        });
+      });
+  };
+
   return (
     <>
       {showModal && (
@@ -214,7 +310,9 @@ export default function Modal({ bill, userId, token }) {
           <div onClick={closeModal} className="overlay"></div>
           <div className="modal-content">
             <div className="header">
-              <div className="modal-title">Edit billing address</div>
+              <div className="modal-title">
+                {bill ? "Edit billing address" : "New billing address"}
+              </div>
               <button onClick={closeModal} className="close-modal">
                 <CloseIcon />
               </button>
@@ -237,7 +335,7 @@ export default function Modal({ bill, userId, token }) {
                       placeholder="City"
                       name="city"
                       id="city"
-                      defaultValue={bill.city}
+                      defaultValue={bill ? bill.city : ""}
                       required
                     />
                   </div>
@@ -264,9 +362,7 @@ export default function Modal({ bill, userId, token }) {
                       }}
                       country={"us"}
                       value={
-                        bill.phoneNumber
-                          ? `${bill.countryCode}${bill.phoneNumber}`
-                          : ""
+                        bill ? `${bill.countryCode}${bill.phoneNumber}` : ""
                       }
                       inputProps={{
                         required: true,
@@ -296,7 +392,7 @@ export default function Modal({ bill, userId, token }) {
                       placeholder="Country"
                       name="country"
                       id="country"
-                      defaultValue={bill.country}
+                      defaultValue={bill ? bill.country : ""}
                       required
                     />
                   </div>
@@ -323,7 +419,7 @@ export default function Modal({ bill, userId, token }) {
                       placeholder="Name"
                       name="name"
                       id="name"
-                      defaultValue={bill.name}
+                      defaultValue={bill ? bill.name : ""}
                       required
                     />
                   </div>
@@ -350,7 +446,7 @@ export default function Modal({ bill, userId, token }) {
                       placeholder="Postal code"
                       name="postalCode"
                       id="postalCode"
-                      defaultValue={bill.postalCode}
+                      defaultValue={bill ? bill.postalCode : ""}
                       required
                     />
                   </div>
@@ -377,7 +473,7 @@ export default function Modal({ bill, userId, token }) {
                       placeholder="Street"
                       name="street"
                       id="street"
-                      defaultValue={bill.street}
+                      defaultValue={bill ? bill.street : ""}
                       required
                     />
                   </div>
@@ -390,8 +486,11 @@ export default function Modal({ bill, userId, token }) {
                   )}
                 </div>
               </div>
-              <button onClick={saveChanges} className="save-changes">
-                Save changes
+              <button
+                onClick={bill ? saveChanges : addNewAddress}
+                className="save-changes"
+              >
+                {bill ? "Save changes" : "Add new address "}
               </button>
             </form>
           </div>
