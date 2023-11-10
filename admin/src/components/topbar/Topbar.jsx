@@ -6,6 +6,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import adminAvatar from "../../images/admin-avatar.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { sidebarActions } from "../../Redux/SidebarSlice";
+import { Link } from "react-router-dom";
 
 const Topbar = () => {
   const sidebarStatus = useSelector((state) => state.sidebar.sidebar);
@@ -24,7 +25,7 @@ const Topbar = () => {
       <div className="topbarWrapper">
         <div className="topLeft">
           <MenuIcon onClick={handleSidebar} className="menu-icon" />
-          <span className="logo">Dress-up Admin</span>
+          <Link to="/"><span className="logo">Dress-up Admin</span></Link>
         </div>
         <div className="topRight">
           <div className="topbarIconContainer">
