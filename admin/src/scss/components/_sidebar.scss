@@ -1,36 +1,51 @@
 .sidebar {
+  padding-top: 20px;
   flex: 1;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 70px);
   background-color: white;
   position: sticky;
-  top: 50px;
+  top: 70px;
   overflow: auto;
+
   border-right: 1px solid #c7e4fb;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
+  background-color: #d0e3ff;
+
 
   .sidebarWrapper {
-    padding: 20px;
+    // padding: 20px;
     color: #555;
 
     .sidebarMenu {
       margin-bottom: 10px;
 
+      & .button-wrapper{
+        padding: 0 20px;
+      }
+
       .sidebarTitle {
-        font-size: 16px;
-        color: rgb(187, 186, 186);
+        font-size: 18px;
+        color: #4747ce;;
+        padding: 0 20px;
       }
 
       .sidebarList {
         list-style: none;
-        padding: 5px;
+        padding: 5px 20px 5px 0;
+        display: flex;
+        flex-direction: column;
+        gap:5px;
 
         .sidebarListItem {
-          padding: 5px;
+          max-width: 200px;
+          width: 100%;
+          padding: 5px 20px;
           cursor: pointer;
           display: flex;
           align-items: center;
-          border-radius: 10px;
+          border-top-right-radius: 20px;
+          border-bottom-right-radius: 20px;
 
           .sidebarIcon {
             margin-right: 5px;
@@ -40,25 +55,12 @@
 
         .sidebarListItem.active,
         .sidebarListItem:hover {
-          background-color: #eff8ff;
-          // border-bottom: 1px solid red;
+          background-color: #80b2fc;
+          color: white;
         }
       }
 
-      .logoutBtn {
-        background-color: darkblue;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 24px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.5s;
 
-        &:hover {
-          background-color: rgb(89, 89, 143);
-        }
-      }
     }
   }
 }
