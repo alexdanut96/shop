@@ -10,13 +10,15 @@ import NewProduct from "./pages/NewProduct";
 import Login from "./pages/Login";
 import UsersList from "./pages/UsersList";
 import "./scss/index.scss";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { sidebarActions } from "./Redux/SidebarSlice";
 
 const App = () => {
   const admin = useSelector((state) => state.user.currentUser);
   const isActive = useSelector((state) => state.sidebar.sidebar);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!admin) {
@@ -24,13 +26,21 @@ const App = () => {
     }
   }, [admin]);
 
+  const hideOverlay = () => {
+    dispatch(sidebarActions.hide());
+  };
+
   return (
     <>
       {admin && admin.isAdmin ? (
         <>
+          <div
+            onClick={hideOverlay}
+            className={`window ${isActive ? "active" : ""}`}
+          ></div>
           <Topbar />
           <div className="app-container">
-            <div className={`window ${isActive ? "active" : ""}`}></div>
+            {/* <div className={`window ${isActive ? "active" : ""}`}></div> */}
             <Sidebar />
             <Routes>
               <Route path="/" element={<Home />} />

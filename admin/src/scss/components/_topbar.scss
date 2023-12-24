@@ -66,9 +66,10 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .topLeft {
     .menu-icon {
+      cursor: pointer;
       display: flex !important;
     }
 

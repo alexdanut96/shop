@@ -9,6 +9,8 @@
 
   .user-edit-bar {
     display: flex;
+    // justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
     border-bottom: 1px solid rgb(224, 224, 224);
     margin-bottom: 20px;

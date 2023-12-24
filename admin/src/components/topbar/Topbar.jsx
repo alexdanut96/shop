@@ -1,5 +1,6 @@
 import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LanguageIcon from "@mui/icons-material/Language";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -17,6 +18,11 @@ const Topbar = () => {
       dispatch(sidebarActions.hide());
     } else {
       dispatch(sidebarActions.show());
+      // const demo = document.querySelector(".window");
+
+      // demo.addEventListener("click", () => {
+      //   console.log("demo");
+      // });
     }
   };
 
@@ -24,8 +30,15 @@ const Topbar = () => {
     <div className="topbar animated">
       <div className="topbarWrapper">
         <div className="topLeft">
-          <MenuIcon onClick={handleSidebar} className="menu-icon" />
-          <Link to="/"><span className="logo">Dress-up Admin</span></Link>
+          {sidebarStatus ? (
+            <CloseIcon onClick={handleSidebar} className="menu-icon" />
+          ) : (
+            <MenuIcon onClick={handleSidebar} className="menu-icon" />
+          )}
+
+          <Link to="/">
+            <span className="logo">Dress-up Admin</span>
+          </Link>
         </div>
         <div className="topRight">
           <div className="topbarIconContainer">

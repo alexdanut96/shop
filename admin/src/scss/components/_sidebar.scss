@@ -6,12 +6,12 @@
   position: sticky;
   top: 70px;
   overflow: auto;
+  min-width: 200px;
 
   border-right: 1px solid #c7e4fb;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
   background-color: #d0e3ff;
-
 
   .sidebarWrapper {
     // padding: 20px;
@@ -20,13 +20,13 @@
     .sidebarMenu {
       margin-bottom: 10px;
 
-      & .button-wrapper{
+      & .button-wrapper {
         padding: 0 20px;
       }
 
       .sidebarTitle {
         font-size: 18px;
-        color: #4747ce;;
+        color: #4747ce;
         padding: 0 20px;
       }
 
@@ -35,7 +35,7 @@
         padding: 5px 20px 5px 0;
         display: flex;
         flex-direction: column;
-        gap:5px;
+        gap: 5px;
 
         .sidebarListItem {
           max-width: 200px;
@@ -59,22 +59,22 @@
           color: white;
         }
       }
-
-
     }
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .sidebar-mobile {
     position: fixed;
     max-width: 300px;
+    min-width: unset;
     width: 100%;
-    z-index: 1;
+    z-index: 3;
     transform: translateX(-100%);
     transition: ease 0.3s;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    background-color: white;
 
     &.active {
       transform: translateX(0);

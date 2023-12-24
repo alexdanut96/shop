@@ -8,9 +8,11 @@ const sidebarSlice = createSlice({
   reducers: {
     show(state) {
       state.sidebar = true;
+      document.querySelector("body").style.overflow = "hidden";
     },
     hide(state) {
       state.sidebar = false;
+      document.querySelector("body").style.overflow = "unset";
     },
   },
 });
