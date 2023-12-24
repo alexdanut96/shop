@@ -55,7 +55,8 @@
     }
     // react tel input
 
-    & input.form-field {
+    & input.form-field,
+    select {
       width: 100%;
       padding: 10px;
       font-size: 16px;
