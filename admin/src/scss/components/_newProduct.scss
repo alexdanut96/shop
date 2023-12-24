@@ -1,39 +1,72 @@
 .newProduct-container {
   // flex: 4;
+  // padding: 10px;
 
-  .addProductForm {
-    margin-top: 10px;
+  .newProductTitle {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
 
-    .addProductItem {
-      width: 250px;
+  & form {
+    padding: 20px;
+    -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+
+    & .form-group.field {
       display: flex;
-      flex-direction: column;
-      margin-bottom: 10px;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
 
-      label {
-        color: gray;
-        font-weight: 600;
-        margin-bottom: 10px;
-      }
+      & .wrapper {
+        min-width: 200px;
+        max-width: 300px;
 
-      input {
-        padding: 10px;
-      }
-
-      select {
-        padding: 10px;
+        & .input-wrapper {
+        }
       }
     }
-
-    .addProductButton {
-      margin-top: 10px;
-      padding: 7px 10px;
-      border: none;
-      border-radius: 10px;
-      background-color: darkblue;
-      color: white;
-      font-weight: 600;
+    .save-changes {
+      align-self: center;
       cursor: pointer;
+      margin-top: 20px;
+      max-width: 300px;
+      width: 100%;
+      outline: 0;
+      font-weight: 400;
+      text-align: center;
+      border: 1px solid transparent;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      border-color: #0d6efd;
+      color: #fff;
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+
+      &:disabled {
+        background-color: #d9d3d3;
+        cursor: not-allowed;
+        border-color: #d9d3d3;
+
+        &:hover {
+          background-color: #d9d3d3;
+          border-color: #d9d3d3;
+          color: #fff;
+        }
+      }
+
+      &:hover {
+        color: #0d6efd;
+        background-color: transparent;
+        border-color: #0d6efd;
+      }
     }
   }
 }
