@@ -1,6 +1,53 @@
 .newProduct-container {
   // flex: 4;
   // padding: 10px;
+  & .form-action {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    & .profile-picture {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      & .img-container {
+        position: relative;
+        line-height: 0;
+        border-radius: 50%;
+
+        & .editIcon-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 30px;
+          width: 30px;
+          background-color: black;
+          border-radius: 50%;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          cursor: pointer;
+
+          &:hover {
+            background: gray;
+          }
+
+          & svg {
+            font-size: 16px;
+            color: white;
+          }
+        }
+      }
+
+      & .userUpdateImg {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+  }
 
   .newProductTitle {
     font-size: 22px;
@@ -26,7 +73,124 @@
         min-width: 200px;
         max-width: 300px;
 
+        & label {
+          display: flex;
+          align-items: center;
+          min-height: 26px;
+
+          & .color-print {
+            width: 16px;
+            height: 16px;
+            border-radius: 10px;
+            // background-color: #ffffff;
+            margin-left: 10px;
+            border: 1px solid #d5cece;
+          }
+
+          // align-items: center;
+        }
+
+        & .choices {
+          min-height: 53.2px;
+          display: flex;
+          gap: 10px;
+
+          flex-wrap: wrap;
+          max-width: 300px;
+          width: 100%;
+          border: 1px solid #d5cece;
+          border-radius: 5px;
+          padding: 10px;
+          margin-top: 5px;
+
+          & .choice {
+            border: 1px solid #d5cece;
+            border-radius: 5px;
+            width: fit-content;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            align-items: center;
+            color: #1e54a3ed;
+            background-color: #e1fce1;
+            cursor: pointer;
+
+            &:hover {
+              background-color: #d6f9d6;
+            }
+
+            & svg {
+              color: #87ee87;
+              font-size: 16px;
+              cursor: pointer;
+            }
+          }
+
+          & .empty-spot {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #d5cece;
+          }
+        }
+
+        & .add-item {
+          margin-left: 10px;
+
+          & svg {
+            font-size: 16px;
+          }
+        }
+
         & .input-wrapper {
+          & .chosen-items {
+            min-height: 53.2px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            max-width: 300px;
+            width: 100%;
+            border: 1px solid #d5cece;
+            border-radius: 5px;
+            padding: 10px;
+
+            & .choice {
+              border: 1px solid #d5cece;
+              border-radius: 5px;
+              width: fit-content;
+              padding: 5px 10px;
+              display: flex;
+              justify-content: center;
+              gap: 5px;
+              align-items: center;
+              color: #1e54a3ed;
+
+              &:hover {
+                background-color: #ffeaea;
+              }
+
+              & svg {
+                color: rgb(254, 99, 99);
+                font-size: 16px;
+                cursor: pointer;
+              }
+            }
+
+            & .empty-spot {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: #d5cece;
+            }
+
+            & button {
+              color: #0d6efd;
+              align-items: center;
+            }
+          }
         }
       }
     }
