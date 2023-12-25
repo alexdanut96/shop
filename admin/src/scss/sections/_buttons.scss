@@ -71,3 +71,42 @@
     border-color: #0d6efd;
   }
 }
+
+button.add-item {
+  display: flex;
+  gap: 3px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 400;
+  text-align: center;
+  border: 1px solid transparent;
+  padding: 0 10px;
+  font-size: 14px;
+  border-radius: 16px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-color: #0d6efd;
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+
+  &:disabled {
+    background-color: #d9d3d3;
+    cursor: not-allowed;
+    border-color: #d9d3d3;
+
+    &:hover {
+      background-color: #d9d3d3;
+      border-color: #d9d3d3;
+      color: #fff;
+    }
+  }
+
+  &:hover {
+    color: #0d6efd;
+    background-color: transparent;
+    border-color: #0d6efd;
+  }
+}
