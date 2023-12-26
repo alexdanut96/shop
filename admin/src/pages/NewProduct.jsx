@@ -4,9 +4,20 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import EditIcon from "@mui/icons-material/Edit";
 import colors from "../utils/colors.json";
+import {
+  ValidateEmail,
+  ValidateEmptyValue,
+  ValidatePassword,
+  ValidatePhoneNumber,
+} from "../utils/formValidation";
 
 const NewProduct = () => {
   const [titleValidationError, setTitleValidationError] = useState(false);
+  const [descriptionValidationError, setDescriptionValidationError] =
+    useState(false);
+  const [categoryValidationError, setCategoryValidationError] = useState(false);
+  const [sizeValidationError, setSizeValidationError] = useState(false);
+  const [colorValidationError, setColorValidationError] = useState(false);
   const [priceValidationError, setPriceValidationError] = useState(false);
   const [currencyValidationError, setCurrencyValidationError] = useState(false);
   const [sizes, setSizes] = useState(["XS", "S", "M", "L", "XL"]);
@@ -23,10 +34,6 @@ const NewProduct = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showSizeChoices, setSizeShowChoices] = useState(false);
   const [showCategoriesChoices, setCategoriesShowChoices] = useState(false);
-  const [categoryValidationError, setCategoryValidationError] = useState(false);
-  const [colorValidationError, setColorValidationError] = useState(false);
-  const [descriptionValidationError, setDescriptionValidationError] =
-    useState(false);
 
   const handleChoices = (event) => {
     const type = event.currentTarget.dataset.type;
@@ -71,6 +78,129 @@ const NewProduct = () => {
   const handleColor = (event) => {
     const color = event.currentTarget.value.split(" ")[0];
     setSelectedColor(color);
+  };
+
+  const addNewProduct = (event) => {
+    event.preventDefault();
+    const title = document.querySelector("input#title");
+    const description = document.querySelector("input#description");
+    const category = document.querySelector(".chosen-items.category");
+    const size = document.querySelector(".chosen-items.size");
+    const color = document.querySelector("select.color");
+    const price = document.querySelector("input#price");
+    const currency = document.querySelector("select.currency");
+
+    // console.log(title, description, category, size, color, price, currency);
+
+    console.log(
+      validForm(
+        title.value,
+        description.value,
+        category.childNodes,
+        size.childNodes,
+        color.value,
+        price.value,
+        currency.value
+      )
+    );
+  };
+
+  const validForm = (
+    title,
+    description,
+    category,
+    size,
+    color,
+    price,
+    currency
+  ) => {
+    let isTitle;
+    let isDescription;
+    let isCategory;
+    let isSize;
+    let isColor;
+    let isPrice;
+    let isCurrency;
+
+    if (!ValidateEmptyValue(title)) {
+      setTitleValidationError(true);
+      isTitle = true;
+    } else {
+      setTitleValidationError(false);
+      isTitle = false;
+    }
+
+    if (!ValidateEmptyValue(description)) {
+      setDescriptionValidationError(true);
+      isDescription = true;
+    } else {
+      setDescriptionValidationError(false);
+      isDescription = false;
+    }
+
+    if (category.length > 0) {
+      if (category[0].classList.contains("empty-spot")) {
+        setCategoryValidationError(true);
+        isCategory = true;
+      } else {
+        setCategoryValidationError(false);
+        isCategory = false;
+      }
+    } else {
+      setCategoryValidationError(false);
+      isCategory = false;
+    }
+
+    if (size.length > 0) {
+      if (size[0].classList.contains("empty-spot")) {
+        setSizeValidationError(true);
+        isSize = true;
+      } else {
+        setSizeValidationError(false);
+        isSize = false;
+      }
+    } else {
+      setSizeValidationError(false);
+      isSize = false;
+    }
+
+    if (!ValidateEmptyValue(color)) {
+      setColorValidationError(true);
+      isColor = true;
+    } else {
+      setColorValidationError(false);
+      isColor = false;
+    }
+
+    if (!ValidateEmptyValue(price)) {
+      setPriceValidationError(true);
+      isPrice = true;
+    } else {
+      setPriceValidationError(false);
+      isPrice = false;
+    }
+
+    if (!ValidateEmptyValue(currency)) {
+      setCurrencyValidationError(true);
+      isCurrency = true;
+    } else {
+      setCurrencyValidationError(false);
+      isCurrency = false;
+    }
+
+    if (
+      isTitle ||
+      isDescription ||
+      isCategory ||
+      isSize ||
+      isColor ||
+      isPrice ||
+      isCurrency
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   return (
@@ -118,7 +248,7 @@ const NewProduct = () => {
                 />
               </div>
               {titleValidationError ? (
-                <div className="username error-message">
+                <div className="title error-message">
                   This field is required!
                 </div>
               ) : (
@@ -215,6 +345,13 @@ const NewProduct = () => {
                   )}
                 </div>
               </div>
+              {categoryValidationError ? (
+                <div className="title error-message">
+                  This field is required!
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
 
             {/* size */}
@@ -275,6 +412,13 @@ const NewProduct = () => {
                   )}
                 </div>
               </div>
+              {sizeValidationError ? (
+                <div className="title error-message">
+                  This field is required!
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
 
             {/* color */}
@@ -291,8 +435,14 @@ const NewProduct = () => {
                 )}
               </label>
               <div className="input-wrapper">
-                <select defaultValue="Select color" onChange={handleColor}>
-                  <option disabled>Select color</option>
+                <select
+                  className="color"
+                  defaultValue=""
+                  onChange={handleColor}
+                >
+                  <option value="" disabled>
+                    Select color
+                  </option>
                   {colors.map((color) => (
                     <option
                       value={`${color.hex} ${color.name}`}
@@ -344,7 +494,10 @@ const NewProduct = () => {
                 Currency *
               </label>
               <div className="input-wrapper">
-                <select>
+                <select defaultValue="" className="currency">
+                  <option disabled value="">
+                    Choose currency
+                  </option>
                   <option>USD</option>
                   <option>EUR</option>
                 </select>
@@ -358,10 +511,7 @@ const NewProduct = () => {
               )}
             </div>
           </div>
-          <button
-            //  onClick={addNewUser}
-            className="save-changes"
-          >
+          <button onClick={addNewProduct} className="save-changes">
             Save changes
           </button>
         </form>
