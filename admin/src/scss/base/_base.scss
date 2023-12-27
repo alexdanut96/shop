@@ -108,6 +108,7 @@ a {
   & #drop-area {
     display: flex;
     padding: 10px;
+    position: relative;
     // flex-direction: column;
     // justify-content: center;
     // align-items: center;
@@ -121,10 +122,29 @@ a {
     background-color: #f1f1f9;
     cursor: pointer;
 
+    & svg {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      background-color: white;
+      border-radius: 16px;
+      font-size: 18px;
+      display: none;
+
+      &:hover {
+        background-color: red;
+        color: white;
+      }
+    }
+
+    &.error {
+      border: solid red !important;
+    }
+
     &:hover,
     &:focus {
-      background-color: #ebebfb;
-      border-color: #7e7eff;
+      background-color: #ebebfb !important;
+      border-color: #7e7eff !important;
     }
 
     // & input[type="file"] {
