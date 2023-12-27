@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { BASE_URL } from "../../ApiRequests";
 import { useLocation } from "react-router-dom";
 import uploadImage from "../../images/upload_img.png";
-import app from "../../Firebase";
+import appUsers from "../../Firebase";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import {
@@ -159,7 +159,7 @@ const UserAccount = () => {
 
   const addToDatabase = (file) => {
     const fileName = new Date().getTime() + "_" + file.name;
-    const storage = getStorage(app);
+    const storage = getStorage(appUsers);
     const storageRef = ref(storage, fileName);
     const uploadLoading = document.querySelector(".upload-loading");
     const uploadTask = uploadBytesResumable(storageRef, file);

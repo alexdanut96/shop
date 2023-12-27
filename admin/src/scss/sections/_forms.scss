@@ -55,6 +55,10 @@
     }
     // react tel input
 
+    & select .error {
+      border-color: red;
+    }
+
     & input.form-field,
     select {
       width: 100%;

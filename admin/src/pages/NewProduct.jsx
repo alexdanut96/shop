@@ -4,14 +4,24 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import EditIcon from "@mui/icons-material/Edit";
 import colors from "../utils/colors.json";
+import uploadImage from "../images/upload_img.png";
+import Swal from "sweetalert2";
+import appUsers from "../Firebase";
 import {
   ValidateEmail,
   ValidateEmptyValue,
   ValidatePassword,
   ValidatePhoneNumber,
 } from "../utils/formValidation";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 const NewProduct = () => {
+  const [imageValidationError, setImageValidationError] = useState(false);
   const [titleValidationError, setTitleValidationError] = useState(false);
   const [descriptionValidationError, setDescriptionValidationError] =
     useState(false);
@@ -82,6 +92,7 @@ const NewProduct = () => {
 
   const addNewProduct = (event) => {
     event.preventDefault();
+    const image = document.querySelector("#img-view");
     const title = document.querySelector("input#title");
     const description = document.querySelector("input#description");
     const category = document.querySelector(".chosen-items.category");
@@ -90,10 +101,9 @@ const NewProduct = () => {
     const price = document.querySelector("input#price");
     const currency = document.querySelector("select.currency");
 
-    // console.log(title, description, category, size, color, price, currency);
-
     console.log(
       validForm(
+        image.dataset.ok,
         title.value,
         description.value,
         category.childNodes,
@@ -106,6 +116,7 @@ const NewProduct = () => {
   };
 
   const validForm = (
+    image,
     title,
     description,
     category,
@@ -114,6 +125,7 @@ const NewProduct = () => {
     price,
     currency
   ) => {
+    let isImage;
     let isTitle;
     let isDescription;
     let isCategory;
@@ -121,6 +133,14 @@ const NewProduct = () => {
     let isColor;
     let isPrice;
     let isCurrency;
+    console.log(image);
+    if (image === "false") {
+      setImageValidationError(true);
+      isImage = true;
+    } else {
+      setImageValidationError(false);
+      isImage = false;
+    }
 
     if (!ValidateEmptyValue(title)) {
       setTitleValidationError(true);
@@ -189,6 +209,7 @@ const NewProduct = () => {
     }
 
     if (
+      isImage ||
       isTitle ||
       isDescription ||
       isCategory ||
@@ -203,6 +224,61 @@ const NewProduct = () => {
     }
   };
 
+  const uploadProductImage = () => {
+    const imageView = document.querySelector("#img-view");
+    const cloudImg = document.querySelector("#img-view img");
+    const paragraph = document.querySelector("#img-view p");
+    const inputFile = document.querySelector("#input-file");
+    const dropArea = document.querySelector("#drop-area svg");
+    let imgLink = URL.createObjectURL(inputFile.files[0]);
+    imageView.style.backgroundImage = `url(${imgLink})`;
+    imageView.dataset.ok = true;
+    // imageView.textContent = "";
+    cloudImg.style.display = "none";
+    paragraph.style.display = "none";
+    dropArea.style.display = "block";
+    setImageValidationError(false);
+  };
+
+  const boxDragOver = (event) => {
+    const dropArea = document.querySelector("#drop-area");
+    event.preventDefault();
+    if (event.target.id === "upload-container") {
+      dropArea.style.backgroundColor = "#f1f1f9";
+      dropArea.style.borderColor = "#aeadad";
+    } else {
+      dropArea.style.backgroundColor = "#ebebfb";
+      dropArea.style.borderColor = "#7e7eff";
+    }
+  };
+
+  const dropAreaDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const dropAreaDrop = (event) => {
+    const dropArea = document.querySelector("#drop-area");
+    const inputFile = document.querySelector("#input-file");
+    event.preventDefault();
+    inputFile.files = event.dataTransfer.files;
+    uploadProductImage();
+    dropArea.style.backgroundColor = "#f1f1f9";
+    dropArea.style.borderColor = "#aeadad";
+  };
+
+  const removeProductPicture = (event) => {
+    event.preventDefault();
+    const dropArea = document.querySelector("#drop-area svg");
+    const image = document.querySelector("#img-view");
+    const cloudImg = document.querySelector("#img-view img");
+    const paragraph = document.querySelector("#img-view p");
+    dropArea.style.display = "none";
+    image.dataset.ok = false;
+    image.style.backgroundImage = "none";
+    cloudImg.style.display = "flex";
+    paragraph.style.display = "flex";
+  };
+
   return (
     <div className="right-side-container">
       <div className="newProduct-container animated">
@@ -210,18 +286,60 @@ const NewProduct = () => {
 
         {/* Form */}
         <form>
+          {/* Demo */}
+          <div className="swal2-html-container">
+            <div onDragOver={boxDragOver} id="upload-container">
+              <label
+                onDrop={dropAreaDrop}
+                onDragOver={dropAreaDragOver}
+                htmlFor="input-file"
+                className={imageValidationError ? "error" : ""}
+                id="drop-area"
+              >
+                <CloseIcon onClick={removeProductPicture} />
+                <input
+                  onChange={uploadProductImage}
+                  type="file"
+                  id="input-file"
+                  accept="image/*"
+                  hidden
+                />
+                <div id="img-view" data-ok="false">
+                  <img id="uploadImg" src={uploadImage} alt="avatar" />
+                  <p>
+                    Drag and drop or click here
+                    <br />
+                    to upload image
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+          {imageValidationError ? (
+            <div className="image error-message">
+              Product image is required!
+            </div>
+          ) : (
+            <></>
+          )}
           {/* Form Action */}
-          <div className="form-action">
-            <div className="profile-picture">
+          {/* <div className="form-action">
+            <div
+              className={
+                imageValidationError
+                  ? "product-picture error"
+                  : "product-picture"
+              }
+            >
               <div className="img-container">
                 <img
-                  className="userUpdateImg"
-                  // src="https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
-                  src="https://firebasestorage.googleapis.com/v0/b/dress-up-shop-659bc.appspot.com/o/1699553486510_ce-se-intampla-cu-ionut-radu-dupa-ce-a-prins-doua-meciuri-in-premier-league-la-bournemouth_size7.jpg?alt=media&token=4ea97a3f-81ce-463d-880b-47e9df1189ea"
+                  className="productUpdateImg"
+                  src="https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
+                  // src="https://pbs.twimg.com/profile_images/1693640453260783616/PVEZ0cEY_400x400.png"
                   alt=""
                 />
                 <div
-                  // onClick={editProfilePicture}
+                  onClick={editProfilePicture}
                   className="editIcon-container"
                 >
                   <EditIcon />
@@ -229,6 +347,13 @@ const NewProduct = () => {
               </div>
             </div>
           </div>
+          {imageValidationError ? (
+            <div className="image error-message">
+              Product image is required!
+            </div>
+          ) : (
+            <></>
+          )} */}
           <div className="form-group field">
             {/* title */}
             <div className="wrapper">
@@ -325,7 +450,13 @@ const NewProduct = () => {
                 ""
               )}
               <div className="input-wrapper">
-                <div className="chosen-items category">
+                <div
+                  className={
+                    categoryValidationError
+                      ? "chosen-items category error"
+                      : "chosen-items category"
+                  }
+                >
                   {selectedCategories?.length > 0 ? (
                     selectedCategories.map((category) => (
                       <div
@@ -399,7 +530,13 @@ const NewProduct = () => {
                 ""
               )}
               <div className="input-wrapper">
-                <div className="chosen-items size">
+                <div
+                  className={
+                    sizeValidationError
+                      ? "chosen-items size error"
+                      : "chosen-items size"
+                  }
+                >
                   {selectedSizes?.length > 0 ? (
                     selectedSizes.map((size) => (
                       <div key={size} data-size={size} className="choice">
@@ -436,7 +573,7 @@ const NewProduct = () => {
               </label>
               <div className="input-wrapper">
                 <select
-                  className="color"
+                  className={colorValidationError ? "color error" : "color"}
                   defaultValue=""
                   onChange={handleColor}
                 >
@@ -494,7 +631,12 @@ const NewProduct = () => {
                 Currency *
               </label>
               <div className="input-wrapper">
-                <select defaultValue="" className="currency">
+                <select
+                  defaultValue=""
+                  className={
+                    currencyValidationError ? "currency error" : "currency"
+                  }
+                >
                   <option disabled value="">
                     Choose currency
                   </option>

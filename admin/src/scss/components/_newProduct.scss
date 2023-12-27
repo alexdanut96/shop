@@ -1,15 +1,26 @@
 .newProduct-container {
+  & .image.error-message {
+    color: red;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
   // flex: 4;
   // padding: 10px;
   & .form-action {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 
-    & .profile-picture {
+    & .product-picture {
       display: flex;
       flex-direction: column;
       align-items: center;
+
+      &.error {
+        border: 1px solid red;
+        border-radius: 5px;
+      }
 
       & .img-container {
         position: relative;
@@ -40,7 +51,7 @@
         }
       }
 
-      & .userUpdateImg {
+      & .productUpdateImg {
         width: 120px;
         height: 120px;
         border-radius: 50%;
@@ -155,6 +166,10 @@
             border: 1px solid #d5cece;
             border-radius: 5px;
             padding: 10px;
+
+            &.error {
+              border-color: red;
+            }
 
             & .choice {
               border: 1px solid #d5cece;
