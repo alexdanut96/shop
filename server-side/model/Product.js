@@ -10,6 +10,7 @@ const ProductSchema = new Schema(
     size: { type: Array },
     color: { type: Array },
     price: { type: Number, required: true },
+    currency: { type: String, required: true },
     inStock: { type: Boolean, default: true },
   },
   { timestamps: true }

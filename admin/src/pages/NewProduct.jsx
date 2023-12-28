@@ -1,26 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import EditIcon from "@mui/icons-material/Edit";
 import colors from "../utils/colors.json";
 import uploadImage from "../images/upload_img.png";
 import Swal from "sweetalert2";
 import appUsers from "../Firebase";
-import {
-  ValidateEmail,
-  ValidateEmptyValue,
-  ValidatePassword,
-  ValidatePhoneNumber,
-} from "../utils/formValidation";
+import { useSelector } from "react-redux";
+import { ValidateEmptyValue } from "../utils/formValidation";
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { BASE_URL } from "../ApiRequests";
 
 const NewProduct = () => {
+  const token = useSelector((state) => state.user.currentUser.accessToken);
+
   const [imageValidationError, setImageValidationError] = useState(false);
   const [titleValidationError, setTitleValidationError] = useState(false);
   const [descriptionValidationError, setDescriptionValidationError] =
@@ -90,7 +88,7 @@ const NewProduct = () => {
     setSelectedColor(color);
   };
 
-  const addNewProduct = (event) => {
+  const addNewProduct = async (event) => {
     event.preventDefault();
     const image = document.querySelector("#img-view");
     const title = document.querySelector("input#title");
@@ -101,8 +99,8 @@ const NewProduct = () => {
     const price = document.querySelector("input#price");
     const currency = document.querySelector("select.currency");
 
-    console.log(
-      validForm(
+    if (
+      !validForm(
         image.dataset.ok,
         title.value,
         description.value,
@@ -112,7 +110,11 @@ const NewProduct = () => {
         price.value,
         currency.value
       )
-    );
+    ) {
+      return;
+    }
+
+    saveToMongoDB();
   };
 
   const validForm = (
@@ -133,7 +135,7 @@ const NewProduct = () => {
     let isColor;
     let isPrice;
     let isCurrency;
-    console.log(image);
+
     if (image === "false") {
       setImageValidationError(true);
       isImage = true;
@@ -233,7 +235,6 @@ const NewProduct = () => {
     let imgLink = URL.createObjectURL(inputFile.files[0]);
     imageView.style.backgroundImage = `url(${imgLink})`;
     imageView.dataset.ok = true;
-    // imageView.textContent = "";
     cloudImg.style.display = "none";
     paragraph.style.display = "none";
     dropArea.style.display = "block";
@@ -279,6 +280,168 @@ const NewProduct = () => {
     paragraph.style.display = "flex";
   };
 
+  const saveToMongoDB = async () => {
+    const inputFile = document.querySelector("#input-file");
+    const file = inputFile.files[0];
+    const fileName = new Date().getTime() + "_" + file.name;
+    const storage = getStorage(appUsers);
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    // Register three observers:
+    // 1. 'state_changed' observer, called any time the state changes
+    // 2. Error observer, called on failure
+    // 3. Completion observer, called on successful completion
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        // console.log("Upload is " + progress + "% done");
+        // uploadLoading.innerHTML = `${parseInt(progress)}%`;
+        switch (snapshot.state) {
+          case "paused":
+            // console.log("Upload is paused");
+            break;
+          case "running":
+            // console.log("Upload is running");
+            break;
+          default:
+        }
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `${error}`,
+        });
+      },
+      () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          // console.log("File available at", downloadURL);
+
+          const titleElement = document.querySelector("input#title");
+          const descriptionElemet = document.querySelector("input#description");
+          const categoriesElement =
+            document.querySelectorAll(".choice.category");
+          const sizesElement = document.querySelectorAll(".choice.size");
+          const colorElement = document.querySelector("select.color");
+          const priceElement = document.querySelector("input#price");
+          const currencyElement = document.querySelector("select.currency");
+
+          const titleValue = titleElement.value;
+          const descriptionValue = descriptionElemet.value;
+          const imageUrl = downloadURL;
+          const colorName = colorElement.value.split(" ")[1];
+          const colorHex = colorElement.value.split(" ")[0];
+          let categoriesArray = [];
+          let sizesArray = [];
+          let colorsArray = [{ name: colorName, hex: colorHex }];
+          const priceValue = priceElement.value;
+          const currencyValue = currencyElement.value;
+
+          Array.from(categoriesElement).forEach((category) =>
+            categoriesArray.push(category.dataset.category)
+          );
+
+          Array.from(sizesElement).forEach((size) =>
+            sizesArray.push(size.dataset.size)
+          );
+
+          const data = {
+            title: titleValue,
+            description: descriptionValue,
+            image: imageUrl,
+            categories: categoriesArray,
+            size: sizesArray,
+            color: colorsArray,
+            price: priceValue,
+            currency: currencyValue,
+          };
+
+          fetch(`${BASE_URL}products/new`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              token: `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              switch (response.status) {
+                case 201:
+                  Swal.fire({
+                    icon: "success",
+                    title: "New product added to Database!",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                  clearForm();
+                  return;
+                case 400:
+                case 401:
+                case 403:
+                  return response.json().then((error) => {
+                    throw new Error(error.message);
+                  });
+
+                default:
+                  throw new Error(
+                    `Please contact the development departament!`
+                  );
+              }
+            })
+            .catch((error) => {
+              console.error(error.message);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: `Something went wrong! ${error.message}`,
+                footer: '<a href="/">Go back to home page</a>',
+              });
+            });
+        });
+      }
+    );
+  };
+
+  const clearForm = () => {
+    const titleElement = document.querySelector("input#title");
+    const descriptionElemet = document.querySelector("input#description");
+    const colorElement = document.querySelector("select.color");
+    const priceElement = document.querySelector("input#price");
+    const currencyElement = document.querySelector("select.currency");
+
+    titleElement.value = "";
+    descriptionElemet.value = "";
+    colorElement.value = "";
+    priceElement.value = "";
+    currencyElement.value = "";
+
+    setSelectedColor(false);
+    setCategories(["woman", "man", "shirt", "trousers", "jacket", "hat"]);
+    setSizes(["XS", "S", "M", "L", "XL"]);
+    setSelectedCategories([]);
+    setSelectedSizes([]);
+    setCategoriesShowChoices(false);
+    setSizeShowChoices(false);
+
+    const dropArea = document.querySelector("#drop-area svg");
+    const imageview = document.querySelector("#img-view");
+    const cloudImg = document.querySelector("#img-view img");
+    const paragraph = document.querySelector("#img-view p");
+    dropArea.style.display = "none";
+    imageview.dataset.ok = false;
+    imageview.style.backgroundImage = "none";
+    cloudImg.style.display = "flex";
+    paragraph.style.display = "flex";
+  };
+
   return (
     <div className="right-side-container">
       <div className="newProduct-container animated">
@@ -286,7 +449,7 @@ const NewProduct = () => {
 
         {/* Form */}
         <form>
-          {/* Demo */}
+          {/* Product Image */}
           <div className="swal2-html-container">
             <div onDragOver={boxDragOver} id="upload-container">
               <label
@@ -322,38 +485,7 @@ const NewProduct = () => {
           ) : (
             <></>
           )}
-          {/* Form Action */}
-          {/* <div className="form-action">
-            <div
-              className={
-                imageValidationError
-                  ? "product-picture error"
-                  : "product-picture"
-              }
-            >
-              <div className="img-container">
-                <img
-                  className="productUpdateImg"
-                  src="https://crowd-literature.eu/wp-content/uploads/2015/01/no-avatar.gif"
-                  // src="https://pbs.twimg.com/profile_images/1693640453260783616/PVEZ0cEY_400x400.png"
-                  alt=""
-                />
-                <div
-                  onClick={editProfilePicture}
-                  className="editIcon-container"
-                >
-                  <EditIcon />
-                </div>
-              </div>
-            </div>
-          </div>
-          {imageValidationError ? (
-            <div className="image error-message">
-              Product image is required!
-            </div>
-          ) : (
-            <></>
-          )} */}
+
           <div className="form-group field">
             {/* title */}
             <div className="wrapper">
@@ -462,7 +594,7 @@ const NewProduct = () => {
                       <div
                         key={category}
                         data-category={category}
-                        className="choice"
+                        className="choice category"
                       >
                         {category}
                         <CloseIcon
@@ -539,7 +671,7 @@ const NewProduct = () => {
                 >
                   {selectedSizes?.length > 0 ? (
                     selectedSizes.map((size) => (
-                      <div key={size} data-size={size} className="choice">
+                      <div key={size} data-size={size} className="choice size">
                         {size}
                         <CloseIcon data-size={size} onClick={removeSize} />
                       </div>
