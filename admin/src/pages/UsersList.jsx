@@ -5,7 +5,8 @@ import { BASE_URL } from "../ApiRequests";
 import ScrollToTop from "../components/ScrollToTop";
 import { format } from "timeago.js";
 import Swal from "sweetalert2";
-import EditIcon from "@mui/icons-material/Edit";
+import Tooltip from "@mui/material/Tooltip";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -171,7 +172,9 @@ const UsersList = () => {
         {users && users.length > 0 ? (
           <>
             <Link to="/newUser">
-              <AddCircleIcon className="newUser" />
+              <Tooltip title="add user" placement="left" arrow>
+                <AddCircleIcon className="newUser" />
+              </Tooltip>
             </Link>
             <ScrollToTop />
             <table>
@@ -224,14 +227,18 @@ const UsersList = () => {
                       <div className="action-buttons">
                         <Link to={`/user/account/${user._id}`}>
                           <div className="edit-button">
-                            <EditIcon />
+                            <Tooltip title="view more" placement="top" arrow>
+                              <VisibilityIcon />
+                            </Tooltip>
                           </div>
                         </Link>
                         <div
                           onClick={() => handleOpen(user._id)}
                           className="delete-button"
                         >
-                          <DeleteOutlineOutlinedIcon />
+                          <Tooltip title="delete user" placement="top" arrow>
+                            <DeleteOutlineOutlinedIcon />
+                          </Tooltip>
                         </div>
                       </div>
                     </td>

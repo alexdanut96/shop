@@ -7,7 +7,8 @@ import ScrollToTop from "../components/ScrollToTop";
 import Swal from "sweetalert2";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import EditIcon from "@mui/icons-material/Edit";
+import Tooltip from "@mui/material/Tooltip";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const ProductList = () => {
   const token = useSelector((state) => state.user.currentUser.accessToken);
@@ -112,7 +113,9 @@ const ProductList = () => {
         {products && products.length > 0 ? (
           <>
             <Link to="/newproduct">
-              <AddCircleIcon className="newProduct" />
+              <Tooltip title="add product" placement="left" arrow>
+                <AddCircleIcon className="newProduct" />
+              </Tooltip>
             </Link>
             <ScrollToTop />
             <table>
@@ -171,14 +174,18 @@ const ProductList = () => {
                       <div className="action-buttons">
                         <Link to={`/`}>
                           <div className="edit-button">
-                            <EditIcon />
+                            <Tooltip title="view more" placement="top" arrow>
+                              <VisibilityIcon />
+                            </Tooltip>
                           </div>
                         </Link>
                         <div
                           // onClick={() => handleOpen(user._id)}
                           className="delete-button"
                         >
-                          <DeleteOutlineOutlinedIcon />
+                          <Tooltip title="delete product" placement="top" arrow>
+                            <DeleteOutlineOutlinedIcon />
+                          </Tooltip>
                         </div>
                       </div>
                     </td>
