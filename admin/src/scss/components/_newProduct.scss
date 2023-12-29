@@ -1,4 +1,10 @@
 .newProduct-container {
+  & #drop-area {
+    height: 250px;
+    max-width: 300px;
+    width: 100%;
+  }
+
   & .image.error-message {
     color: red;
     display: flex;
@@ -16,8 +22,8 @@
 
   & form {
     padding: 20px;
-    -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+    // -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+    // box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
     border-radius: 10px;
     display: flex;
     flex-direction: column;

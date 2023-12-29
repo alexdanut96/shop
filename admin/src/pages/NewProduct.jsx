@@ -472,7 +472,7 @@ const NewProduct = () => {
                   <p>
                     Drag and drop or click here
                     <br />
-                    to upload image
+                    to upload product image
                   </p>
                 </div>
               </label>
