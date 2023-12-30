@@ -20,6 +20,7 @@ import Messages from "./pages/Messages";
 import StaffAnalytics from "./pages/StaffAnalytics";
 import StaffManage from "./pages/StaffManage";
 import StaffReports from "./pages/StaffReports";
+import NotFound404 from "./pages/NotFound404";
 import "./scss/index.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -78,6 +79,8 @@ const App = () => {
               <Route path="/product/:productId" element={<Product />} />
               <Route path="/newproduct" element={<NewProduct />} />
               <Route path="/login" element={<Navigate replace to="/" />} />
+              //404
+              <Route path="/*" element={<NotFound404 />} />
             </Routes>
           </div>
         </>

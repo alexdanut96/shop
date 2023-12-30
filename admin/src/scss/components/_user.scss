@@ -1,13 +1,38 @@
 .user-container {
   // flex: 4;
   // padding: 0 20px 20px 20px;
+  & .user-box {
+    & .back-link {
+      margin-bottom: 20px;
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #9c9797;
+      font-size: 15px;
+      // border-bottom: 1px solid #9c9797;
+
+      &:hover {
+        color: #1e54a3ed;
+      }
+
+      & svg {
+        font-size: 16px;
+      }
+    }
+  }
 
   & .title {
     font-size: 24px;
     margin-bottom: 20px;
+    color: #4e80cbed;
   }
 
   .user-edit-bar {
+    position: sticky;
+    top: 70px;
+    background-color: white;
+    z-index: 1;
     display: flex;
     // justify-content: center;
     flex-wrap: wrap;

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../ApiRequests";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import uploadImage from "../../images/upload_img.png";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import colors from "../../utils/colors.json";
@@ -64,12 +65,23 @@ const ProductDetails = () => {
             case 400:
             case 401:
             case 403:
+            case 410:
               return response.json().then((error) => {
                 throw new Error(error.message);
               });
+            case 404:
+              throw new Error("404 Page not found!");
 
             default:
-              throw new Error(`Please contact the development departament!`);
+              return response.json().then((error) => {
+                if (error && error.message) {
+                  throw new Error(error.message);
+                } else {
+                  throw new Error(
+                    `Please contact the development departament!`
+                  );
+                }
+              });
           }
         })
         .then((user) => {
@@ -508,6 +520,12 @@ const ProductDetails = () => {
 
   return (
     <>
+      <Link to="/products">
+        <div className="back-link">
+          <ArrowBackIcon />
+          Products
+        </div>
+      </Link>
       {product ? (
         <div className="productUpdate animated">
           {/* Form */}
@@ -883,7 +901,9 @@ const ProductDetails = () => {
           </form>
         </div>
       ) : (
-        <></>
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
       )}
     </>
   );

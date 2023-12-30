@@ -34,7 +34,14 @@ const UsersList = () => {
             });
 
           default:
-            throw new Error(`Please contact the development departament!`);
+            return response.json().then((error) => {
+              console.log(error);
+              if (error && error.message) {
+                throw new Error(error.message);
+              } else {
+                throw new Error(`Please contact the development departament!`);
+              }
+            });
         }
       })
       .then((success) => {
