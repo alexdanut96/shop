@@ -19,7 +19,7 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
 });
 
 // Edit product
-router.post("/:id", verifyTokenAndAdmin, async (req, res) => {
+router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   const allowedData = [
     "title",
     "description",
@@ -28,14 +28,22 @@ router.post("/:id", verifyTokenAndAdmin, async (req, res) => {
     "size",
     "color",
     "price",
+    "currency",
   ];
   try {
+    if (Object.keys(req.body).length === 0) {
+      res.status(401).json({
+        message: "Data is empty. Please fill up the form!",
+      });
+      console.error("Data is empty. Please fill up the form!");
+      return;
+    }
     if (req.params.id) {
-      const updatedProduct = await Product.findById(req.params.id);
+      let updatedProduct = await Product.findById(req.params.id);
 
       Object.entries(req.body).forEach((item) => {
-        const dataKeyProperty = item[0].toString();
-        let dataValueProperty = item[1].toString();
+        const dataKeyProperty = item[0];
+        const dataValueProperty = item[1];
 
         const allowedProperty = allowedData.find(
           (item) => item === dataKeyProperty
@@ -45,13 +53,17 @@ router.post("/:id", verifyTokenAndAdmin, async (req, res) => {
           updatedProduct[dataKeyProperty] = dataValueProperty;
         } else {
           console.log(`"${dataKeyProperty}" doesn't exist in Database`);
+          throw new Error(`"${dataKeyProperty}" doesn't exist in Database`);
         }
+
+        updatedProduct[dataKeyProperty] = dataValueProperty;
       });
-      console.log(updatedProduct);
+
       const result = await updatedProduct.save();
       res.json(result);
     } else {
       res.status(401).json({ message: "Product Id is required" });
+      return;
     }
   } catch (err) {
     console.log(err);

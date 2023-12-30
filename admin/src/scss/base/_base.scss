@@ -129,7 +129,10 @@ a {
       background-color: white;
       border-radius: 16px;
       font-size: 18px;
-      display: none;
+
+      &.add-product {
+        display: none;
+      }
 
       &:hover {
         background-color: red;

@@ -459,7 +459,10 @@ const NewProduct = () => {
                 className={imageValidationError ? "error" : ""}
                 id="drop-area"
               >
-                <CloseIcon onClick={removeProductPicture} />
+                <CloseIcon
+                  className="add-product"
+                  onClick={removeProductPicture}
+                />
                 <input
                   onChange={uploadProductImage}
                   type="file"
