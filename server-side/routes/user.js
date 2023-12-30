@@ -25,8 +25,17 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
 router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const foundUser = await User.findById(req.params.id);
+    if (!foundUser) {
+      return res.status(410).json({
+        message: `User with ID "${req.params.id}" is no longer available!`,
+      });
+    }
     res.status(200).json(foundUser);
   } catch (err) {
+    console.log(err);
+    if (err.name === "CastError") {
+      err = { message: `User ID "${req.params.id}" is invalid!` };
+    }
     res.status(500).json(err);
   }
 });
@@ -84,9 +93,16 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
     await User.findByIdAndDelete(req.params.id);
     res
       .status(200)
-      .json({ message: `User with the ID ${req.params.id} has been deleted!` });
+      .json({
+        message: `User with the ID "${req.params.id}" has been deleted!`,
+      });
   } catch (err) {
     console.log(err);
+    if (err.name === "CastError") {
+      err = {
+        message: `Cannot delete! User ID "${req.params.id}" is invalid!`,
+      };
+    }
     res.status(500).json(err);
   }
 });

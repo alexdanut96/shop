@@ -106,6 +106,68 @@ const ProductList = () => {
     getProducts();
   }, [deleteConfirmation]);
 
+  const deleteProduct = (productId) => {
+    fetch(`${BASE_URL}products/${productId}`, {
+      method: "DELETE",
+      headers: { token: `Bearer ${token}` },
+    })
+      .then((response) => {
+        switch (response.status) {
+          case 200:
+            return response.json();
+
+          case 400:
+          case 401:
+          case 403:
+            return response.json().then((error) => {
+              throw new Error(error.message);
+            });
+
+          default:
+            return response.json().then((error) => {
+              console.log(error);
+              if (error && error.message) {
+                throw new Error(error.message);
+              } else {
+                throw new Error(`Please contact the development departament!`);
+              }
+            });
+        }
+      })
+      .then((success) => {
+        setDeleteConfirmation(!deleteConfirmation);
+        return success;
+      })
+      .then((data) => {
+        Swal.fire("Deleted!", data.message, "success");
+      })
+      .catch((error) => {
+        console.error(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `Something went wrong! ${error.message}`,
+          footer: '<a href="/">Go back to home page</a>',
+        });
+      });
+  };
+
+  const handleOpen = (productId) => {
+    Swal.fire({
+      title: `Product ID: ${productId}`,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteProduct(productId);
+      }
+    });
+  };
+
   console.log(products);
   return (
     <div className="right-side-container">
@@ -180,7 +242,7 @@ const ProductList = () => {
                           </div>
                         </Link>
                         <div
-                          // onClick={() => handleOpen(user._id)}
+                          onClick={() => handleOpen(product._id)}
                           className="delete-button"
                         >
                           <Tooltip title="delete product" placement="top" arrow>

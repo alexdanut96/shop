@@ -7,6 +7,10 @@
     width: 100%;
     border-collapse: collapse;
 
+    & caption {
+      color: #4e80cbed;
+    }
+
     tr:first-child {
       background-color: white;
       // background-color: #e7e6ff;

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BASE_URL } from "../../ApiRequests";
 import { useSelector, useDispatch } from "react-redux";
 import Swal from "sweetalert2";
@@ -10,6 +10,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Modal from "../Modal";
 import { modalActions } from "../../Redux/ModalSlice";
 import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const UserBilling = () => {
   const [bill, setBill] = useState();
@@ -133,6 +134,12 @@ const UserBilling = () => {
   console.log(bill);
   return (
     <>
+      <Link to="/users">
+        <div className="back-link">
+          <ArrowBackIcon />
+          Users
+        </div>
+      </Link>
       {showModal && <Modal bill={selectedBill} userId={userId} token={token} />}
       <div className="info-billing animated">
         <button onClick={showAddModal} className="add-new-bill-address">

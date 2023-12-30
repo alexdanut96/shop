@@ -80,11 +80,16 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
     res.status(200).json({
-      message: `The product with ID ${req.params.id} has been deleted!`,
+      message: `The product with ID "${req.params.id}" has been deleted!`,
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json(err._message);
+    if (err.name === "CastError") {
+      err = {
+        message: `Cannot delete! Product ID "${req.params.id}" is invalid!`,
+      };
+    }
+    res.status(500).json(err);
   }
 });
 
@@ -92,9 +97,18 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
 router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const foundProduct = await Product.findById(req.params.id);
+    if (!foundProduct) {
+      return res.status(410).json({
+        message: `Product with ID "${req.params.id}" is no longer available!`,
+      });
+    }
+
     res.status(200).json(foundProduct);
   } catch (err) {
     console.log(err);
+    if (err.name === "CastError") {
+      err = { message: `Product ID "${req.params.id}" is invalid!` };
+    }
     res.status(500).json(err);
   }
 });

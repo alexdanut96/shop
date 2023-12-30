@@ -1,5 +1,6 @@
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { useSelector } from "react-redux";
@@ -7,7 +8,7 @@ import Swal from "sweetalert2";
 import CryptoJS from "crypto-js";
 import { useState, useEffect } from "react";
 import { BASE_URL } from "../../ApiRequests";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import uploadImage from "../../images/upload_img.png";
 import appUsers from "../../Firebase";
 import PhoneInput from "react-phone-input-2";
@@ -358,12 +359,23 @@ const UserAccount = () => {
             case 400:
             case 401:
             case 403:
+            case 410:
               return response.json().then((error) => {
                 throw new Error(error.message);
               });
+            case 404:
+              throw new Error("404 Page not found!");
 
             default:
-              throw new Error(`Please contact the development departament!`);
+              return response.json().then((error) => {
+                if (error && error.message) {
+                  throw new Error(error.message);
+                } else {
+                  throw new Error(
+                    `Please contact the development departament!`
+                  );
+                }
+              });
           }
         })
         .then((user) => {
@@ -392,6 +404,12 @@ const UserAccount = () => {
 
   return (
     <>
+      <Link to="/users">
+        <div className="back-link">
+          <ArrowBackIcon />
+          Users
+        </div>
+      </Link>
       {user ? (
         <div className="userUpdate animated">
           <div className="form-container">
