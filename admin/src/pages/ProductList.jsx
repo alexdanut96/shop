@@ -172,7 +172,7 @@ const ProductList = () => {
                     </td>
                     <td>
                       <div className="action-buttons">
-                        <Link to={`/`}>
+                        <Link to={`/product/details/${product._id}`}>
                           <div className="edit-button">
                             <Tooltip title="view more" placement="top" arrow>
                               <VisibilityIcon />

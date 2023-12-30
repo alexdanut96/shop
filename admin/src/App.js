@@ -3,6 +3,7 @@ import Topbar from "./components/topbar/Topbar";
 import Home from "./pages/Home";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import UserRoutes from "./Routes/UserRoutes";
+import ProductRoutes from "./Routes/ProductRoutes";
 import NewUser from "./pages/NewUser";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/Product";
@@ -72,6 +73,7 @@ const App = () => {
               <Route path="/staff-reports" element={<StaffReports />} />
               // REST
               <Route path="/user/*" element={<UserRoutes />} />
+              <Route path="/product/*" element={<ProductRoutes />} />
               <Route path="/newUser" element={<NewUser />} />
               <Route path="/product/:productId" element={<Product />} />
               <Route path="/newproduct" element={<NewProduct />} />
