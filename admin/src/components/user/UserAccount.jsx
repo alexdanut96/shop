@@ -1,4 +1,6 @@
 import React from "react";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Tooltip from "@mui/material/Tooltip";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
@@ -404,12 +406,20 @@ const UserAccount = () => {
 
   return (
     <>
-      <Link to="/users">
-        <div className="back-link">
-          <ArrowBackIcon />
-          Users
-        </div>
-      </Link>
+      <div className="back-link-container">
+        <Link to="/users">
+          <div className="back-link">
+            <ArrowBackIcon />
+            Users
+          </div>
+        </Link>
+        <Link to="/newUser">
+          <Tooltip title="Add new user" placement="left" arrow>
+            <AddCircleIcon className="newUser" />
+          </Tooltip>
+        </Link>
+      </div>
+
       {user ? (
         <div className="userUpdate animated">
           <div className="form-container">

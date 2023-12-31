@@ -134,12 +134,14 @@ const UserBilling = () => {
   console.log(bill);
   return (
     <>
-      <Link to="/users">
-        <div className="back-link">
-          <ArrowBackIcon />
-          Users
-        </div>
-      </Link>
+      <div className="back-link-container">
+        <Link to="/users">
+          <div className="back-link">
+            <ArrowBackIcon />
+            Users
+          </div>
+        </Link>
+      </div>
       {showModal && <Modal bill={selectedBill} userId={userId} token={token} />}
       <div className="info-billing animated">
         <button onClick={showAddModal} className="add-new-bill-address">

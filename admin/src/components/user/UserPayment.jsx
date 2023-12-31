@@ -4,15 +4,19 @@ import { Link } from "react-router-dom";
 
 const UserPayment = () => {
   return (
-    <div className="info-payments animated">
-      <Link to="/users">
-        <div className="back-link">
-          <ArrowBackIcon />
-          Users
-        </div>
-      </Link>
-      <div className="no-payments-title">No payments!</div>
-    </div>
+    <>
+      <div className="back-link-container">
+        <Link to="/users">
+          <div className="back-link">
+            <ArrowBackIcon />
+            Users
+          </div>
+        </Link>
+      </div>
+      <div className="info-payments animated">
+        <div className="no-payments-title">No payments!</div>
+      </div>
+    </>
   );
 };
 

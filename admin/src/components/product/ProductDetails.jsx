@@ -8,6 +8,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Tooltip from "@mui/material/Tooltip";
 import colors from "../../utils/colors.json";
 import appUsers from "../../Firebase";
 import { ValidateEmptyValue } from "../../utils/formValidation";
@@ -520,12 +522,20 @@ const ProductDetails = () => {
 
   return (
     <>
-      <Link to="/products">
-        <div className="back-link">
-          <ArrowBackIcon />
-          Products
-        </div>
-      </Link>
+      <div className="back-link-container">
+        <Link to="/products">
+          <div className="back-link">
+            <ArrowBackIcon />
+            Products
+          </div>
+        </Link>
+        <Link to="/newproduct">
+          <Tooltip title="Add new product" placement="left" arrow>
+            <AddCircleIcon className="newProduct" />
+          </Tooltip>
+        </Link>
+      </div>
+
       {product ? (
         <div className="productUpdate animated">
           {/* Form */}
