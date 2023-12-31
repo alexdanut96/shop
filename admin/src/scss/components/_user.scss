@@ -1,23 +1,53 @@
 .user-container {
   // flex: 4;
   // padding: 0 20px 20px 20px;
+
   & .user-box {
-    & .back-link {
-      margin-bottom: 20px;
-      width: fit-content;
+    & .back-link-container {
+      height: 32px;
       display: flex;
       align-items: center;
-      gap: 5px;
-      color: #9c9797;
-      font-size: 15px;
-      // border-bottom: 1px solid #9c9797;
+      margin-bottom: 20px;
+      justify-content: space-between;
 
-      &:hover {
-        color: #1e54a3ed;
+      & .back-link {
+        // width: fit-content;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #9c9797;
+        font-size: 15px;
+        // border-bottom: 1px solid #9c9797;
+
+        &:hover {
+          color: #1e54a3ed;
+        }
+
+        & svg {
+          font-size: 16px;
+        }
       }
 
-      & svg {
-        font-size: 16px;
+      & .newUser {
+        margin-right: 5px;
+        font-size: 32px;
+        display: flex;
+        align-items: center;
+        // z-index: 2;
+        // position: fixed;
+        // position: absolute;
+        // top: 188px;
+        // top: 115.5px;
+        // right: 20px;
+        border-radius: 5rem;
+        background-color: white;
+        color: #0d6efd;
+        transition: 0.2s ease;
+        cursor: pointer;
+
+        &:hover {
+          scale: 1.5;
+        }
       }
     }
   }
@@ -32,7 +62,7 @@
     position: sticky;
     top: 70px;
     background-color: white;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     // justify-content: center;
     flex-wrap: wrap;

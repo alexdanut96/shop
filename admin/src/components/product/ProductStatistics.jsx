@@ -4,15 +4,19 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const ProductStatistics = () => {
   return (
-    <div className="product-statistics animated">
-      <Link to="/products">
-        <div className="back-link">
-          <ArrowBackIcon />
-          Products
-        </div>
-      </Link>
-      <div className="no-statistics-title">No statistics</div>
-    </div>
+    <>
+      <div className="back-link-container">
+        <Link to="/products">
+          <div className="back-link">
+            <ArrowBackIcon />
+            Products
+          </div>
+        </Link>
+      </div>
+      <div className="product-statistics animated">
+        <div className="no-statistics-title">No statistics</div>
+      </div>
+    </>
   );
 };
 

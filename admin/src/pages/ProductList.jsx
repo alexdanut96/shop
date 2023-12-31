@@ -175,7 +175,7 @@ const ProductList = () => {
         {products && products.length > 0 ? (
           <>
             <Link to="/newproduct">
-              <Tooltip title="add product" placement="left" arrow>
+              <Tooltip title="Add new product" placement="left" arrow>
                 <AddCircleIcon className="newProduct" />
               </Tooltip>
             </Link>

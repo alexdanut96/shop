@@ -179,7 +179,7 @@ const UsersList = () => {
         {users && users.length > 0 ? (
           <>
             <Link to="/newUser">
-              <Tooltip title="add user" placement="left" arrow>
+              <Tooltip title="Add new user" placement="left" arrow>
                 <AddCircleIcon className="newUser" />
               </Tooltip>
             </Link>

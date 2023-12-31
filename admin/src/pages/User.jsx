@@ -4,6 +4,7 @@ import UserAccount from "../components/user/UserAccount";
 import UserBilling from "../components/user/UserBilling";
 import UserPayment from "../components/user/UserPayment";
 import UserInvoices from "../components/user/UserInvoices";
+import ScrollToTop from "../components/ScrollToTop";
 
 const User = () => {
   const location = useLocation();
@@ -33,8 +34,10 @@ const User = () => {
 
   return (
     <div className="right-side-container">
+      <ScrollToTop />
       <div className="user-container">
         <div className="title">User Information</div>
+
         <div className="user-edit-bar">
           {barOptions.map((option) => {
             return (
