@@ -551,7 +551,10 @@ const ProductDetails = () => {
                   id="drop-area"
                 >
                   <CloseIcon
-                    style={{ display: product.image ? "flex" : "none" }}
+                    style={{
+                      display: product.image ? "flex" : "none",
+                      backgroundColor: "white",
+                    }}
                     className="edit-product"
                     onClick={removeProductPicture}
                   />
