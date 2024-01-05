@@ -7,6 +7,7 @@ import uploadImage from "../images/upload_img.png";
 import Swal from "sweetalert2";
 import appUsers from "../Firebase";
 import { useSelector } from "react-redux";
+import uniqid from "uniqid";
 import { ValidateEmptyValue } from "../utils/formValidation";
 import {
   getStorage,
@@ -18,7 +19,7 @@ import { BASE_URL } from "../ApiRequests";
 
 const NewProduct = () => {
   const token = useSelector((state) => state.user.currentUser.accessToken);
-
+  const [images, setImages] = useState([uniqid()]);
   const [imageValidationError, setImageValidationError] = useState(false);
   const [titleValidationError, setTitleValidationError] = useState(false);
   const [descriptionValidationError, setDescriptionValidationError] =
@@ -42,6 +43,29 @@ const NewProduct = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showSizeChoices, setSizeShowChoices] = useState(false);
   const [showCategoriesChoices, setCategoriesShowChoices] = useState(false);
+
+  const addImageBox = () => {
+    let newArray = images;
+    newArray.push(uniqid());
+    setImages([...newArray]);
+  };
+
+  const removeImageBox = (event) => {
+    event.preventDefault();
+    const imagePosition = event.currentTarget.dataset.imageCode;
+    let newArray = [];
+    images.forEach((img) => {
+      if (img !== imagePosition) {
+        newArray.push(img);
+      }
+    });
+    setImages([...newArray]);
+    // let secondArray = [];
+    // newArray.forEach((img, index) => {
+    //   secondArray.push(index + 1);
+    // });
+    // setImages([...secondArray]);
+  };
 
   const handleChoices = (event) => {
     const type = event.currentTarget.dataset.type;
@@ -226,25 +250,37 @@ const NewProduct = () => {
     }
   };
 
-  const uploadProductImage = () => {
-    const imageView = document.querySelector("#img-view");
-    const cloudImg = document.querySelector("#img-view img");
-    const paragraph = document.querySelector("#img-view p");
-    const inputFile = document.querySelector("#input-file");
-    const dropArea = document.querySelector("#drop-area svg");
+  const uploadProductImage = (imageCode) => {
+    const imageView = document.querySelector(`#img-view.${imageCode}`);
+    const cloudImg = document.querySelector(`#img-view.${imageCode} img`);
+    const paragraph = document.querySelector(`#img-view.${imageCode} p`);
+    const inputFile = document.querySelector(`#input-file.${imageCode}`);
+    const removeImage = document.querySelector(
+      `#drop-area.${imageCode} .add-product`
+    );
+    const removeImageBox = document.querySelector(
+      `#drop-area.${imageCode} .remove-image-box`
+    );
+
     let imgLink = URL.createObjectURL(inputFile.files[0]);
     imageView.style.backgroundImage = `url(${imgLink})`;
     imageView.dataset.ok = true;
     cloudImg.style.display = "none";
     paragraph.style.display = "none";
-    dropArea.style.display = "block";
+    removeImage.style.display = "flex";
+    removeImageBox.style.display = "none";
     setImageValidationError(false);
   };
 
   const boxDragOver = (event) => {
-    const dropArea = document.querySelector("#drop-area");
     event.preventDefault();
-    if (event.target.id === "upload-container") {
+    const imageCode = event.currentTarget.dataset.imageCode;
+    const dropArea = document.querySelector(`#drop-area.${imageCode}`);
+
+    if (
+      event.target.id === "upload-container" &&
+      event.target.classList.contains(`${imageCode}`)
+    ) {
       dropArea.style.backgroundColor = "#f1f1f9";
       dropArea.style.borderColor = "#aeadad";
     } else {
@@ -258,156 +294,184 @@ const NewProduct = () => {
   };
 
   const dropAreaDrop = (event) => {
-    const dropArea = document.querySelector("#drop-area");
-    const inputFile = document.querySelector("#input-file");
     event.preventDefault();
+    const imageCode = event.currentTarget.dataset.imageCode;
+    const dropArea = document.querySelector(`#drop-area.${imageCode}`);
+    const inputFile = document.querySelector(`#input-file.${imageCode}`);
+
     inputFile.files = event.dataTransfer.files;
-    uploadProductImage();
+    uploadProductImage(imageCode);
     dropArea.style.backgroundColor = "#f1f1f9";
     dropArea.style.borderColor = "#aeadad";
   };
 
   const removeProductPicture = (event) => {
     event.preventDefault();
-    const dropArea = document.querySelector("#drop-area svg");
-    const image = document.querySelector("#img-view");
-    const cloudImg = document.querySelector("#img-view img");
-    const paragraph = document.querySelector("#img-view p");
-    dropArea.style.display = "none";
+    const imageCode = event.currentTarget.dataset.imageCode;
+    const image = document.querySelector(`#img-view.${imageCode}`);
+    const cloudImg = document.querySelector(`#img-view.${imageCode} img`);
+    const paragraph = document.querySelector(`#img-view.${imageCode} p`);
+    const removeImage = document.querySelector(
+      `#drop-area.${imageCode} .add-product`
+    );
+    const removeImageBox = document.querySelector(
+      `#drop-area.${imageCode} .remove-image-box`
+    );
+
+    removeImageBox.style.display = "flex";
+    removeImage.style.display = "none";
     image.dataset.ok = false;
     image.style.backgroundImage = "none";
     cloudImg.style.display = "flex";
     paragraph.style.display = "flex";
   };
 
-  const saveToMongoDB = async () => {
-    const inputFile = document.querySelector("#input-file");
-    const file = inputFile.files[0];
-    const fileName = new Date().getTime() + "_" + file.name;
-    const storage = getStorage(appUsers);
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  let imagesUrl = [];
 
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // console.log("Upload is " + progress + "% done");
-        // uploadLoading.innerHTML = `${parseInt(progress)}%`;
-        switch (snapshot.state) {
-          case "paused":
-            // console.log("Upload is paused");
-            break;
-          case "running":
-            // console.log("Upload is running");
-            break;
-          default:
+  const saveToMongoDB = () => {
+    const allImagesBoxes = Array.from(document.querySelectorAll("#input-file"));
+    const imagesAmount = allImagesBoxes.filter((item) => {
+      return item.files[0];
+    }).length;
+
+    for (const item of allImagesBoxes) {
+      getFirabaseImagesUrl(item, imagesAmount);
+    }
+  };
+
+  const getFirabaseImagesUrl = (item, imagesAmount) => {
+    if (item.files[0]) {
+      const file = item.files[0];
+      const fileName = new Date().getTime() + "_" + file.name;
+      const storage = getStorage(appUsers);
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      // Register three observers:
+      // 1. 'state_changed' observer, called any time the state changes
+      // 2. Error observer, called on failure
+      // 3. Completion observer, called on successful completion
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // console.log("Upload is " + progress + "% done");
+          // uploadLoading.innerHTML = `${parseInt(progress)}%`;
+          switch (snapshot.state) {
+            case "paused":
+              // console.log("Upload is paused");
+              break;
+            case "running":
+              // console.log("Upload is running");
+              break;
+            default:
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `${error}`,
+          });
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            // console.log("File available at", downloadURL);
+            imagesUrl.push(downloadURL);
+
+            if (imagesAmount === imagesUrl.length) {
+              saveInDatabase(imagesUrl);
+            }
+          });
         }
+      );
+    }
+    // }
+  };
+
+  const saveInDatabase = (urls) => {
+    const titleElement = document.querySelector("input#title");
+    const descriptionElemet = document.querySelector("input#description");
+    const categoriesElement = document.querySelectorAll(".choice.category");
+    const sizesElement = document.querySelectorAll(".choice.size");
+    const colorElement = document.querySelector("select.color");
+    const priceElement = document.querySelector("input#price");
+    const currencyElement = document.querySelector("select.currency");
+
+    const titleValue = titleElement.value;
+    const descriptionValue = descriptionElemet.value;
+    const imageUrl = urls;
+    const colorName = colorElement.value.split(" ")[1];
+    const colorHex = colorElement.value.split(" ")[0];
+    let categoriesArray = [];
+    let sizesArray = [];
+    let colorsArray = [{ name: colorName, hex: colorHex }];
+    const priceValue = priceElement.value;
+    const currencyValue = currencyElement.value;
+
+    Array.from(categoriesElement).forEach((category) =>
+      categoriesArray.push(category.dataset.category)
+    );
+
+    Array.from(sizesElement).forEach((size) =>
+      sizesArray.push(size.dataset.size)
+    );
+
+    const data = {
+      title: titleValue,
+      description: descriptionValue,
+      image: imageUrl,
+      categories: categoriesArray,
+      size: sizesArray,
+      color: colorsArray,
+      price: priceValue,
+      currency: currencyValue,
+    };
+
+    fetch(`${BASE_URL}products/new`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        token: `Bearer ${token}`,
       },
-      (error) => {
-        // Handle unsuccessful uploads
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        switch (response.status) {
+          case 201:
+            Swal.fire({
+              icon: "success",
+              title: "New product added to Database!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            clearForm();
+            return;
+          case 400:
+          case 401:
+          case 403:
+            return response.json().then((error) => {
+              throw new Error(error.message);
+            });
+
+          default:
+            throw new Error(`Please contact the development departament!`);
+        }
+      })
+      .catch((error) => {
+        console.error(error.message);
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: `${error}`,
+          text: `Something went wrong! ${error.message}`,
+          footer: '<a href="/">Go back to home page</a>',
         });
-      },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          // console.log("File available at", downloadURL);
-
-          const titleElement = document.querySelector("input#title");
-          const descriptionElemet = document.querySelector("input#description");
-          const categoriesElement =
-            document.querySelectorAll(".choice.category");
-          const sizesElement = document.querySelectorAll(".choice.size");
-          const colorElement = document.querySelector("select.color");
-          const priceElement = document.querySelector("input#price");
-          const currencyElement = document.querySelector("select.currency");
-
-          const titleValue = titleElement.value;
-          const descriptionValue = descriptionElemet.value;
-          const imageUrl = downloadURL;
-          const colorName = colorElement.value.split(" ")[1];
-          const colorHex = colorElement.value.split(" ")[0];
-          let categoriesArray = [];
-          let sizesArray = [];
-          let colorsArray = [{ name: colorName, hex: colorHex }];
-          const priceValue = priceElement.value;
-          const currencyValue = currencyElement.value;
-
-          Array.from(categoriesElement).forEach((category) =>
-            categoriesArray.push(category.dataset.category)
-          );
-
-          Array.from(sizesElement).forEach((size) =>
-            sizesArray.push(size.dataset.size)
-          );
-
-          const data = {
-            title: titleValue,
-            description: descriptionValue,
-            image: imageUrl,
-            categories: categoriesArray,
-            size: sizesArray,
-            color: colorsArray,
-            price: priceValue,
-            currency: currencyValue,
-          };
-
-          fetch(`${BASE_URL}products/new`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              token: `Bearer ${token}`,
-            },
-            body: JSON.stringify(data),
-          })
-            .then((response) => {
-              switch (response.status) {
-                case 201:
-                  Swal.fire({
-                    icon: "success",
-                    title: "New product added to Database!",
-                    showConfirmButton: false,
-                    timer: 1500,
-                  });
-                  clearForm();
-                  return;
-                case 400:
-                case 401:
-                case 403:
-                  return response.json().then((error) => {
-                    throw new Error(error.message);
-                  });
-
-                default:
-                  throw new Error(
-                    `Please contact the development departament!`
-                  );
-              }
-            })
-            .catch((error) => {
-              console.error(error.message);
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: `Something went wrong! ${error.message}`,
-                footer: '<a href="/">Go back to home page</a>',
-              });
-            });
-        });
-      }
-    );
+      });
   };
 
   const clearForm = () => {
@@ -430,16 +494,17 @@ const NewProduct = () => {
     setSelectedSizes([]);
     setCategoriesShowChoices(false);
     setSizeShowChoices(false);
+    setImages([uniqid()]);
 
-    const dropArea = document.querySelector("#drop-area svg");
-    const imageview = document.querySelector("#img-view");
-    const cloudImg = document.querySelector("#img-view img");
-    const paragraph = document.querySelector("#img-view p");
-    dropArea.style.display = "none";
-    imageview.dataset.ok = false;
-    imageview.style.backgroundImage = "none";
-    cloudImg.style.display = "flex";
-    paragraph.style.display = "flex";
+    // const dropArea = document.querySelector("#drop-area svg");
+    // const imageview = document.querySelector("#img-view");
+    // const cloudImg = document.querySelector("#img-view img");
+    // const paragraph = document.querySelector("#img-view p");
+    // dropArea.style.display = "none";
+    // imageview.dataset.ok = false;
+    // imageview.style.backgroundImage = "none";
+    // cloudImg.style.display = "flex";
+    // paragraph.style.display = "flex";
   };
 
   return (
@@ -451,39 +516,79 @@ const NewProduct = () => {
         <form>
           {/* Product Image */}
           <div className="swal2-html-container">
-            <div onDragOver={boxDragOver} id="upload-container">
-              <label
-                onDrop={dropAreaDrop}
-                onDragOver={dropAreaDragOver}
-                htmlFor="input-file"
-                className={imageValidationError ? "error" : ""}
-                id="drop-area"
+            {/* upload container */}
+            {images.map((image) => (
+              <div
+                key={image}
+                onDragOver={boxDragOver}
+                data-image-code={image}
+                className={`animated ${image}`}
+                id="upload-container"
               >
-                <CloseIcon
-                  className="add-product"
-                  onClick={removeProductPicture}
-                />
-                <input
-                  onChange={uploadProductImage}
-                  type="file"
-                  id="input-file"
-                  accept="image/*"
-                  hidden
-                />
-                <div id="img-view" data-ok="false">
-                  <img id="uploadImg" src={uploadImage} alt="avatar" />
-                  <p>
-                    Drag and drop or click here
-                    <br />
-                    to upload product image
-                  </p>
-                </div>
-              </label>
+                <label
+                  onDrop={dropAreaDrop}
+                  onDragOver={dropAreaDragOver}
+                  htmlFor="input-file"
+                  data-image-code={image}
+                  className={
+                    imageValidationError ? `${image} error` : `${image}`
+                  }
+                  id="drop-area"
+                >
+                  <CloseIcon
+                    data-image-code={image}
+                    style={{ display: images.length > 1 ? "flex" : "none" }}
+                    className={`remove-image-box ${image}`}
+                    onClick={removeImageBox}
+                  />
+
+                  <CloseIcon
+                    data-image-code={image}
+                    className={`add-product ${image}`}
+                    onClick={removeProductPicture}
+                  />
+
+                  <input
+                    onChange={() => uploadProductImage(image)}
+                    type="file"
+                    id="input-file"
+                    className={`${image}`}
+                    data-image-code={image}
+                    accept="image/*"
+                    // hidden
+                  />
+                  <div
+                    className={`${image}`}
+                    id="img-view"
+                    data-image-code={image}
+                    data-ok="false"
+                  >
+                    <img
+                      data-image-code={image}
+                      id="uploadImg"
+                      className={`${image}`}
+                      src={uploadImage}
+                      alt="avatar"
+                    />
+                    <p className={`${image}`} data-image-code={image}>
+                      Drag and drop or click here to upload product image
+                    </p>
+                  </div>
+                </label>
+              </div>
+            ))}
+
+            {/* upload container */}
+
+            <div className="add-new-image-box">
+              <div onClick={addImageBox} className="new-image">
+                <AddIcon />
+              </div>
             </div>
           </div>
           {imageValidationError ? (
             <div className="image error-message">
-              Product image is required!
+              All images boxes are required!
             </div>
           ) : (
             <></>

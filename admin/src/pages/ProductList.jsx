@@ -222,7 +222,9 @@ const ProductList = () => {
                       </div>
                     </td>
                     <td data-cell="Price:">
-                      <div className="td-text">{product.price}</div>
+                      <div className="td-text">
+                        {product.price} {product.currency}
+                      </div>
                     </td>
                     <td data-cell="Stock:">
                       <div className="td-text">

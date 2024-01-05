@@ -27,6 +27,7 @@
     "sweetalert2": "^11.7.32",
     "sweetalert2-react-content": "^5.0.7",
     "timeago.js": "^4.0.2",
+    "uniqid": "^5.4.0",
     "web-vitals": "^3.5.0"
   },
   "scripts": {
