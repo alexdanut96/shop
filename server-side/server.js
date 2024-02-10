@@ -11,6 +11,8 @@ const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const stripeRoute = require("./routes/stripe");
+const adminRoute = require("./routes/admin");
+
 const cors = require("cors");
 
 const PORT = process.env.PORT || 5000;
@@ -32,6 +34,7 @@ app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/billing", billingRoute);
 app.use("/api/checkout", stripeRoute);
+app.use("/api/admin", adminRoute);
 
 app.listen(PORT, () => {
   console.log(`The server is up and running on port ${PORT}`);
