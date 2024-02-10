@@ -15,6 +15,7 @@ import appUsers from "../../Firebase";
 import { ValidateEmptyValue } from "../../utils/formValidation";
 import productSizes from "../../utils/productSizes.json";
 import productCategories from "../../utils/productCategories.json";
+import uniqid from "uniqid";
 import {
   getStorage,
   ref,
@@ -23,6 +24,8 @@ import {
 } from "firebase/storage";
 
 const ProductDetails = () => {
+  const [renderImg, setRenderImg] = useState(true);
+  const [images, setImages] = useState([]);
   const [imageValidationError, setImageValidationError] = useState(false);
   const [titleValidationError, setTitleValidationError] = useState(false);
   const [descriptionValidationError, setDescriptionValidationError] =
@@ -35,7 +38,7 @@ const ProductDetails = () => {
   const [sizes, setSizes] = useState([]);
   const [selectedColor, setSelectedColor] = useState("");
   const [categories, setCategories] = useState([]);
-  const [imageChanged, setImageChanged] = useState(false);
+  // const [imageChanged, setImageChanged] = useState(false);
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showSizeChoices, setSizeShowChoices] = useState(false);
@@ -46,6 +49,24 @@ const ProductDetails = () => {
   const id = location.pathname.split("/")[3];
   const [product, setProduct] = useState();
   const [productSuccess, setProductSuccess] = useState(0);
+
+  const addImageBox = () => {
+    let newArray = images;
+    newArray.push(uniqid());
+    setImages([...newArray]);
+  };
+
+  const removeImageBox = (event) => {
+    event.preventDefault();
+    const imagePosition = event.currentTarget.dataset.imageCode;
+    let newArray = [];
+    images.forEach((img) => {
+      if (img !== imagePosition) {
+        newArray.push(img);
+      }
+    });
+    setImages([...newArray]);
+  };
 
   const availableItems = (a, b) => {
     return a.filter((element) => {
@@ -107,6 +128,11 @@ const ProductDetails = () => {
           setCategories(availableItems(productCategories, data.categories));
           setSizes(availableItems(productSizes, data.size));
           setSelectedColor(data.color[0]);
+          let array = [];
+          for (const img of data.image) {
+            array.push(uniqid());
+          }
+          setImages(array);
         })
 
         .catch((error) => {
@@ -166,11 +192,21 @@ const ProductDetails = () => {
 
   const removeProductPicture = (event) => {
     event.preventDefault();
-    const dropArea = document.querySelector("#drop-area svg");
-    const image = document.querySelector("#img-view");
-    const cloudImg = document.querySelector("#img-view img");
-    const paragraph = document.querySelector("#img-view p");
-    dropArea.style.display = "none";
+    const imageCode = event.currentTarget.dataset.imageCode;
+    const image = document.querySelector(`#img-view.${imageCode}`);
+    const cloudImg = document.querySelector(`#img-view.${imageCode} img`);
+    const paragraph = document.querySelector(`#img-view.${imageCode} p`);
+    const inputFile = document.querySelector(`#input-file.${imageCode}`);
+    const removeImage = document.querySelector(
+      `#drop-area.${imageCode} .add-product`
+    );
+    const removeImageBox = document.querySelector(
+      `#drop-area.${imageCode} .remove-image-box`
+    );
+
+    inputFile.value = "";
+    removeImageBox.style.display = "flex";
+    removeImage.style.display = "none";
     image.dataset.ok = false;
     image.style.backgroundImage = "none";
     cloudImg.style.display = "flex";
@@ -179,26 +215,41 @@ const ProductDetails = () => {
 
   // handle product picture functions
 
-  const uploadProductImage = () => {
-    const imageView = document.querySelector("#img-view");
-    const cloudImg = document.querySelector("#img-view img");
-    const paragraph = document.querySelector("#img-view p");
-    const inputFile = document.querySelector("#input-file");
-    const dropArea = document.querySelector("#drop-area svg");
+  const uploadProductImage = (imageCode) => {
+    const imageView = document.querySelector(`#img-view.${imageCode}`);
+    const cloudImg = document.querySelector(`#img-view.${imageCode} img`);
+    const paragraph = document.querySelector(`#img-view.${imageCode} p`);
+    const inputFile = document.querySelector(`#input-file.${imageCode}`);
+    // const test = document.querySelectorAll("#input-file");
+    const removeImage = document.querySelector(
+      `#drop-area.${imageCode} .add-product`
+    );
+    const removeImageBox = document.querySelector(
+      `#drop-area.${imageCode} .remove-image-box`
+    );
+    // console.log(inputFile.files);
+    // test.forEach((item) => console.log(item.files));
+    // if (inputFile.files.length !== 0) {
     let imgLink = URL.createObjectURL(inputFile.files[0]);
     imageView.style.backgroundImage = `url(${imgLink})`;
     imageView.dataset.ok = true;
     cloudImg.style.display = "none";
     paragraph.style.display = "none";
-    dropArea.style.display = "block";
+    removeImage.style.display = "flex";
+    removeImageBox.style.display = "none";
     setImageValidationError(false);
-    setImageChanged(true);
+    // }
   };
 
   const boxDragOver = (event) => {
-    const dropArea = document.querySelector("#drop-area");
     event.preventDefault();
-    if (event.target.id === "upload-container") {
+    const imageCode = event.currentTarget.dataset.imageCode;
+    const dropArea = document.querySelector(`#drop-area.${imageCode}`);
+
+    if (
+      event.target.id === "upload-container" &&
+      event.target.classList.contains(`${imageCode}`)
+    ) {
       dropArea.style.backgroundColor = "#f1f1f9";
       dropArea.style.borderColor = "#aeadad";
     } else {
@@ -212,11 +263,14 @@ const ProductDetails = () => {
   };
 
   const dropAreaDrop = (event) => {
-    const dropArea = document.querySelector("#drop-area");
-    const inputFile = document.querySelector("#input-file");
     event.preventDefault();
+    event.stopPropagation();
+    const imageCode = event.currentTarget.dataset.imageCode;
+    const dropArea = document.querySelector(`#drop-area.${imageCode}`);
+    const inputFile = document.querySelector(`#input-file.${imageCode}`);
+
     inputFile.files = event.dataTransfer.files;
-    uploadProductImage();
+    uploadProductImage(imageCode);
     dropArea.style.backgroundColor = "#f1f1f9";
     dropArea.style.borderColor = "#aeadad";
   };
@@ -254,7 +308,7 @@ const ProductDetails = () => {
     let isPrice;
     let isCurrency;
 
-    if (image === "false") {
+    if (image === false) {
       setImageValidationError(true);
       isImage = true;
     } else {
@@ -348,7 +402,12 @@ const ProductDetails = () => {
 
   const addNewProduct = async (event) => {
     event.preventDefault();
-    const image = document.querySelector("#img-view");
+    const isImage = Array.from(document.querySelectorAll("#img-view")).find(
+      (item) => {
+        return item.dataset.ok === "true";
+      }
+    );
+    const image = isImage ? true : false;
     const title = document.querySelector("input#title");
     const description = document.querySelector("input#description");
     const category = document.querySelector(".chosen-items.category");
@@ -359,7 +418,7 @@ const ProductDetails = () => {
 
     if (
       !validForm(
-        image.dataset.ok,
+        image,
         title.value,
         description.value,
         category.childNodes,
@@ -372,66 +431,191 @@ const ProductDetails = () => {
       return;
     }
 
-    if (imageChanged) {
-      getImageUrlAndSavaChanges();
-    } else {
-      const imageUrl = getSubstring(
-        document.querySelector("#img-view").style.backgroundImage,
-        '"',
-        '"'
-      );
-      saveChanges(imageUrl);
+    saveToMongoDB();
+  };
+
+  let imagesUrl = [];
+
+  // const imageUrl = getSubstring(
+  //   document.querySelector("#img-view").style.backgroundImage,
+  //   '"',
+  //   '"'
+  // );
+
+  const saveToMongoDB = () => {
+    // const allImagesBoxes = Array.from(document.querySelectorAll("#img-view"));
+    // const imagesAmount = Array.from(
+    //   document.querySelectorAll("#img-view")
+    // ).filter((item) => {
+    //   return item.dataset.ok === "true";
+    // }).length;
+
+    const allImagesBoxes = Array.from(document.querySelectorAll("#input-file"));
+    const imagesAmount = allImagesBoxes.filter((item) => {
+      const imgView = document.querySelector(
+        `#img-view.${item.dataset.imageCode}`
+      ).style.backgroundImage;
+      // console.log(test);
+      if (item.value || (imgView && imgView != "none")) {
+        return item;
+      }
+    }).length;
+    // console.log(imagesAmount);
+
+    for (const item of allImagesBoxes) {
+      getFirabaseImagesUrl(item, imagesAmount);
     }
   };
 
-  const getImageUrlAndSavaChanges = () => {
-    const inputFile = document.querySelector("#input-file");
-    const file = inputFile.files[0];
-    const fileName = new Date().getTime() + "_" + file.name;
-    const storage = getStorage(appUsers);
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  const getFirabaseImagesUrl = (item, imagesAmount) => {
+    const imgView = document.querySelector(
+      `#img-view.${item.dataset.imageCode}`
+    );
+    if (item.value) {
+      // console.log(item);
 
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // console.log("Upload is " + progress + "% done");
-        // uploadLoading.innerHTML = `${parseInt(progress)}%`;
-        switch (snapshot.state) {
-          case "paused":
-            // console.log("Upload is paused");
-            break;
-          case "running":
-            // console.log("Upload is running");
-            break;
-          default:
+      // const file = getSubstring(item.style.backgroundImage, '"', '"');
+      const file = item.files[0];
+      const fileName = new Date().getTime() + "_" + file;
+      const storage = getStorage(appUsers);
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      // Register three observers:
+      // 1. 'state_changed' observer, called any time the state changes
+      // 2. Error observer, called on failure
+      // 3. Completion observer, called on successful completion
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // console.log("Upload is " + progress + "% done");
+          // uploadLoading.innerHTML = `${parseInt(progress)}%`;
+          switch (snapshot.state) {
+            case "paused":
+              // console.log("Upload is paused");
+              break;
+            case "running":
+              // console.log("Upload is running");
+              break;
+            default:
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `${error}`,
+          });
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            // console.log("File available at", downloadURL);
+            imagesUrl.push(downloadURL);
+
+            if (imagesAmount === imagesUrl.length) {
+              // console.log(imagesUrl);
+              saveInDatabase(imagesUrl);
+            }
+          });
         }
+      );
+    } else if (
+      imgView.style.backgroundImage &&
+      imgView.style.backgroundImage != "none"
+    ) {
+      const image = getSubstring(imgView.style.backgroundImage, '"', '"');
+      imagesUrl.push(image);
+      if (imagesAmount === imagesUrl.length) {
+        // console.log(imagesUrl);
+        saveInDatabase(imagesUrl);
+      }
+    }
+    // }
+  };
+
+  const saveInDatabase = (urls) => {
+    const titleElement = document.querySelector("input#title");
+    const descriptionElemet = document.querySelector("input#description");
+    const categoriesElement = document.querySelectorAll(".choice.category");
+    const sizesElement = document.querySelectorAll(".choice.size");
+    const colorElement = document.querySelector("select.color");
+    const priceElement = document.querySelector("input#price");
+    const currencyElement = document.querySelector("select.currency");
+
+    const titleValue = titleElement.value;
+    const descriptionValue = descriptionElemet.value;
+    const imageUrl = urls;
+    const colorName = colorElement.value.split(" ")[1];
+    const colorHex = colorElement.value.split(" ")[0];
+    let categoriesArray = [];
+    let sizesArray = [];
+    let colorsArray = [{ name: colorName, hex: colorHex }];
+    const priceValue = priceElement.value;
+    const currencyValue = currencyElement.value;
+
+    Array.from(categoriesElement).forEach((category) =>
+      categoriesArray.push(category.dataset.category)
+    );
+
+    Array.from(sizesElement).forEach((size) =>
+      sizesArray.push(size.dataset.size)
+    );
+
+    const data = {
+      title: titleValue,
+      description: descriptionValue,
+      image: imageUrl,
+      categories: categoriesArray,
+      size: sizesArray,
+      color: colorsArray,
+      price: priceValue,
+      currency: currencyValue,
+    };
+
+    fetch(`${BASE_URL}products/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        token: `Bearer ${token}`,
       },
-      (error) => {
-        // Handle unsuccessful uploads
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        switch (response.status) {
+          case 200:
+            Swal.fire({
+              icon: "success",
+              title: "Product updated!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setProductSuccess(productSuccess + 1);
+            return;
+          case 400:
+          case 401:
+          case 403:
+            return response.json().then((error) => {
+              throw new Error(error.message);
+            });
+          default:
+            throw new Error(`Please contact the development departament!`);
+        }
+      })
+      .catch((error) => {
+        console.error(error.message);
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: `${error}`,
+          text: `Something went wrong! ${error.message}`,
+          footer: '<a href="/">Go back to home page</a>',
         });
-      },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          // console.log("File available at", downloadURL);
-          saveChanges(downloadURL);
-        });
-      }
-    );
+      });
   };
 
   const getSubstring = (string, char1, char2) => {
@@ -520,6 +704,39 @@ const ProductDetails = () => {
       });
   };
 
+  const renderImageFromDatabase = (imageCode, imgUrl) => {
+    const imageView = document.querySelector(`#img-view.${imageCode}`);
+    const cloudImg = document.querySelector(`#img-view.${imageCode} img`);
+    const paragraph = document.querySelector(`#img-view.${imageCode} p`);
+    const inputFile = document.querySelector(`#input-file.${imageCode}`);
+    const removeImage = document.querySelector(
+      `#drop-area.${imageCode} .add-product`
+    );
+    const removeImageBox = document.querySelector(
+      `#drop-area.${imageCode} .remove-image-box`
+    );
+
+    let imgLink = imgUrl;
+    imageView.style.backgroundImage = `url(${imgLink})`;
+    imageView.dataset.ok = true;
+    cloudImg.style.display = "none";
+    paragraph.style.display = "none";
+    removeImage.style.display = "flex";
+    removeImageBox.style.display = "none";
+    setImageValidationError(false);
+    setRenderImg(false);
+  };
+
+  useEffect(() => {
+    if (!renderImg) return;
+    const fileInputs = Array.from(document.querySelectorAll("#input-file"));
+
+    fileInputs.forEach((item, index) => {
+      if (index >= product.image.length) return;
+      renderImageFromDatabase(item.dataset.imageCode, product.image[index]);
+    });
+  });
+
   return (
     <>
       <div className="back-link-container">
@@ -538,71 +755,93 @@ const ProductDetails = () => {
 
       {product ? (
         <div className="productUpdate animated">
+          <img
+            style={{ width: "100px" }}
+            src="https://res.sport.ro/assets/sport/2024/01/28/image_galleries/804477/reactia-englezilor-dupa-ce-au-aflat-comisionul-lui-florin-manea-n-am-vazut-pe-nimeni-care-sa-vorbeasca_size6.jpg"
+            alt="testtest"
+          />
           {/* Form */}
           <form>
             {/* Product Image */}
             <div className="swal2-html-container">
-              <div onDragOver={boxDragOver} id="upload-container">
-                <label
-                  onDrop={dropAreaDrop}
-                  onDragOver={dropAreaDragOver}
-                  htmlFor="input-file"
-                  className={imageValidationError ? "error" : ""}
-                  id="drop-area"
+              {/* upload container */}
+              {images.map((image, index) => (
+                <div
+                  key={image}
+                  onDragOver={boxDragOver}
+                  data-image-code={image}
+                  className={`animated ${image}`}
+                  id="upload-container"
                 >
-                  <CloseIcon
-                    style={{
-                      display: product.image ? "flex" : "none",
-                      backgroundColor: "white",
-                    }}
-                    className="edit-product"
-                    onClick={removeProductPicture}
-                  />
-
-                  <input
-                    onChange={uploadProductImage}
-                    type="file"
-                    id="input-file"
-                    accept="image/*"
-                    hidden
-                  />
-                  <div
-                    id="img-view"
-                    style={{
-                      backgroundImage: product.image
-                        ? `url(${product.image})`
-                        : "none",
-                    }}
-                    data-ok={product.image ? "true" : "false"}
+                  <label
+                    onDrop={dropAreaDrop}
+                    onDragOver={dropAreaDragOver}
+                    htmlFor="input-file"
+                    data-image-code={image}
+                    className={
+                      imageValidationError ? `${image} error` : `${image}`
+                    }
+                    id="drop-area"
                   >
-                    <img
-                      style={{ display: product.image ? "none" : "flex" }}
-                      id="uploadImg"
-                      src={uploadImage}
-                      alt="avatar"
+                    <CloseIcon
+                      data-image-code={image}
+                      style={{ display: images.length > 1 ? "flex" : "none" }}
+                      className={`remove-image-box ${image}`}
+                      onClick={removeImageBox}
                     />
-                    <p
-                      style={{
-                        display: product.image ? "none" : "flex",
-                        textAlign: "center",
-                      }}
+
+                    <CloseIcon
+                      data-image-code={image}
+                      className={`add-product ${image}`}
+                      onClick={removeProductPicture}
+                    />
+
+                    <input
+                      onChange={() => uploadProductImage(image)}
+                      type="file"
+                      id="input-file"
+                      className={`${image}`}
+                      data-image-code={image}
+                      accept="image/*"
+                      // hidden
+                    />
+
+                    <div
+                      className={`${image}`}
+                      id="img-view"
+                      data-image-code={image}
+                      data-ok="false"
                     >
-                      {product.image
-                        ? "Drag and drop or click here to upload product image"
-                        : "Image has been deleted from Firebase! Drag and drop or click here to upload product image"}
-                    </p>
-                  </div>
-                </label>
+                      <img
+                        data-image-code={image}
+                        id="uploadImg"
+                        className={`${image}`}
+                        src={uploadImage}
+                        alt="avatar"
+                      />
+                      <p className={`${image}`} data-image-code={image}>
+                        Drag and drop or click here to upload product image
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              ))}
+
+              {/* upload container */}
+
+              <div className="add-new-image-box">
+                <div onClick={addImageBox} className="new-image">
+                  <AddIcon />
+                </div>
               </div>
             </div>
             {imageValidationError ? (
               <div className="image error-message">
-                Product image is required!
+                All images boxes are required!
               </div>
             ) : (
               <></>
             )}
-
             <div className="form-group field">
               {/* title */}
               <div className="wrapper">

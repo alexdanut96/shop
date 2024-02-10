@@ -23,20 +23,30 @@ import StaffReports from "./pages/StaffReports";
 import NotFound404 from "./pages/NotFound404";
 import "./scss/index.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { sidebarActions } from "./Redux/SidebarSlice";
+import checkAdmin from "./utils/checkAdmin";
+import { userActions } from "./Redux/UserSlice";
 
 const App = () => {
-  const admin = useSelector((state) => state.user.currentUser);
+  const user = useSelector((state) => state.user);
+  // const [admin, setAdmin] = useState(false);
   const isActive = useSelector((state) => state.sidebar.sidebar);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!admin) {
-      navigate("/login");
-    }
-  }, [admin]);
+    const getAdminValue = async () => {
+      let demo = false;
+      if (user.currentUser) {
+        demo = await checkAdmin(user.currentUser.accessToken);
+        dispatch(userActions.setAdmin(demo));
+      } else {
+        dispatch(userActions.setAdmin(false));
+      }
+    };
+
+    getAdminValue();
+  }, [user]);
 
   const hideOverlay = () => {
     dispatch(sidebarActions.hide());
@@ -44,7 +54,7 @@ const App = () => {
 
   return (
     <>
-      {admin && admin.isAdmin ? (
+      {user.currentUser && user.isAdmin ? (
         <>
           <div
             onClick={hideOverlay}
@@ -87,6 +97,7 @@ const App = () => {
       ) : (
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/*" element={<Navigate replace to="/login" />} />
         </Routes>
       )}
     </>

@@ -6,6 +6,7 @@ const userSlice = createSlice({
     currentUser: null,
     isFetching: false,
     error: false,
+    isAdmin: false,
   },
   reducers: {
     loginStart(state) {
@@ -21,6 +22,9 @@ const userSlice = createSlice({
     },
     logout: (state) => {
       state.currentUser = null;
+    },
+    setAdmin: (state, action) => {
+      state.isAdmin = action.payload;
     },
   },
 });

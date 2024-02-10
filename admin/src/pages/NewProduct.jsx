@@ -60,11 +60,6 @@ const NewProduct = () => {
       }
     });
     setImages([...newArray]);
-    // let secondArray = [];
-    // newArray.forEach((img, index) => {
-    //   secondArray.push(index + 1);
-    // });
-    // setImages([...secondArray]);
   };
 
   const handleChoices = (event) => {
@@ -495,16 +490,6 @@ const NewProduct = () => {
     setCategoriesShowChoices(false);
     setSizeShowChoices(false);
     setImages([uniqid()]);
-
-    // const dropArea = document.querySelector("#drop-area svg");
-    // const imageview = document.querySelector("#img-view");
-    // const cloudImg = document.querySelector("#img-view img");
-    // const paragraph = document.querySelector("#img-view p");
-    // dropArea.style.display = "none";
-    // imageview.dataset.ok = false;
-    // imageview.style.backgroundImage = "none";
-    // cloudImg.style.display = "flex";
-    // paragraph.style.display = "flex";
   };
 
   return (
