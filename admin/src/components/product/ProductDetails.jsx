@@ -203,7 +203,7 @@ const ProductDetails = () => {
     const removeImageBox = document.querySelector(
       `#drop-area.${imageCode} .remove-image-box`
     );
-
+    console.log(inputFile)
     inputFile.value = "";
     removeImageBox.style.display = "flex";
     removeImage.style.display = "none";
