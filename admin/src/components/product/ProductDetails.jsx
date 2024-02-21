@@ -204,6 +204,8 @@ const ProductDetails = () => {
       `#drop-area.${imageCode} .remove-image-box`
     );
 
+    console.log("test2");
+
     inputFile.value = "";
     removeImageBox.style.display = "flex";
     removeImage.style.display = "none";
